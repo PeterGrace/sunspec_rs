@@ -5,4 +5,12 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+name = "sunspec_rs"
+path = "src/lib/lib.rs"
+
+[[bin]]
+name = "sunspec_test"
+path = "src/bin/main.rs"
+
 [dependencies]
