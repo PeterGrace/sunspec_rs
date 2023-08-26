@@ -1,3 +1,9 @@
+#[macro_use]
+extern crate tracing;
+pub mod modbus;
+pub mod sunspec;
+pub mod sunspec_data;
+
 pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
