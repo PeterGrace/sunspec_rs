@@ -6,18 +6,19 @@ use std::fs::File;
 use serde_xml_rs::from_reader;
 
 #[derive(Deserialize, Default, Debug, Clone)]
-pub(crate) enum PointType {
-    string,
-    int16,
-    uint16,
-    acc16,
-    enum16,
-    bitfield16,
-    int32,
-    uint32,
-    acc32,
-    enum32,
-    bitfield32,
+#[serde(untagged)]
+pub enum PointType {
+    string(String),
+    int16(i16),
+    uint16(u16),
+    acc16(u16),
+    enum16(String),
+    bitfield16(Vec<String>),
+    int32(i32),
+    uint32(u32),
+    acc32(u32),
+    enum32(String),
+    bitfield32(Vec<String>),
     #[default]
     pad,
 }

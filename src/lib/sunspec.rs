@@ -53,7 +53,7 @@ impl SunSpecConnection {
         };
         models
     }
-    pub async fn get_point(mut self, md: ModelData, name: &str) -> Option<Point> {
+    pub async fn get_point(mut self, md: ModelData, name: &str) -> Option<PointType> {
         let mut point = Point::default();
         if let Some(model) = md.model {
             model.block.point.iter().for_each(|p| {
@@ -62,7 +62,7 @@ impl SunSpecConnection {
                 }
             });
             match point.r#type {
-                PointType::string => {
+                PointType::string(_) => {
                     let rs = match self.ctx.get_string(2+md.address+point.offset,point.len.unwrap()).await {
                         Ok(rs) => rs,
                         Err(e) => {
@@ -72,16 +72,16 @@ impl SunSpecConnection {
                     };
                     info!("{}/{name} is {rs}!",model.name);
                 },
-                PointType::int16 => {}
-                PointType::uint16 => {}
-                PointType::acc16 => {}
-                PointType::enum16 => {}
-                PointType::bitfield16 => {}
-                PointType::int32 => {}
-                PointType::uint32 => {}
-                PointType::acc32 => {}
-                PointType::enum32 => {}
-                PointType::bitfield32 => {}
+                PointType::int16(_) => {}
+                PointType::uint16(_) => {}
+                PointType::acc16(_) => {}
+                PointType::enum16(_) => {}
+                PointType::bitfield16(_) => {}
+                PointType::int32(_) => {}
+                PointType::uint32(_) => {}
+                PointType::acc32(_) => {}
+                PointType::enum32(_) => {}
+                PointType::bitfield32(_) => {}
                 PointType::pad => {}
             }
         }
