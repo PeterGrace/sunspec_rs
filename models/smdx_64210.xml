@@ -1,0 +1,104 @@
+<sunSpecModels v="1">
+  <!-- 64210: Generac Owner Registration Info -->
+  <model id="64210" len="220" name="owner_info">
+    <block len="220">
+      <point id="FNm" offset="0" type="string" access="rw" len="16" />
+      <point id="LNm" offset="16" type="string" access="rw" len="16" />
+      <point id="Em" offset="32" type="string" access="rw" len="20" />
+      <point id="Adr1" offset="52" type="string" access="rw" len="20" />
+      <point id="Adr2" offset="72" type="string" access="rw" len="20" />
+      <point id="Cty" offset="92" type="string" access="rw" len="16" />
+      <point id="St" offset="108" type="string" access="rw" len="16" />
+      <point id="Zp" offset="124" type="string" access="rw" len="8" />
+      <point id="Cntr" offset="132" type="string" access="rw" len="16" />
+      <point id="Phn" offset="148" type="string" access="rw" len="8" />
+      <point id="IFNm" offset="156" type="string" access="rw" len="16" />
+      <point id="ILNm" offset="172" type="string" access="rw" len="16" />
+      <point id="IEm" offset="188" type="string" access="rw" len="16" />
+      <point id="ICo" offset="204" type="string" access="rw" len="8" />
+      <point id="IPhn" offset="212" type="string" access="rw" len="8" />
+    </block>
+  </model>
+  <strings id="64210" locale="en">
+    <model>
+      <label>Device Registration</label>
+      <description>Owner and Installer information</description>
+      <notes></notes>
+    </model>
+    <point id="FNm">
+      <label>Owner's First Name</label>
+      <description>End user's first name</description>
+      <notes></notes>
+    </point>
+    <point id="LNm">
+      <label>Owner's Last Name</label>
+      <description>End user's last name</description>
+      <notes></notes>
+    </point>
+    <point id="Em">
+      <label>Owner's Email</label>
+      <description>End user's email address</description>
+      <notes></notes>
+    </point>    
+    <point id="Adr1">
+      <label>Address Line 1</label>
+      <description>Address Line 1</description>
+      <notes></notes>
+    </point>
+    <point id="Adr2">
+      <label>Address Line 2</label>
+      <description>Address Line 2</description>
+      <notes></notes>
+    </point>
+    <point id="Cty">
+      <label>City</label>
+      <description>City</description>
+      <notes></notes>
+    </point>
+    <point id="Zp">
+      <label>Zip/Postal Code</label>
+      <description>Zip/Postal Code</description>
+      <notes></notes>
+    </point>
+    <point id="St">
+      <label>State/Province</label>
+      <description>State/Province</description>
+      <notes></notes>
+    </point>
+    <point id="Cntr">
+      <label>Country</label>
+      <description>Country</description>
+      <notes></notes>
+    </point>
+    <point id="Phn">
+      <label>Phone</label>
+      <description>Customer's phone number</description>
+      <notes></notes>
+    </point>
+    <point id="IFNm">
+      <label>Installer's first name</label>
+      <description>Installer's first name</description>
+      <notes></notes>
+    </point>
+    <point id="ILNm">
+      <label>Installer's last name</label>
+      <description>Installer's last name</description>
+      <notes></notes>
+    </point>
+    <point id="IEm">
+      <label>Installer's email</label>
+      <description>Installer's email address</description>
+      <notes></notes>
+    </point>
+    <point id="ICo">
+      <label>Installer Company</label>
+      <description>Installer Company</description>
+      <notes></notes>
+    </point>
+    <point id="IPhn">
+      <label>Installer's phone</label>
+      <description>Installer's phone</description>
+      <notes></notes>
+    </point>
+  </strings>
+</sunSpecModels>

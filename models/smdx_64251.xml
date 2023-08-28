@@ -1,0 +1,130 @@
+<sunSpecModels v="1">
+  <!-- 64251: PV Link Status-->
+  <model id="64251" len="22" name="pvlink_status">
+    <block len="22">
+      <point id="ErrorWord" offset="0" type="bitfield16" mandatory="true">
+        <symbol id="UNUSED0">0</symbol>
+        <symbol id="HW_ARC_FAULT">1</symbol>
+        <symbol id="HW_REVERSE_CURRENT">2</symbol>
+        <symbol id="OVER_CURRENT">3</symbol>
+        <symbol id="INPUT_OVERVOLTAGE">4</symbol>
+        <symbol id="GFTEST_FAIL">5</symbol>
+        <symbol id="LOW_INPUT_IMPEDANCE">6</symbol>
+        <symbol id="UNUSED7">7</symbol>
+        <symbol id="UNUSED8">8</symbol>
+        <symbol id="FLASH_FAILURE">9</symbol>
+        <symbol id="EEPROM_FAILURE">10</symbol>
+        <symbol id="SPT_CRC_FAIL">11</symbol>
+        <symbol id="OVER_TEMP">12</symbol>
+        <symbol id="UNUSED13">13</symbol>
+        <symbol id="DEAD_FET">14</symbol>
+        <symbol id="HWV_MISMATCH">15</symbol>
+      </point>
+      <point id="EnableBits" offset="1" type="bitfield16" mandatory="true">
+        <symbol id="DEADMAN">0</symbol>
+        <symbol id="UNUSED1">1</symbol>
+        <symbol id="UNUSED2">2</symbol>
+        <symbol id="UNUSED3">3</symbol>
+        <symbol id="CONNECT_INPUT">4</symbol>
+        <symbol id="CONNECT_OUTPUT">5</symbol>
+        <symbol id="UNUSED6">6</symbol>
+        <symbol id="UNUSED7">7</symbol>
+        <symbol id="UNUSED8">8</symbol>
+        <symbol id="GF_STARTTEST">9</symbol>
+        <symbol id="INPUT_IMPED_STARTTEST">11</symbol>
+        <symbol id="UNUSED11">11</symbol>
+        <symbol id="PHASE2">12</symbol>
+        <symbol id="UNUSED13">13</symbol>
+        <symbol id="UNUSED14">14</symbol>
+        <symbol id="UNUSED15">15</symbol>
+      </point>
+      <point id="StatusWord" offset="2" type="bitfield16" mandatory="true">
+        <symbol id="DEADMAN_UP">0</symbol>
+        <symbol id="LOW_SUPPLY_VOLTAGE">1</symbol>
+        <symbol id="GF_TESTED">2</symbol>
+        <symbol id="INPUT_IMPED_TESTED">3</symbol>
+        <symbol id="INPUT_CONNECTED">4</symbol>
+        <symbol id="OUTPUT_CONNECTED">5</symbol>
+        <symbol id="INPUT_DISCONNETED">6</symbol>
+        <symbol id="OUTPUT_DISCONNETED">7</symbol>
+        <symbol id="GF_SW_ACTIVE">8</symbol>
+        <symbol id="MASTER_FAULT_ACTIVE">9</symbol>
+        <symbol id="GF_ACTIVE">10</symbol>
+        <symbol id="ARC_FAULT_ACTIVE">11</symbol>
+        <symbol id="PBUS_LOW">12</symbol>
+        <symbol id="UNBAL_INPUT_FAULT_ACTIVE">13</symbol>
+        <symbol id="PH2_ON">14</symbol>
+        <symbol id="PH2_OFF">15</symbol>        
+      </point>
+      <point id="V_SF"  offset="3" type="sunssf" mandatory="true"/>
+      <point id="I_SF"  offset="4" type="sunssf" mandatory="true"/>
+      <point id="Vin"  offset="5" type="int16" access = "r" sf = "V_SF" mandatory="true"/>
+      <point id="Iin"  offset="6" type="int16" access = "r" sf = "I_SF" mandatory="true"/>
+      <point id="AMax"  offset="7" type="int16" access = "rw" sf = "I_SF" mandatory="true"/>
+      <point id="Ena"  offset="8" type="enum16" access = "rw" mandatory="true">
+        <symbol id="DISABLE">0</symbol>
+        <symbol id="ENABLE">1</symbol>
+      </point>
+      <point id="Pad0"  offset="9" type="pad" mandatory="true"/>
+      <point id="Pad1"  offset="10" type="pad" mandatory="true"/>
+      <point id="Pad2"  offset="11" type="pad" mandatory="true"/>
+      <point id="Pad3"  offset="12" type="pad" mandatory="true"/>
+      <point id="Pad4"  offset="13" type="pad" mandatory="true"/>
+      <point id="Pad5"  offset="14" type="pad" mandatory="true"/>
+      <point id="Pad6"  offset="15" type="pad" mandatory="true"/>
+      <point id="Pad7"  offset="16" type="pad" mandatory="true"/>
+      <point id="Pad8"  offset="17" type="pad" mandatory="true"/>
+      <point id="Pad9"  offset="18" type="pad" mandatory="true"/>
+      <point id="Pad10" offset="19" type="pad" mandatory="true"/>
+      <point id="Pad11" offset="20" type="pad" mandatory="true"/>
+      <point id="Pad12" offset="21" type="pad" mandatory="true"/>
+    </block>
+  </model>
+  <strings id="64251">
+    <model>
+      <label>Generac PV Link Status</label>
+      <description>Miscellaneous PV Link status registers</description>
+      <notes></notes>
+    </model>
+    <point id="ErrorWord">
+      <label>Error status</label>
+      <description>Error status bitfield</description>
+      <notes></notes>
+    </point>
+    <point id="EnableBits">
+      <label>Enable bits</label>
+      <description>Internal status register</description>
+      <notes></notes>
+    </point>
+    <point id="StatusWord">
+      <label>General status</label>
+      <description>General system status</description>
+      <notes></notes>
+    </point>
+    <point id="Vin">
+      <label>PV String Voltage</label>
+      <description>Input voltage of PV string</description>
+      <notes></notes>
+    </point>
+    <point id="Iin">
+      <label>PV String Current</label>
+      <description>Input current of PV string</description>
+      <notes></notes>
+    </point>
+    <point id="AMax">
+      <label>Maximum Input Current</label>
+      <description>Maximum permitted input current from PV string</description>
+      <notes></notes>
+    </point>
+    <point id="Ena">
+      <label>Enable or Disable PV Link</label>
+      <description></description>
+      <notes></notes>
+    </point>  
+    <point id="Pad0">
+      <label>Pad</label>
+      <description>Large pad for future model expansion</description>
+      <notes></notes>
+    </point>
+  </strings>
+</sunSpecModels>

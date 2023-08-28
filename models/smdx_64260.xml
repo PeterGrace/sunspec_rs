@@ -1,0 +1,48 @@
+<sunSpecModels v="1">
+  <!-- 1: timezone config -->
+  <model id="64260" len="24" name="tz_config">
+    <block len="48">
+      <point id="Tz"   offset="0"  type="string" len="24" mandatory="true" access="rw" />
+      <point id="Err"  offset="24" type="bitfield16" mandatory="true" >
+        <symbol id="INVALID_TIMEZONE">0</symbol>
+      </point>
+      <point id="LocalTime" offset="25" type="string" len="14" mandatory="true" />
+      <point id="Pad0" offset="39" type="pad" mandatory="true" />
+      <point id="Pad1" offset="40" type="pad" mandatory="true" />
+      <point id="Pad2" offset="41" type="pad" mandatory="true" />
+      <point id="Pad3" offset="42" type="pad" mandatory="true" />
+      <point id="Pad4" offset="43" type="pad" mandatory="true" />
+      <point id="Pad5" offset="44" type="pad" mandatory="true" />
+      <point id="Pad6" offset="45" type="pad" mandatory="true" />
+      <point id="Pad7" offset="46" type="pad" mandatory="true" />
+      <point id="Pad8" offset="47" type="pad" mandatory="true" />
+    </block>
+  </model>
+  <strings id="1" locale="en">
+    <model>
+      <label>Time zone configuration</label>
+      <description>Set/get device's local time zone</description>
+      <notes></notes>
+    </model>
+    <point id="Tz">
+      <label>Time zone</label>
+      <description>TZ Database (aka zoneinfo, http://www.iana.org/time-zones) name (e.g., "US/Pacific") </description>
+      <notes></notes>
+    </point>
+    <point id="Err">
+      <label>Error code</label>
+      <description>Indicates time zone configuration errors</description>
+      <notes></notes>
+    </point>
+    <point id="LocalTime">
+      <label>Local time</label>
+      <description>Local time string in YYYY-MM-DD hh:mm:ss +hhmm (e.g. "2006-01-02 15:04:05 -0700")</description>
+      <notes></notes>
+    </point>
+    <point id="Pad0">
+      <label></label>
+      <description></description>
+      <notes></notes>
+    </point>
+  </strings>
+</sunSpecModels>

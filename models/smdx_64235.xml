@@ -1,0 +1,515 @@
+<sunSpecModels v="1">
+    <!-- 64235: LFRT -->
+    <model id="64235" len="100" name="lfrt_pika">
+        <block len="10" type="fixed">
+            <point id="ActCrv" offset="0" access="rw" type="uint16" len="1" mandatory="true"/>
+            <point id="ModEna" offset="1" access="rw" type="bitfield16" len="1" mandatory="true">
+                <symbol id="ENABLED">0</symbol>
+            </point>
+            <point id="WinTms" offset="2" access="rw" type="uint16" len="1" mandatory="false" units="Secs"/>
+            <point id="RvrtTms" offset="3" access="rw" type="uint16" len="1" mandatory="false" units="Secs"/>
+            <point id="RmpTms" offset="4" access="rw" type="uint16" len="1" mandatory="false" units="Secs"/>
+            <point id="NCrv" offset="5" access="r" type="uint16" len="1" mandatory="true"/>
+            <point id="NPt" offset="6" access="r" type="uint16" len="1" mandatory="true"/>
+            <point id="Tms_SF" offset="7" access="r" type="sunssf" len="1" mandatory="true"/>
+            <point id="Hz_SF" offset="8" access="r" type="sunssf" len="1" mandatory="true"/>
+            <point id="Pad" offset="9" access="r" type="pad" len="1" mandatory="false"/>
+        </block>
+        <block len="90" type="repeating" name="curve">
+            <point id="ActPt" offset="0" access="rw" type="uint16" len="1" mandatory="true"/>
+            <point id="Tms1" offset="1" access="rw" type="uint32" len="2" mandatory="true" units="Secs" sf="Tms_SF"/>
+            <point id="Hz1" offset="3" access="rw" type="uint16" len="1" mandatory="true" units="Hz" sf="Hz_SF"/>
+            <point id="Fn1" offset="4" access="rw" type="enum16" len="1" mandatory="true">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms2" offset="5" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz2" offset="7" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn2" offset="8" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms3" offset="9" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz3" offset="11" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn3" offset="12" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms4" offset="13" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz4" offset="15" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn4" offset="16" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms5" offset="17" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz5" offset="19" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn5" offset="20" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms6" offset="21" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz6" offset="23" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn6" offset="24" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms7" offset="25" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz7" offset="27" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn7" offset="28" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms8" offset="29" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz8" offset="31" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn8" offset="32" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms9" offset="33" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz9" offset="35" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn9" offset="36" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms10" offset="37" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz10" offset="39" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn10" offset="40" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms11" offset="41" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz11" offset="43" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn11" offset="44" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms12" offset="45" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz12" offset="47" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn12" offset="48" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms13" offset="49" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz13" offset="51" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn13" offset="52" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms14" offset="53" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz14" offset="55" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn14" offset="56" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms15" offset="57" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz15" offset="59" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn15" offset="60" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms16" offset="61" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz16" offset="63" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn16" offset="64" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms17" offset="65" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz17" offset="67" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn17" offset="68" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms18" offset="69" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz18" offset="71" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn18" offset="72" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms19" offset="73" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz19" offset="75" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn19" offset="76" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="Tms20" offset="77" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
+            <point id="Hz20" offset="79" access="rw" type="uint16" len="1" mandatory="false" units="Hz" sf="Hz_SF"/>
+            <point id="Fn20" offset="80" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
+                <symbol id="CEASE_TO_ENERGIZE">1</symbol>
+            </point>
+            <point id="CrvNam" offset="81" access="rw" type="string" len="8" mandatory="false"/>
+            <point id="ReadOnly" offset="89" access="r" type="enum16" len="1" mandatory="true">
+                <symbol id="READWRITE">0</symbol>
+                <symbol id="READONLY">1</symbol>
+            </point>
+        </block>
+    </model>
+    <strings id="64235" locale="en">
+        <model>
+            <label>LFRT</label>
+            <description>Low Frequency Ride-through</description>
+            <notes>Ref 4: 11</notes>
+        </model>
+        <point id="NCrv">
+            <label>NCrv</label>
+            <description>Number of curves supported (recommend 4)</description>
+            <notes></notes>
+        </point>
+        <point id="NPt">
+            <label>NPt</label>
+            <description>Number of curve points supported (maximum of 20)</description>
+            <notes></notes>
+        </point>
+        <point id="ModEna">
+            <label>ModEna</label>
+            <description>LHzRT control mode. Enable active curve. Bitfield value</description>
+            <notes></notes>
+        </point>
+        <point id="ActCrv">
+            <label>ActCrv</label>
+            <description>Index of active curve. 0 = no active curve</description>
+            <notes></notes>
+        </point>
+        <point id="WinTms">
+            <label>WinTms</label>
+            <description>Time window for LFRT change</description>
+            <notes>Setting is ignored for LFRT controls</notes>
+        </point>
+        <point id="RvrtTms">
+            <label>RvrtTms</label>
+            <description>Timeout period for LFRT curve selection</description>
+            <notes>Setting is ignored for LFRT controls</notes>
+        </point>
+        <point id="RmpTms">
+            <label>RmpTms</label>
+            <description>Ramp time for moving from current mode to new mode</description>
+            <notes>Setting is ignored for LFRT controls</notes>
+        </point>
+        <point id="Tms_SF">
+            <label>Tms_SF</label>
+            <description>Scale factor for duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz_SF">
+            <label>Hz_SF</label>
+            <description>Scale factor for frequency</description>
+            <notes></notes>
+        </point>
+        <point id="CrvNam">
+            <label>CrvNam</label>
+            <description>Optional description for curve</description>
+            <notes></notes>
+        </point>
+        <point id="ActPt">
+            <label>ActPt</label>
+            <description>Number of active points in array</description>
+            <notes></notes>
+        </point>
+        <point id="Tms1">
+            <label>Tms1</label>
+            <description>Point 1 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz1">
+            <label>Hz1</label>
+            <description>Point 1 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn1">
+            <label>Fn1</label>
+            <description>Point 1 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms2">
+            <label>Tms2</label>
+            <description>Point 2 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz2">
+            <label>Hz2</label>
+            <description>Point 2 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn2">
+            <label>Fn2</label>
+            <description>Point 2 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms3">
+            <label>Tms3</label>
+            <description>Point 3 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz3">
+            <label>Hz3</label>
+            <description>Point 3 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn3">
+            <label>Fn3</label>
+            <description>Point 3 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms4">
+            <label>Tms4</label>
+            <description>Point 4 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz4">
+            <label>Hz4</label>
+            <description>Point 4 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn4">
+            <label>Fn4</label>
+            <description>Point 4 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms5">
+            <label>Tms5</label>
+            <description>Point 5 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz5">
+            <label>Hz5</label>
+            <description>Point 5 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn5">
+            <label>Fn5</label>
+            <description>Point 5 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms6">
+            <label>Tms6</label>
+            <description>Point 6 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz6">
+            <label>Hz6</label>
+            <description>Point 6 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn6">
+            <label>Fn6</label>
+            <description>Point 6 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms7">
+            <label>Tms7</label>
+            <description>Point 7 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz7">
+            <label>Hz7</label>
+            <description>Point 7 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn7">
+            <label>Fn7</label>
+            <description>Point 7 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms8">
+            <label>Tms8</label>
+            <description>Point 8 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz8">
+            <label>Hz8</label>
+            <description>Point 8 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn8">
+            <label>Fn8</label>
+            <description>Point 8 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms9">
+            <label>Tms9</label>
+            <description>Point 9 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz9">
+            <label>Hz9</label>
+            <description>Point 9 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn9">
+            <label>Fn9</label>
+            <description>Point 9 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms10">
+            <label>Tms10</label>
+            <description>Point 10 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz10">
+            <label>Hz10</label>
+            <description>Point 10 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn10">
+            <label>Fn10</label>
+            <description>Point 10 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms11">
+            <label>Tms11</label>
+            <description>Point 11 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz11">
+            <label>Hz11</label>
+            <description>Point 11 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn11">
+            <label>Fn11</label>
+            <description>Point 11 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms12">
+            <label>Tms12</label>
+            <description>Point 12 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz12">
+            <label>Hz12</label>
+            <description>Point 12 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn12">
+            <label>Fn12</label>
+            <description>Point 12 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms13">
+            <label>Tms13</label>
+            <description>Point 13 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz13">
+            <label>Hz13</label>
+            <description>Point 13 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn13">
+            <label>Fn13</label>
+            <description>Point 13 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms14">
+            <label>Tms14</label>
+            <description>Point 14 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz14">
+            <label>Hz14</label>
+            <description>Point 14 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn14">
+            <label>Fn14</label>
+            <description>Point 14 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms15">
+            <label>Tms15</label>
+            <description>Point 15 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz15">
+            <label>Hz15</label>
+            <description>Point 15 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn15">
+            <label>Fn15</label>
+            <description>Point 15 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms16">
+            <label>Tms16</label>
+            <description>Point 16 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz16">
+            <label>Hz16</label>
+            <description>Point 16 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn16">
+            <label>Fn16</label>
+            <description>Point 16 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms17">
+            <label>Tms17</label>
+            <description>Point 17 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz17">
+            <label>Hz17</label>
+            <description>Point 17 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn17">
+            <label>Fn17</label>
+            <description>Point 17 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms18">
+            <label>Tms18</label>
+            <description>Point 18 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz18">
+            <label>Hz18</label>
+            <description>Point 18 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn18">
+            <label>Fn18</label>
+            <description>Point 18 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms19">
+            <label>Tms19</label>
+            <description>Point 19 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz19">
+            <label>Hz19</label>
+            <description>Point 19 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn19">
+            <label>Fn19</label>
+            <description>Point 19 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="Tms20">
+            <label>Tms20</label>
+            <description>Point 20 must disconnect duration</description>
+            <notes></notes>
+        </point>
+        <point id="Hz20">
+            <label>Hz20</label>
+            <description>Point 20 must disconnect frequency</description>
+            <notes></notes>
+        </point>
+        <point id="Fn20">
+            <label>Fn20</label>
+            <description>Point 20 special behavior</description>
+            <notes></notes>
+        </point>
+        <point id="ReadOnly">
+            <label>ReadOnly</label>
+            <description>Enumerated value indicates if curve is read-only or can be modified</description>
+            <notes></notes>
+        </point>
+    </strings>
+</sunSpecModels>
+

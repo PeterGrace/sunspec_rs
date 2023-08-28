@@ -1,0 +1,36 @@
+<sunSpecModels v="1">
+  <!-- 64261: Output Controls  -->
+  <model id="64261" len="12" name="output_controls" status="test">
+    <block len="12" type="fixed">
+      <point id="VarRamp" offset="0" access="rw" type="uint16" len="1" mandatory="false" units="Pct" sf="Rmp_SF"/>
+      <point id="Pad1" offset="1" access="r" type="pad" len="1" mandatory="false"/>
+      <point id="Pad2" offset="2" access="r" type="pad" len="1" mandatory="false"/>
+      <point id="Pad3" offset="3" access="r" type="pad" len="1" mandatory="false"/>
+      <point id="Pad4" offset="4" access="r" type="pad" len="1" mandatory="false"/>
+      <point id="Pad5" offset="5" access="r" type="pad" len="1" mandatory="false"/>
+      <point id="Pad6" offset="6" access="r" type="pad" len="1" mandatory="false"/>
+      <point id="Pad7" offset="7" access="r" type="pad" len="1" mandatory="false"/>
+      <point id="Pad8" offset="8" access="r" type="pad" len="1" mandatory="false"/>
+      <point id="Pad9" offset="9" access="r" type="pad" len="1" mandatory="false"/>
+      <point id="Pad10" offset="10" access="r" type="pad" len="1" mandatory="false"/>
+      <point id="Rmp_SF" offset="11" access="r" type="sunssf" len="1" mandatory="false"/>
+    </block>
+  </model>
+  <strings id="64261" locale="en">
+    <model>
+      <label>Output Controls</label>
+      <description>Generac inverter output controls.</description>
+      <notes></notes>
+    </model>
+    <point id="VarRamp">
+      <label>Reactive power ramp</label>
+      <description>Reactive power ramp-up rate as a percentage of max power.</description>
+      <notes></notes>
+    </point>
+    <point id="Rmp_SF">
+      <label>Ramp Rate Scale Factor</label>
+      <description>Ramp Rate Scale Factor</description>
+      <notes></notes>
+    </point>
+ </strings>
+</sunSpecModels>

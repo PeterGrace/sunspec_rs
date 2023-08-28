@@ -1,0 +1,85 @@
+<sunSpecModels v="1">
+  <!-- 64203: Inverter Reconnect Control -->
+  <model id="64203" len="12" name="reconnect">
+    <block len="12">
+      <point id="ModEna" offset="0" access="rw" type="enum16" mandatory="true">
+        <symbol id="DISABLE">0</symbol>
+        <symbol id="ENABLE">1</symbol>
+      </point>
+      <point id="ReConn_Tms" offset="1" access="rw" type="uint16" units="Secs" sf="Tms_SF" mandatory="true"/>
+      <point id="ReConnMinV" offset="2" access="rw" type="uint16" units="%VRef" sf="V_SF" mandatory="true"/>
+      <point id="ReConnMaxV" offset="3" access="rw" type="uint16" units="%VRef" sf="V_SF" mandatory="true"/>
+      <point id="ReConnMinHz" offset="4" access="rw" type="uint16" units="Hz" sf="Hz_SF" mandatory="true"/>
+      <point id="ReConnMaxHz" offset="5" access="rw" type="uint16" units="Hz" sf="Hz_SF" mandatory="true"/>
+	  <point id="VWLatchTms" offset="6" access="rw" type="uint16" units="Secs" sf="Tms_SF" mandatory="true"/>
+	  <point id="FWLatchTms" offset="7" access="rw" type="uint16" units="Secs" sf="Tms_SF" mandatory="true"/>
+      <point id="Tms_SF" offset="8" type="sunssf" mandatory="true"/>
+      <point id="V_SF" offset="9" type="sunssf" mandatory="true"/>
+      <point id="Hz_SF" offset="10" type="sunssf" mandatory="true"/>
+      <point id="Pad" offset="11" type="pad" mandatory="true"/>
+    </block>
+  </model>
+  <strings id="64203">
+    <model>
+      <label>Generac Reconnect Control</label>
+      <description>Define grid parameters required for reconnection</description>
+      <notes></notes>
+    </model>
+    <point id="ModEna">
+      <label>ModEna</label>
+      <description>Enable this model's voltage and frequency window.</description>
+      <notes></notes>
+    </point>
+    <point id="ReConn_Tms">
+      <label>ReConn_Tms</label>
+      <description>Time to reconnect after fault, and within frequency and voltage window.</description>
+      <notes></notes>
+    </point>
+    <point id="ReConnMinV">
+      <label>ReConnMinV</label>
+      <description>Reconnect only above this voltage</description>
+      <notes></notes>
+    </point>
+    <point id="ReConnMaxV">
+      <label>ReConnMaxV</label>
+      <description>Reconnect only below this voltage</description>
+      <notes></notes>
+    </point>
+    <point id="ReConnMinHz">
+      <label>ReConnMinHz</label>
+      <description>Reconnect only above this frequency</description>
+      <notes></notes>
+    </point>
+    <point id="ReConnMaxHz">
+      <label>ReConnMaxHz</label>
+      <description>Reconnect only below this frequency</description>
+      <notes></notes>
+    </point>
+    <point id="VWLatchTms">
+      <label>VoltWattLatchTime</label>
+      <description>Delay for this amount of time after voltage is restored before reconnecting</description>
+      <notes></notes>
+    </point>
+    <point id="FWLatchTms">
+      <label>FreqWattLatchTime</label>
+      <description>Delay for this amount of time after frequency is restored before reconnecting</description>
+      <notes></notes>
+    </point>	
+
+	<point id="Tms_SF">
+      <label>Tms_SF</label>
+      <description>Scale factor for reconnect time.</description>
+      <notes></notes>
+    </point>
+    <point id="V_SF">
+      <label>V_SF</label>
+      <description>Scale factor for voltage percent of Vref.</description>
+      <notes></notes>
+    </point>
+    <point id="Hz_SF">
+      <label>Hz_SF</label>
+      <description>Scale factor for frequency.</description>
+      <notes></notes>
+    </point>
+  </strings>
+</sunSpecModels>

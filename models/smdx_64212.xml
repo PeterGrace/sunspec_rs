@@ -1,0 +1,169 @@
+<sunSpecModels v="1">
+  <!-- 64212: Panasonic DCB105 Module Warranty data-->
+  <model id="64212" len="32" name="DCB105_warranty">
+    <block len="16">
+      <point id="sf_10" offset="0" type="sunssf" mandatory="true"/>
+      <point id="sf_100"  offset="1" type="sunssf" mandatory="true"/>
+      <point id="sf_1000"  offset="2" type="sunssf" mandatory="true"/>
+      <point id="NMod"   offset="3" type="uint16" mandatory="true"/>
+      <point id="WhIn"   offset="4" type="int32" units="Wh" mandatory="true"/>
+      <point id="WhOut"  offset="6" type="int32" units="Wh" mandatory="true"/>
+      <point id="AhIn"   offset="8"  type="int32" units="Ah" mandatory="true"/>
+      <point id="AhOut"  offset="10"  type="int32" units="Ah" mandatory="true"/>
+      <point id="THSin"  offset="12" type="int16" units="C" sf="sf_10" mandatory="true"/>
+      <point id="W"      offset="13" type="int16" units="W" mandatory="true"/>
+      <point id="I"      offset="14" type="int16" units="A" mandatory="true" sf="sf_100"/>
+      <point id="V"      offset="15" type="int16" units="V" mandatory="true" sf="sf_10"/>
+    </block>
+    <block type="repeating" len="16" name="DCB105_module">
+      <point id="SN"            offset="0" type="uint16" mandatory="true"/>
+      <point id="ManDt"         offset="1" type="uint16" mandatory="true"/>
+      <point id="ProgVer"       offset="2" type="uint16" mandatory="true"/>
+      <point id="DataVer"       offset="3" type="uint16" mandatory="true"/>
+      <point id="StatusFlags"   offset="4" type="bitfield16" mandatory="true"/>
+      <point id="WarningFlags"  offset="5" type="bitfield16" mandatory="true"/>
+      <point id="AlarmFlags"    offset="6" type="bitfield16" mandatory="true"/>
+      <point id="ErrorFlags"    offset="7" type="bitfield16" mandatory="true"/>
+      <point id="ModuleIOFlags" offset="8" type="bitfield16" mandatory="true"/>
+      <point id="SOC"           offset="9" type="uint16" mandatory="true" sf="sf_10"/>
+      <point id="SOH"           offset="10" type="uint16" mandatory="true" sf="sf_10"/>
+      <point id="MaxCellV"      offset="11" type="uint16" units="V" mandatory="true" sf="sf_1000"/>
+      <point id="MinCellV"      offset="12" type="uint16" units="V" mandatory="true" sf="sf_1000"/>
+      <point id="PackV"         offset="13" type="uint16" units="V" mandatory="true" sf="sf_100"/>
+      <point id="MaxCellT"      offset="14" type="int16" units="C" mandatory="true" sf="sf_10"/>
+      <point id="MinCellT"      offset="15" type="int16" units="C" mandatory="true" sf="sf_10"/>
+    </block>
+  </model>
+  <strings id="64212">
+    <model>
+      <label>Panasonic DCB105 Module Warranty Data</label>
+      <description>Data from DCB105 modules required for Panasonic warranty</description>
+      <notes></notes>
+    </model>
+<point id="NMod">
+  <label>Module Count</label>
+  <description>Number of DCB modules that the system is configured for</description>
+  <notes></notes>
+</point>  
+<point id="W">
+  <label>Power</label>
+  <description>Battery power right now</description>
+  <notes></notes>
+</point>     
+<point id="WhIn">
+  <label>WhIn</label>
+  <description>Cummulative energy into battery string</description>
+  <notes></notes>
+</point>  
+<point id="WhOut">
+  <label>WhOut</label>
+  <description>Cummulative energy out of battery string</description>
+  <notes></notes>
+</point> 
+<point id="AhIn">
+  <label>AhIn</label>
+  <description>Cummulative charge into battery string</description>
+  <notes></notes>
+</point>  
+<point id="AhOut">
+  <label>AhOut</label>
+  <description>Cummulative charge out of battery string</description>
+  <notes></notes>
+</point> 
+<point id="THSin">
+  <label>Heat Sink Temp</label>
+  <description>Temperature of heat sink input</description>
+  <notes></notes>
+</point>
+<point id="V">
+  <label>String Voltage</label>
+  <description>Voltage of whole string of batteries</description>
+  <notes></notes>
+</point>  
+<point id="I">
+  <label>Current</label>
+  <description>Instantaneous current measurement</description>
+  <notes>Because the modules are in series, the current is the same through all modules.</notes>
+</point>  
+<point id="SN">
+  <label>Serial Number</label>
+  <description>Serial Number</description>
+  <notes></notes>
+</point>
+<point id="ManDt">
+  <label>Product Date Code</label>
+  <description>Manufacture date</description>
+  <notes></notes>
+</point>          
+<point id="ProgVer">
+  <label>Program Version</label>
+  <description>Program version</description>
+  <notes></notes>
+</point>      
+<point id="DataVer">
+  <label>Data Version</label>
+  <description>Data version</description>
+  <notes></notes>
+</point>      
+<point id="StatusFlags">
+  <label>Status Flags</label>
+  <description>Status</description>
+  <notes></notes>
+</point>  
+<point id="WarningFlags">
+  <label>Warning Flags</label>
+  <description>Warnings</description>
+  <notes></notes>
+</point> 
+<point id="AlarmFlags">
+  <label>Alarm Flags</label>
+  <description>Alarms</description>
+  <notes></notes>
+</point>   
+<point id="ErrorFlags">
+  <label>Error Flags</label>
+  <description>Errors</description>
+  <notes></notes>
+</point>   
+<point id="ModuleIOFlags">
+  <label>Module IO Flags</label>
+  <description>IO flags</description>
+  <notes></notes>
+</point>
+<point id="SOC">
+  <label>State of Charge</label>
+  <description>State of Charge</description>
+  <notes></notes>
+</point> 
+<point id="SOH">
+  <label>State of Health</label>
+  <description>State of Health</description>
+  <notes></notes>
+</point>          
+<point id="MaxCellV">
+  <label>MaxCellV</label>
+  <description>Maximum cell voltage</description>
+  <notes></notes>
+</point>     
+<point id="MinCellV">
+  <label>MinCellV</label>
+  <description>Minimum cell voltage</description>
+  <notes></notes>
+</point>     
+<point id="PackV">
+  <label>PackV</label>
+  <description>Module voltage</description>
+  <notes></notes>
+</point>        
+<point id="MaxCellT">
+  <label>MaxCellT</label>
+  <description>Maximum cell temperature</description>
+  <notes></notes>
+</point>     
+<point id="MinCellT">
+  <label>MinCellT</label>
+  <description>Minimum cell temperature</description>
+  <notes></notes>
+</point>     
+  </strings>
+</sunSpecModels>

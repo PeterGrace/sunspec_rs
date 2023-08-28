@@ -5,8 +5,11 @@ use std::io;
 use std::fs::File;
 use serde_xml_rs::from_reader;
 
+
+
+
 #[derive(Deserialize, Default, Debug, Clone)]
-#[serde(untagged)]
+#[serde(tag="untagged")]
 pub enum PointType {
     string(String),
     int16(i16),
@@ -23,6 +26,20 @@ pub enum PointType {
     pad,
 }
 
+#[derive(Default)]
+pub struct ResolvedPoint {
+    pt: PointType,
+    label: Option<String>,
+    description: Option<String>,
+    notes: Option<String>
+}
+#[derive(Default)]
+pub struct ResolvedModel {
+    model: Model,
+    label: Option<String>,
+    description: Option<String>,
+    notes: Option<String>
+}
 
 
 #[derive(Deserialize, Clone, Debug)]
@@ -36,12 +53,13 @@ pub struct Model {
     pub id: u16,
     pub len: u16,
     pub name: String,
-    pub block: Block,
+    pub block: Vec<Block>,
 }
 
 #[derive(Deserialize, Debug, Default, Clone)]
 pub struct Block {
     len: u16,
+    r#type: Option<String>,
     pub(crate) point: Vec<Point>,
 }
 
@@ -49,15 +67,22 @@ pub struct Block {
 pub struct Point {
     pub(crate) id: String,
     pub(crate) offset: u16,
-    pub(crate) r#type: PointType,
+    pub(crate) r#type: String,
     pub(crate) len: Option<u16>,
     pub(crate) mandatory: Option<bool>,
     pub(crate) access: Option<Access>,
+    pub(crate) symbol: Option<Vec<Symbol>>
+}
+#[derive(Debug, Clone, Deserialize)]
+pub struct Symbol {
+    pub(crate) id: String,
+    #[serde(rename="$value")]
+    pub(crate) symbol: String
 }
 #[derive(Deserialize)]
 pub struct Strings {
     id: String,
-    locale: String,
+    locale: Option<String>,
     #[serde(rename = "$value")]
     literals: Vec<LiteralType>
 }
@@ -94,7 +119,8 @@ pub struct SunSpecData {
 
 impl SunSpecData {
     fn load_model(id: u16) -> anyhow::Result<Model> {
-        let fd = match File::open("foobar.xml") {
+        let filename = format!("models/smdx_{:05}.xml", id);
+        let fd = match File::open(filename) {
             Ok(f) => f,
             Err(e) => {
                 anyhow::bail!("Error reading XML file: {e}");
@@ -115,6 +141,7 @@ impl SunSpecData {
         if lookup.is_none() {
             match SunSpecData::load_model(id) {
                 Ok(m) => {
+
                     self.models.insert(id, m.clone());
                     Some(m)
                 },

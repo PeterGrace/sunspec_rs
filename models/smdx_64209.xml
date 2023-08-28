@@ -1,0 +1,159 @@
+<sunSpecModels v="1">
+  <!-- 64209: Battery Status-->
+  <model id="64209" len="22" name="battery_status">
+    <block len="22">
+      <point id="WhIn" offset="0" type="uint32" units="Wh" mandatory="true"/>
+      <point id="WhOut" offset="2" type="uint32" units="Wh" mandatory="true"/>
+      <point id="ErrorWord" offset="4" type="bitfield16" mandatory="true">
+        <symbol id="CS_ZERO_ERR">0</symbol>
+        <symbol id="REF_FAIL">1</symbol>
+        <symbol id="THERM_FAIL">2</symbol>
+        <symbol id="UNUSED">3</symbol>
+        <symbol id="EEPROM_FAIL">4</symbol>
+        <symbol id="SPT_ERROR">5</symbol>
+        <symbol id="HWV_MISMATCH">6</symbol>
+        <symbol id="SPTV_MISMATCH">7</symbol>
+        <symbol id="BATT_OVERTEMP">8</symbol>
+        <symbol id="REPEAT_OVERCURRENT">9</symbol>
+        <symbol id="FAN_FAIL">10</symbol>
+        <symbol id="CURRENT_CTRL_FAIL">11</symbol>
+        <symbol id="BMS_ERROR">12</symbol>
+        <symbol id="REPEAT_CONTACT">13</symbol>
+        <symbol id="EXTERNAL_STOP">14</symbol>
+        <symbol id="GROUND_FAULT">15</symbol>
+      </point>
+      <point id="EnableBits" offset="5" type="bitfield16" mandatory="true">
+        <symbol id="DEADMAN">0</symbol>
+        <symbol id="GATEDRIVE">1</symbol>
+        <symbol id="REBUS_CONNECT">2</symbol>
+        <symbol id="BATT_CONNECT">3</symbol>
+        <symbol id="INT_FAN">4</symbol>
+        <symbol id="EXT_FAN">5</symbol>
+        <symbol id="FAN_OVERRIDE">6</symbol>
+        <symbol id="BLKSTART_BATT_CHG">7</symbol>
+        <symbol id="CONV1">8</symbol>
+        <symbol id="CONV2">9</symbol>
+        <symbol id="AUTOMODE">10</symbol>
+        <symbol id="120HZ_FILTER">11</symbol>
+        <symbol id="BMS">12</symbol>
+        <symbol id="INHIBIT_CSZ">13</symbol>
+        <symbol id="CSZERO">14</symbol>
+        <symbol id="USB_RCP">15</symbol>
+      </point>
+      <point id="InhibitBits" offset="6" type="bitfield16" mandatory="true">
+        <symbol id="PRECHARGE_FAIL">0</symbol>
+        <symbol id="IBAT_INTEGRAL">1</symbol>
+        <symbol id="NO_REBUS_ENABLES">2</symbol>
+        <symbol id="BATTERY_BMS">3</symbol>
+        <symbol id="VBUS_OV">4</symbol>
+        <symbol id="VDC_OV">5</symbol>
+        <symbol id="VBAT_OV">6</symbol>
+        <symbol id="IBAT_OV">7</symbol>
+        <symbol id="NO_INPUT">8</symbol>
+        <symbol id="BATT_VERYLOW_TIMEOUT">9</symbol>
+        <symbol id="BATT_CRIT_LOW">10</symbol>
+        <symbol id="BATT_CRIT_HIGH">11</symbol>
+        <symbol id="UNUSED12">12</symbol>
+        <symbol id="UNUSED13">13</symbol>
+        <symbol id="UNUSED14">14</symbol>
+        <symbol id="UNUSED15">15</symbol>
+      </point>
+      <point id="StatusBits" offset="7" type="bitfield16" mandatory="true">
+        <symbol id="DEADMAN_UP">0</symbol>
+        <symbol id="REBUS_PRECHARGING">1</symbol>
+        <symbol id="REBUS_CONNECTED">2</symbol>
+        <symbol id="BATT_CONNECTED">3</symbol>
+        <symbol id="CHARGING">4</symbol>
+        <symbol id="DISCHARGING">5</symbol>
+        <symbol id="COULD_CHARGE">6</symbol>
+        <symbol id="COULD_DISCHARGE">7</symbol>
+        <symbol id="UNUSED8">8</symbol>
+        <symbol id="UNUSED9">9</symbol>
+        <symbol id="UNUSED10">10</symbol>
+        <symbol id="UNUSED11">11</symbol>
+        <symbol id="GFD_READY">12</symbol>
+        <symbol id="PLM_READY">13</symbol>
+        <symbol id="UNUSED14">14</symbol>
+        <symbol id="UNUSED15">15</symbol>        
+      </point>
+      <point id="BMSStatus" offset="8" type="bitfield16" mandatory="true">
+        <symbol id="ENABLE_DISCHARGE">0</symbol>
+        <symbol id="LOW_SOC">1</symbol>
+        <symbol id="VERYLOW_SOC">2</symbol>
+        <symbol id="CRITLOW_SOC">3</symbol>
+        <symbol id="ENABLE_CHARGE">4</symbol>
+        <symbol id="HIGH_SOC">5</symbol>
+        <symbol id="VERYHIGH_SOC">6</symbol>
+        <symbol id="CRITHIGH_SOC">7</symbol>
+        <symbol id="BMS_UP">8</symbol>
+        <symbol id="COMM_OK">9</symbol>
+        <symbol id="BATT_READY">10</symbol>
+        <symbol id="UNUSED">11</symbol>
+        <symbol id="CHARGE_WARNING">12</symbol>
+        <symbol id="DISCHARGE_WARNING">13</symbol>
+        <symbol id="UNUSED14">14</symbol>
+        <symbol id="FLOAT">15</symbol>        
+      </point>
+      <point id="Pad0" offset="9" type="pad" mandatory="true"/>
+      <point id="Pad1" offset="10" type="pad" mandatory="true"/>
+      <point id="Pad2" offset="11" type="pad" mandatory="true"/>
+      <point id="Pad3" offset="12" type="pad" mandatory="true"/>
+      <point id="Pad4" offset="13" type="pad" mandatory="true"/>
+      <point id="Pad5" offset="14" type="pad" mandatory="true"/>
+      <point id="Pad6" offset="15" type="pad" mandatory="true"/>
+      <point id="Pad7" offset="16" type="pad" mandatory="true"/>
+      <point id="Pad8" offset="17" type="pad" mandatory="true"/>
+      <point id="Pad9" offset="18" type="pad" mandatory="true"/>
+      <point id="Pad10" offset="19" type="pad" mandatory="true"/>
+      <point id="Pad11" offset="20" type="pad" mandatory="true"/>
+      <point id="Pad12" offset="21" type="pad" mandatory="true"/>
+    </block>
+  </model>
+  <strings id="64209">
+    <model>
+      <label>Generac B-Link Status</label>
+      <description>Miscellaneous battery status registers</description>
+      <notes></notes>
+    </model>
+    <point id="WhIn">
+      <label>Total Energy In</label>
+      <description>Energy absorbed by battery</description>
+      <notes></notes>
+    </point>
+    <point id="WhOut">
+      <label>Total Energy Out</label>
+      <description>Energy supplied by battery</description>
+      <notes></notes>
+    </point>
+    <point id="ErrorWord">
+      <label>Error status</label>
+      <description>Error status bitfield</description>
+      <notes></notes>
+    </point>
+    <point id="EnableBits">
+      <label>Enable bits</label>
+      <description>Internal status register</description>
+      <notes></notes>
+    </point>
+    <point id="InhibitBits">
+      <label>InhibitBits</label>
+      <description>Internal status register</description>
+      <notes></notes>
+    </point>
+    <point id="BMSStatus">
+      <label>BMS Status</label>
+      <description>Battery Management System flags</description>
+      <notes></notes>
+    </point>
+    <point id="StatusBits">
+      <label>General Status</label>
+      <description>General system status</description>
+      <notes></notes>
+    </point>
+    <point id="Pad0">
+      <label>Pad</label>
+      <description>Large pad for future model expansion</description>
+      <notes></notes>
+    </point>
+  </strings>
+</sunSpecModels>

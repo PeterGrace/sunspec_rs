@@ -1,0 +1,108 @@
+<sunSpecModels v="1">
+    <model id="64263" len="12" name="pvrss_config">
+        <block len="12">
+            <point id="Enable" type="enum16" access="rw" mandatory="true" offset="0">
+                <symbol id="ENABLED">1</symbol>
+                <symbol id="DISABLED">0</symbol>
+            </point>
+            <point id="AutoConfigPVRSS" offset="1" type="enum16" access="rw" mandatory="true">
+                <symbol id="N/A">0</symbol>
+                <symbol id="BEGIN_AUTOCONFIG">1</symbol>
+            </point>
+            <point id="PLMCh" offset="2" access="rw" type="enum16" mandatory="true">
+              <symbol id="CH_0">0</symbol>
+              <symbol id="CH_1">1</symbol>
+              <symbol id="CH_2">2</symbol>
+              <symbol id="CH_3">3</symbol>
+              <symbol id="CH_4">4</symbol>
+              <symbol id="CH_5">5</symbol>
+              <symbol id="CH_6">6</symbol>
+              <symbol id="CH_7">7</symbol>
+              <symbol id="CH_8">8</symbol>
+              <symbol id="CH_9">9</symbol>
+              <symbol id="CH_10">10</symbol>
+              <symbol id="CH_11">11</symbol>
+              <symbol id="CH_12">12</symbol>
+            </point>
+            <point id="VinStartup" type="uint16" offset="3" sf="SF_X10" units="V" access="rw" mandatory="true" />
+            <point id="NumStrings" offset="4" type="enum16" access="rw" mandatory="true">
+                <symbol id="ONE_SUBSTRING">1</symbol>
+                <symbol id="TWO_SUBSTRINGS">2</symbol>
+            </point>
+            <point id="EnablePVRSS" offset="5" type="enum16" access="rw" mandatory="true">
+                <symbol id="OFF">0</symbol>
+                <symbol id="ON">1</symbol>
+            </point>
+            <point id="SnapRSInstalledCnt" offset="6" type="uint16" access="rw" mandatory="true" />
+            <point id="SnapRSDetectedCnt" offset="7" type="uint16" mandatory="true" />
+            <point id="PVRSSLockoutError" offset="8" type="enum16" mandatory="true">
+                <symbol id="NO_ERROR">0</symbol>
+                <symbol id="ERROR_ACTIVE">1</symbol>
+            </point>
+            <point id="ClearPVRSSLockoutError" offset="9" type="enum16" access="rw" mandatory="true">
+                <symbol id="N/A">0</symbol>
+                <symbol id="CLEAR_ERROR">1</symbol>
+            </point>
+            <point id="SF_X10" offset="10" type="sunssf" />
+            <point id="Pad0" offset="11" type="pad" />
+        </block>
+    </model>
+    <strings id="64263" locale="en">
+        <model>
+            <label>PV Link Settings</label>
+            <description>Commission the PV Link and configure the Photovoltaic Rapid Shutdown System (PVRSS)</description>
+            <warning>SAFETY WARNING: PVRSS is an important safety feature that relies on user programmable settings. Failure to properly configure the PV Link may lead to equipment failure and/or property damage. Ensure that SnapRSInstalled is equal to the number of SnapRS devices physically installed in the associated substring(s).</warning>
+            <notes/>
+        </model>
+        <point id="Enable">
+            <label>Enable</label>
+            <description>Use this command to enable the PV Link. For first-time commissioning with SnapRS, use Auto Cfg PVRSS.</description>
+            <notes />
+        </point>
+        <point id="AutoConfigPVRSS">
+            <label>Auto Cfg PVRSS</label>
+            <description>Automatically configure and enable the PV Link for use with SnapRS. PV Link will count the number of SnapRS devices and set the installed count accordingly.</description>
+            <notes>After using Auto Cfg PVRSS, ensure that SnapRSInstalled is equal to the number of SnapRS devices physically installed in the associated substring(s). This feature will only work if PVRSS Lockout Error is not detected. It was previously known as "Enable w/PVRSS".</notes>
+        </point>
+        <point id="PLMCh">
+            <label>PLM channel</label>
+            <description>Channel for REbus communications. All devices in a system must use the same channel (except REbus Beacon).</description>
+            <notes/>
+        </point>
+        <point id="VinStartup">
+            <label>Vin Startup (V)</label>
+            <description>Minimum DC input voltage from the PV substring for the PV Link to start making power.</description>
+            <notes/>
+        </point>
+        <point id="NumStrings">
+            <label>String Count</label>
+            <description>Number of parallel PV substrings connected to this PV Link.</description>
+            <notes/>
+        </point>
+        <point id="EnablePVRSS">
+            <label>Enable PVRSS</label>
+            <description>If SnapRS devices are installed, this must be 'on'.</description>
+            <notes/>
+        </point>
+        <point id="SnapRSInstalledCnt">
+            <label>SnapRSInstalled</label>
+            <description>The total number of SnapRS devices physically installed on this PV Link. </description>
+            <notes/>
+        </point>
+        <point id="SnapRSDetectedCnt">
+            <label>SnapRSDetected</label>
+            <description>The number of SnapRS devices detected by the PV Link after its daily count. </description>
+            <notes/>
+        </point>
+        <point id="PVRSSLockoutError">
+            <label>PVRSS Lockout Error Status</label>
+            <description>A PVRSS Lockout Error indicates that SnapRSDetected does not equal SnapRSInstalled. Inspect SnapRS devices on this substring(s) for damage and replace as necessary.</description>
+            <notes />
+        </point>
+        <point id="ClearPVRSSLockoutError">
+            <label>Clear PVRSS Lockout Error</label>
+            <description>Use to clear PVRSS Lockout error after confirming all SnapRS are functioning properly.</description>
+            <notes>CAUTION: PVRSS Lockout is an important safety feature. Attempting to clear this error or change the SnapRSInstalled number without first addressing the underlying issue may lead to equipment failure and/or property damage.</notes>
+        </point>
+    </strings>
+</sunSpecModels>

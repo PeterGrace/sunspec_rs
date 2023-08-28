@@ -1,0 +1,290 @@
+<sunSpecModels v="1">
+  <!-- 64259: Site Energy Metrics -->
+  <model id="64259" len="64" name="site_energy">
+    <block len="64">
+      <point id="time" offset="0" type="uint32" mandatory="true" units="Unix seconds"/>
+      <point id="sysmode" offset="2" type="enum16" mandatory="true">
+        <symbol id="SAFETY_SHUTDOWN">0</symbol>
+        <symbol id="GRID_TIE">1</symbol>
+        <symbol id="SELF_SUPPLY">2</symbol>
+        <symbol id="CLEAN_BACKUP">3</symbol>
+        <symbol id="PRIORITY_BACKUP">4</symbol>
+        <symbol id="REMOTE_ARBITRAGE">5</symbol>
+        <symbol id="SELL">6</symbol>
+      </point>
+      <point id="alarms" offset="3" type="bitfield16" mandatory="true">
+        <symbol id="UNKNOWN_ERROR">0</symbol>
+        <symbol id="PVLINK_ERROR">1</symbol>
+        <symbol id="INVERTER_ERROR">2</symbol>
+        <symbol id="BATTERY_ERROR">3</symbol>
+        <symbol id="DC_GENERATOR_ERROR">4</symbol>
+      </point>
+      <point id="bat_soc"     offset="4"  type="uint16" sf="sf_10" mandatory="true" units="%SoC"/>
+      <point id="sf_10"       offset="5"  type="sunssf" mandatory="true"/>
+      <point id="inv_state"   offset="6"  type="enum16" mandatory="true">
+        <symbol id="UNKNOWN">0</symbol>
+        <symbol id="DISABLED">16</symbol>
+        <symbol id="INITIALIZING">256</symbol>
+        <symbol id="POWERING_UP">272</symbol>
+        <symbol id="CONNECTING_BUS">288</symbol>
+        <symbol id="TESTING_BUS">320</symbol>
+        <symbol id="LOW_BUS_VOLTAGE">512</symbol>
+        <symbol id="WAITING">784</symbol>
+        <symbol id="CONNECTING_GRID">2048</symbol>
+        <symbol id="DISCONNECTING_GRID">2064</symbol>
+        <symbol id="GRID_CONNECTED">2080</symbol>
+        <symbol id="ISLANDED">2096</symbol>
+        <symbol id="GENERATOR_PARALLEL">2112</symbol>
+        <symbol id="ERROR_GENERIC">28672</symbol>
+        <symbol id="ERROR_REBUS_FAULT">29968</symbol>
+        <symbol id="ERROR_INTERNAL_BUS_FAULT">29984</symbol>
+        <symbol id="CONFIGURATION_ERROR">30464</symbol>
+        <symbol id="BAD_RESET_ERROR">30480</symbol>
+        <symbol id="GROUND_FAULT">49152</symbol>
+      </point>
+      <point id="dcgenerator_power" offset="7"  type="int16" units="W" mandatory="true"/>
+      <point id="generation"  offset="8"  type="uint64" mandatory="true" units="Ws"/>
+      <point id="consumption" offset="12" type="int64" mandatory="true" units="Ws"/>
+      <point id="bat_out"     offset="16" type="uint64" mandatory="true" units="Ws"/>
+      <point id="bat_in"      offset="20" type="uint64" mandatory="true" units="Ws"/>
+      <point id="net_out"     offset="24" type="uint64" mandatory="true" units="Ws"/>
+      <point id="net_in"      offset="28" type="uint64" mandatory="true" units="Ws"/>
+      <point id="inv_out"     offset="32" type="uint64" mandatory="true" units="Ws"/>
+      <point id="inv_in"      offset="36" type="uint64" mandatory="true" units="Ws"/>
+      <point id="dcgenerator_out" offset="40" type="uint64" mandatory="true" units="Ws"/>
+      <point id="dcgenerator_in"  offset="44" type="uint64" mandatory="true" units="Ws"/>
+      <point id="net_out_var" offset="48" type="uint64" mandatory="true" units="VAR-seconds"/>
+      <point id="net_in_var"  offset="52" type="uint64" mandatory="true" units="VAR-seconds"/>
+      <point id="gen_power"   offset="56" type="int16" units="W" mandatory="true"/>
+      <point id="inv_power"   offset="57" type="int16" units="W" mandatory="true"/>
+      <point id="net_power"   offset="58" type="int16" units="W" mandatory="true"/>
+      <point id="bat_power"   offset="59" type="int16" units="W" mandatory="true"/>
+      <point id="max_sink_power"   offset="60" type="int16" units="W" mandatory="true"/>
+      <point id="max_source_power" offset="61" type="int16" units="W" mandatory="true"/>
+      <point id="Pad5"        offset="62"  type="pad" mandatory="true"/>
+      <point id="Pad6"        offset="63"  type="pad" mandatory="true"/>
+    </block>
+  </model>
+  <strings id="64259">
+    <model>
+      <label>Site Energy Metrics</label>
+      <description>Lifetime accumulated site-wide energy metrics</description>
+      <notes></notes>
+    </model>
+    <point id="time">
+      <label>Timestamp</label>
+      <description>Unix epoch time when update was created</description>
+      <notes></notes>
+    </point>
+    <point id="sysmode">
+      <label>Sysmode</label>
+      <description>System operating mode</description>
+      <notes></notes>
+    </point>
+    <point id="alarms">
+      <label>Alarms</label>
+      <description>Bitfield of device types reporting errors</description>
+      <notes></notes>
+    </point>
+    <point id="bat_soc">
+      <label>Battery SoC</label>
+      <description>Weighted average state of charge of all connected batteries</description>
+      <notes>Weights are based on Wh capacity of each battery</notes>
+    </point>
+    <point id="inv_state">
+      <label>Inverter State</label>
+      <description>State of the inverter</description>
+      <notes></notes>
+      <symbol id="UNKNOWN">
+        <label>unknown</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISABLED">
+        <label>disabled</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INITIALIZING">
+        <label>initializing</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="POWERING_UP">
+        <label>powering up</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CONNECTING_BUS">
+        <label>connecting to REbus</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TESTING_BUS">
+        <label>testing REbus</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LOW_BUS_VOLTAGE">
+        <label>low REbus voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="WAITING">
+        <label>waiting</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CONNECTING_GRID">
+        <label>connecting grid</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISCONNECTING_GRID">
+        <label>disconnecting grid</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GRID_CONNECTED">
+        <label>grid connected</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ISLANDED">
+        <label>islanded</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GENERATOR_PARALLEL">
+        <label>generator parallel</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ERROR_GENERIC">
+        <label>error</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ERROR_REBUS_FAULT">
+        <label>error: REbus fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ERROR_INTERNAL_BUS_FAULT">
+        <label>internal bus fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CONFIGURATION_ERROR">
+        <label>configuration error</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BAD_RESET_ERROR">
+        <label>bad reset error</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GROUND_FAULT">
+        <label>ground fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+    </point>
+    <point id="dcgenerator_power">
+      <label>DC Generator Power</label>
+      <description>Instantaneous DC generator power measurement</description>
+      <notes></notes>
+    </point>
+    <point id="generation">
+      <label>Generation Energy</label>
+      <description>Total energy of connected solar generation devices</description>
+      <notes></notes>
+    </point>
+    <point id="consumption">
+      <label>Consumption Energy</label>
+      <description>Energy consumption of local AC loads</description>
+      <notes></notes>
+    </point>
+    <point id="bat_out">
+      <label>Battery Discharge Energy</label>
+      <description>DC energy discharged from battery</description>
+      <notes></notes>
+    </point>
+    <point id="bat_in">
+      <label>Battery Charge Energy</label>
+      <description>DC energy into battery (charging)</description>
+      <notes></notes>
+    </point>
+    <point id="net_out">
+      <label>Net Exported Energy</label>
+      <description>Total AC energy exported from the site</description>
+      <notes></notes>
+    </point>
+    <point id="net_in">
+      <label>Net Imported Energy</label>
+      <description>Total AC energy imported from the site</description>
+      <notes></notes>
+    </point>
+    <point id="inv_out">
+      <label>Inverter Exported energy</label>
+      <description>AC energy exported to the DC bus through the inverter</description>
+      <notes></notes>
+    </point>
+    <point id="inv_in">
+      <label>Inverter Imported Energy</label>
+      <description>AC energy imported to the DC bus through the inverter</description>
+      <notes></notes>
+    </point>
+    <point id="dcgenerator_out">
+      <label>DC Generator Exported Energy</label>
+      <description>DC energy exported from the DC generator</description>
+      <notes></notes>
+    </point>
+    <point id="dcgenerator_in">
+      <label>DC Generator Imported Energy</label>
+      <description>DC energy imported from the DC generator</description>
+      <notes></notes>
+    </point>
+    <point id="net_out_var">
+      <label>Net Reactive Energy Injected</label>
+      <description>Total reactive energy injected by site, VAR</description>
+      <notes></notes>
+    </point>
+    <point id="net_in_var">
+      <label>Net Reactive Energy Absorbed</label>
+      <description>Total reactive energy absorbed by site</description>
+      <notes></notes>
+    </point>
+    <point id="gen_power">
+      <label>Generation Power</label>
+      <description>Instantaneous power measurement from solar generation sources</description>
+      <notes></notes>
+    </point>
+    <point id="inv_power">
+      <label>Inverter Power</label>
+      <description>Instantaneous power measurement of inverter AC output</description>
+      <notes></notes>
+    </point>
+    <point id="net_power">
+      <label>Net Power</label>
+      <description>Instantaneous AC power measurement from site</description>
+      <notes></notes>
+    </point>
+    <point id="bat_power">
+      <label>Battery Power</label>
+      <description>Instantaneous battery power measurement</description>
+      <notes></notes>
+    </point>
+    <point id="max_sink_power">
+      <label>Max Sink Power</label>
+      <description>Estimated maximum amount of power the site is capable of sinking at present</description>
+      <notes></notes>
+    </point>
+    <point id="max_source_power">
+      <label>Max Source Power</label>
+      <description>Estimated maximum amount of power the site is capable of sourcing at present</description>
+      <notes></notes>
+    </point>
+  </strings>
+</sunSpecModels>

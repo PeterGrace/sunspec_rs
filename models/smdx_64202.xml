@@ -1,0 +1,104 @@
+<sunSpecModels v="1">
+  <!-- 64202: Inverter Power Control -->
+  <model id="64202" len="12" name="REbus_arb">
+    <block len="12">
+      <point id="SysMd" offset="0" type="enum16" mandatory="true">
+        <symbol id="SAFETY_SHUTDOWN">0</symbol>
+        <symbol id="GRID_CONNECT">1</symbol>
+        <symbol id="SELF_SUPPLY">2</symbol>
+        <symbol id="CLEAN_BACKUP">3</symbol>
+        <symbol id="PRIORITY_BACKUP">4</symbol>
+        <symbol id="ARBITRAGE">5</symbol>
+      </point>
+      <point access="r" id="PMax" offset="1" type="uint16" sf="PQMax_SF" mandatory="true"/>
+      <point access="r" id="QMax" offset="2" type="uint16" sf="PQMax_SF" mandatory="true"/>
+      <point access="rw" id="PMaxLimPct" offset="3" type="int16" sf="PQLimPct_SF" mandatory="true"/>
+      <point access="rw" id="QMaxLimPct" offset="4" type="int16" sf="PQLimPct_SF" mandatory="true"/>
+      <point access="rw" id="PQGra" offset="5" type="uint16" sf="PQGra_SF" mandatory="true"/>
+      <point id="PQMax_SF" access="r" offset="6" type="sunssf" mandatory="true"/>
+      <point id="PQLimPct_SF" access="r" offset="7" type="sunssf" mandatory="true"/>
+      <point id="PQGra_SF"  access="r" offset="8" type="sunssf" mandatory="true"/>
+      <point access="rw" id="CtlPr" offset="9" type="enum16" mandatory="true">
+        <symbol id="REAL">0</symbol>
+        <symbol id="REACTIVE">1</symbol>
+      </point>
+      <point access="rw" id="PQSet_Ena" offset="10" type="enum16" mandatory="true">
+        <symbol id="DISABLE">0</symbol>
+        <symbol id="ENABLE">1</symbol>
+        <symbol id="UPDATE">2</symbol>
+        <symbol id="ENABLE_LATCHED">3</symbol>
+      </point>
+      <point access="rw" id="Conn" offset="11" type="enum16" mandatory="true">
+        <symbol id="DISCONNECT">0</symbol>
+        <symbol id="CONNECT">1</symbol>
+      </point>
+    </block>
+  </model>
+  <strings id="64202">
+    <model>
+      <label>Generac Inverter Arbitrage Control</label>
+      <description>Power control model for PWRcell</description>
+      <notes></notes>
+    </model>
+    <point id="SysMd">
+      <label>System Operating Mode</label>
+      <description>System operating mode</description>
+      <notes>must be in Sysmode 5, ARBITRAGE, for the controls in this model to take effect. It is read-only in this model. This parameter can be changed from model 64200 on the device at Modbus slave ID 1</notes>
+    </point>
+    <point id="PMax">
+      <label>Max real power</label>
+      <description>Maximum real power magnitude</description>
+      <notes>applies to import and export power levels</notes>
+    </point>
+    <point id="QMax">
+      <label>Max reactive power</label>
+      <description>Maximum reactive power magnitude</description>
+      <notes>applies to import and export power levels</notes>
+    </point>
+    <point id="PMaxLimPct">
+      <label>Real power target</label>
+      <description>target real power - -100.0% to +100.0% of PMax</description>
+      <notes>take note of scale factor: -1000 to 1000 corresponds to -100.0% to 100.0%</notes>
+    </point>
+    <point id="QMaxLimPct">
+      <label>Reactive power target</label>
+      <description>target reactive power - -100.0% to +100.0% of QMax</description>
+      <notes>take note of scale factor: -1000 to 1000 corresponds to -100.0% to 100.0%</notes>
+    </point>
+    <point id="PQGra">
+      <label>Ramp rate</label>
+      <description>ramp rate for slewing power to target</description>
+      <notes>applies to both active and reactive slewing</notes>
+    </point>
+    <point id="PQMax_SF">
+      <label>PQMax_SF</label>
+      <description>scale factor for max power</description>
+      <notes>applies to both active and reactive power levels</notes>
+    </point>
+    <point id="PQLimPct_SF">
+      <label>PQLimPct_SF</label>
+      <description>scale factor for target power percentages</description>
+      <notes>applies to both active and reactive power levels</notes>
+    </point>
+    <point id="PQGra_SF">
+      <label>PQGra_SF</label>
+      <description>scale factor for ramp rate</description>
+      <notes></notes>
+    </point>
+    <point id="CtlPr">
+      <label>Control priority</label>
+      <description>set control priority to real or reactive target</description>
+      <notes></notes>
+    </point>
+    <point id="PQSet_Ena">
+      <label>Enable arbitrage control</label>
+      <description>activate PQ control settings</description>
+      <notes>must set this flag to ENABLE or UPDATE for new settings to take effect</notes>
+    </point>
+    <point id="Conn">
+      <label>Connect</label>
+      <description>enable/disable inverter</description>
+      <notes></notes>
+    </point>
+  </strings>
+</sunSpecModels>

@@ -1,0 +1,115 @@
+<sunSpecModels v="1">
+	<model id="10000" len="15" name="batt_status">
+		<block len="15">
+			<point id="DeviceID"        type="uint16"                         offset="0"/>
+			<point id="BatteryType"     type="uint16"                         offset="1"/>
+			<point id="BatterySubtype"  type="uint16"                         offset="2"/>
+			<point id="State"           type="enum16"                         offset="3"/>
+			<point id="BattP"           type="int16"        units="W"         offset="4"/>
+			<point id="SoC"             type="uint16"       units="1/10 %"    sf="Tenth_SF"      offset="5"/>
+			<point id="Tenth_SF"        type="sunssf"                         offset="6"/>
+			<point id="BattV"           type="int16"        units="V"         sf="Tenth_SF"      offset="7"/>
+			<point id="Priority"        type="uint16"                         offset="8"/>
+			<point id="MaxChargePower"  type="uint16"       units="W"         offset="9"/>
+			<point id="MaxDischargePower"  type="uint16"    units="W"         offset="10"/>
+			<point id="WhyChargeLimit"  type="bitfield16"   customType="batt_status_limit_bits_t" offset="11">
+				<symbol id="CellV">0</symbol>
+				<symbol id="ModuleV">1</symbol>
+				<symbol id="StackV">2</symbol>
+				<symbol id="CellTemp">3</symbol>
+				<symbol id="SoC">4</symbol>
+				<symbol id="Disabled">5</symbol>
+				<symbol id="min_factor_bit0">6</symbol>
+				<symbol id="min_factor_bit1">7</symbol>
+				<symbol id="min_factor_bit2">8</symbol>
+				<symbol id="min_factor_bit3">9</symbol>
+			</point>
+			<point id="WhyDischargeLimit" type="bitfield16" customType="batt_status_limit_bits_t" offset="12">
+				<symbol id="CellV">0</symbol>
+				<symbol id="ModuleV">1</symbol>
+				<symbol id="StackV">2</symbol>
+				<symbol id="CellTemp">3</symbol>
+				<symbol id="SoC">4</symbol>
+				<symbol id="Disabled">5</symbol>
+				<symbol id="min_factor_bit0">6</symbol>
+				<symbol id="min_factor_bit1">7</symbol>
+				<symbol id="min_factor_bit2">8</symbol>
+				<symbol id="min_factor_bit3">9</symbol>
+			</point>
+			<point id="AmpHourCap"      type="uint16"      units="x100 Ah"    sf="AmpHourCap_SF" offset="13"/>
+			<point id="AmpHourCap_SF"   type="sunssf"                         offset="14"/>
+		</block>
+	</model>
+	<strings id="10000" locale="en">
+		<model>
+			<label>Battery Status</label>
+			<description>Contains the status of a battery.</description>
+			<notes></notes>
+		</model>
+		<point id="DeviceID">
+			<label></label>
+			<description></description>
+			<notes></notes>
+		</point>
+		<point id="BatteryType">
+			<label></label>
+			<description>Harbor, etc.</description>
+			<notes></notes>
+		</point>
+		<point id="BatterySubtype">
+			<label></label>
+			<description>Number of modules,</description>
+			<notes></notes>
+		</point>
+		<point id="State">
+			<label></label>
+			<description>disabled, ready, standby, etc.</description>
+			<notes></notes>
+		</point>
+		<point id="BattP">
+			<label></label>
+			<description>Signed watts at present</description>
+			<notes></notes>
+		</point>
+		<point id="SoC">
+			<label></label>
+			<description></description>
+			<notes>Tenths of percent</notes>
+		</point>
+		<point id="BattV">
+			<label></label>
+			<description></description>
+			<notes></notes>
+		</point>
+		<point id="Priority">
+			<label></label>
+			<description>From REB.h: the B-Link's active priority pair</description>
+			<notes></notes>
+		</point>
+		<point id="MaxChargePower">
+			<label></label>
+			<description>Watts, always >= 0</description>
+			<notes></notes>
+		</point>
+		<point id="MaxDischargePower">
+			<label></label>
+			<description>Watts, always >= 0</description>
+			<notes></notes>
+		</point>
+		<point id="WhyChargeLimit">
+			<label></label>
+			<description></description>
+			<notes></notes>
+		</point>
+		<point id="WhyDischargeLimit">
+			<label></label>
+			<description></description>
+			<notes></notes>
+		</point>
+		<point id="AmpHourCap">
+			<label></label>
+			<description></description>
+			<notes></notes>
+		</point>
+	</strings>
+</sunSpecModels>

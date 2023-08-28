@@ -1,0 +1,1204 @@
+<sunSpecModels v="1">
+  <!-- 64207: Generac REbus Status -->
+  <model id="64207" len="12" name="REbus_status">
+    <block len="12">
+      <point id="P" offset="0" type="int16" mandatory="true" units="W"/>
+      <point id="E" offset="1" type="uint32" mandatory="true" units="Wh"/>
+      <point id="V" offset="3" sf="VT_sf" type="uint16" mandatory="true" units="V"/>
+      <point id="I" offset="4" sf="I_sf" type="int16" mandatory="true" units="A"/>
+      <point id="T" offset="5" sf="VT_sf" type="int16" mandatory="true" units="Deg C"/>
+      <point id="St" offset="6" type="enum16" mandatory="true">
+        <symbol id="UNKNOWN">0</symbol>
+        <symbol id="DISABLED">16</symbol>
+        <symbol id="ESTOP_ACTIVE">32</symbol>
+        <symbol id="INITIALIZING">256</symbol>
+        <symbol id="POWERING_UP">272</symbol>
+        <symbol id="CONNECTING_BUS">288</symbol>
+        <symbol id="DISCONNECTING_BUS">304</symbol>
+        <symbol id="TESTING_BUS">320</symbol>
+        <symbol id="LOW_BUS_VOLTAGE">512</symbol>
+        <symbol id="STANDBY">768</symbol>
+        <symbol id="WAITING">784</symbol>
+        <symbol id="WAITING_NO_INPUT">800</symbol>
+        <symbol id="WAITING_HEARTBEAT">816</symbol>
+        <symbol id="CONNECTING_GRID">2048</symbol>
+        <symbol id="DISCONNECTING_GRID">2064</symbol>
+        <symbol id="GRID_CONNECTED">2080</symbol>
+        <symbol id="ISLANDED">2096</symbol>
+        <symbol id="CONNECTING_GENERATOR">2112</symbol>
+        <symbol id="GENERATOR_CONNECTED">2128</symbol>
+        <symbol id="DISCONNECTING_GENERATOR">2144</symbol>
+        <symbol id="ISLAND_OVERLOAD">2160</symbol>
+        <symbol id="ISLANDED_WITH_ACCPV">2176</symbol>
+        <symbol id="ISLANDED_WITHOUT_ACCPV">2192</symbol>
+        <symbol id="LOW_INPUT_VOLTAGE">4096</symbol>
+        <symbol id="TESTING_DEVICE_INPUT">4112</symbol>
+        <symbol id="SAFETY_CHECKS">4128</symbol>
+        <symbol id="CONNECTING_INPUT">4352</symbol>
+        <symbol id="DISCONNECTING_INPUT">4368</symbol>
+        <symbol id="CALIBRATING">4608</symbol>
+        <symbol id="CALIBRATION_SUCCESS">4624</symbol>
+        <symbol id="CALIBRATION_NEEDED">4640</symbol>
+        <symbol id="BURN_IN">4656</symbol>
+        <symbol id="BURN_IN_DONE">4672</symbol>
+        <symbol id="SCHEDULER_OVERRIDDEN">4864</symbol>
+        <symbol id="SCHEDULER_DISABLED">4880</symbol>
+        <symbol id="SCHEDULER_NOT_CONFIGURED">4896</symbol>
+        <symbol id="RUNNING">8192</symbol>
+        <symbol id="MAKING_POWER">8208</symbol>
+        <symbol id="LIMITING_POWER">8224</symbol>
+        <symbol id="LOW_WIND">12288</symbol>
+        <symbol id="HIGH_WIND">12304</symbol>
+        <symbol id="LOW_SUN">12544</symbol>
+        <symbol id="GROUND_FAULT">16384</symbol>
+        <symbol id="INSULATION_FAULT">16400</symbol>
+        <symbol id="GROUND_FAULT_LOCKOUT">16416</symbol>
+        <symbol id="ARC_FAULT">16640</symbol>
+        <symbol id="BUS_OVER_VOLTAGE">16896</symbol>
+        <symbol id="TEST_SUCCESS">20480</symbol>
+        <symbol id="TEST_FAILURE">20496</symbol>
+        <symbol id="TESTING_AFD">20512</symbol>
+        <symbol id="TESTING_PVRSS">20528</symbol>
+        <symbol id="TESTING_GFD">20544</symbol>
+        <symbol id="TEST_FAIL_PVRSS">20752</symbol>
+        <symbol id="TEST_FAIL_PVRSS_LOWVOC">20768</symbol>
+        <symbol id="TEST_FAIL_PVRSS_COUNT_MISMATCH">20784</symbol>
+        <symbol id="TEST_FAIL_PVRSS_VLOW_HIGH">20800</symbol>
+        <symbol id="TEST_FAIL_PVRSS_VLOW_TIMEOUT">20816</symbol>
+        <symbol id="TEST_FAIL_AFD">20832</symbol>
+        <symbol id="TEST_FAIL_GFD">20848</symbol>
+        <symbol id="TEST_FAIL_PVRSS_NOT_CONFIGURED">20864</symbol>
+        <symbol id="UPDATING_FIRMWARE">20992</symbol>
+        <symbol id="CHARGING_BATTERY">24576</symbol>
+        <symbol id="FLOAT_CHARGING_BATTERY">24592</symbol>
+        <symbol id="BULK_CHARGING_BATTERY">24608</symbol>
+        <symbol id="ABSORPTION_CHARGING_BATTERY">24624</symbol>
+        <symbol id="EQUALIZE_CHARGING_BATTERY">24640</symbol>
+        <symbol id="DISCHARGING_BATTERY">24832</symbol>
+        <symbol id="LOW_BATTERY_VOLTAGE">24848</symbol>
+        <symbol id="CELL_IMBALANCE">25344</symbol>
+        <symbol id="ERROR_GENERIC">28672</symbol>
+        <symbol id="OVER_VOLTAGE_INPUT">28688</symbol>
+        <symbol id="OVER_VOLTAGE_OUTPUT">28704</symbol>
+        <symbol id="OVER_CURRENT_INPUT">28720</symbol>
+        <symbol id="OVER_CURRENT_OUTPUT">28736</symbol>
+        <symbol id="ERROR_LOW_BATTERY_VOLTAGE">28752</symbol>
+        <symbol id="OVER_TEMPERATURE">28928</symbol>
+        <symbol id="GROUND_FAULT_LOCKOUT_DEFUNCT">29184</symbol>
+        <symbol id="INSULATION_FAULT_LOCKOUT">29200</symbol>
+        <symbol id="ARC_FAULT_LOCKOUT">29440</symbol>
+        <symbol id="PVRSS_LOCKOUT">29456</symbol>
+        <symbol id="INPUT_REVERSED">29696</symbol>
+        <symbol id="ERROR_REBUS_FAULT">29968</symbol>
+        <symbol id="ERROR_INTERNAL_BUS_FAULT">29984</symbol>
+        <symbol id="CONFIGURATION_ERROR">30464</symbol>
+        <symbol id="BAD_RESET_ERROR">30480</symbol>
+        <symbol id="WIRING_ERROR">30496</symbol>
+        <symbol id="ERROR_FUSE_BLOWN">30512</symbol>
+        <symbol id="CALIBRATION_0">32256</symbol>
+        <symbol id="CALIBRATION_1">32272</symbol>
+        <symbol id="CALIBRATION_2">32288</symbol>
+        <symbol id="CALIBRATION_3">32304</symbol>
+      </point>
+      <point id="Ev" offset="7" type="enum16" mandatory="true">
+        <symbol id="GENERIC">32768</symbol>
+        <symbol id="POWERUP">32784</symbol>
+        <symbol id="SUPPLY_UNDERVOLTAGE">32800</symbol>
+        <symbol id="DAILY_EVENT">32816</symbol>
+        <symbol id="FIRMWARE_RECEIVED">32832</symbol>
+        <symbol id="SUPPLY_OVERVOLTAGE">32848</symbol>
+        <symbol id="CT_CALIBRATION_NIBBLED">32864</symbol>
+        <symbol id="CT_CALIBRATION_SUCCESS">32880</symbol>
+        <symbol id="CT_CALIBRATION_FAULT">32896</symbol>
+        <symbol id="FIRMWARE_REJECTED">32912</symbol>
+        <symbol id="ENABLE">33024</symbol>
+        <symbol id="DISABLE">33280</symbol>
+        <symbol id="MANUAL_DISABLE">33296</symbol>
+        <symbol id="EXTERNAL_ESTOP">33312</symbol>
+        <symbol id="ENTERING_ISLANDED">33328</symbol>
+        <symbol id="SYSMODE_CHANGE">33536</symbol>
+        <symbol id="HEARTBEAT_LOST">33584</symbol>
+        <symbol id="SYSMODE_BAD">33792</symbol>
+        <symbol id="DEBUG_TRACE">34048</symbol>
+        <symbol id="TOU_ENTRY_ACTIVATED">34304</symbol>
+        <symbol id="PVRSS_INSTALLED_COUNT_CHANGED">34560</symbol>
+        <symbol id="PVRSS_LOCKOUT_CLEARED">34576</symbol>
+        <symbol id="PVRSS_LOCKOUT_SET">34592</symbol>
+        <symbol id="SOFTWARE_VERSION">36832</symbol>
+        <symbol id="HARDWARE_VERSION">36848</symbol>
+        <symbol id="INTERRUPT_FAULT">36864</symbol>
+        <symbol id="GATEDRIVE_FAULT">37120</symbol>
+        <symbol id="TIMER_FAULT">37376</symbol>
+        <symbol id="MUX_STUCK">37632</symbol>
+        <symbol id="RELAY_FAULT">37664</symbol>
+        <symbol id="TRANSISTOR_FAILURE">39168</symbol>
+        <symbol id="OVER_TEMPERATURE">41216</symbol>
+        <symbol id="FAN_FAILURE">41232</symbol>
+        <symbol id="FUSE_BLOWN">41248</symbol>
+        <symbol id="MISWIRING">41472</symbol>
+        <symbol id="ALTERNATOR_BAD">42496</symbol>
+        <symbol id="REVERSE_ROTATION">42752</symbol>
+        <symbol id="BUS_FAULT">45056</symbol>
+        <symbol id="BUS_NO_LOAD">45072</symbol>
+        <symbol id="BUS_PRECHARGE_FAIL">45088</symbol>
+        <symbol id="BUS_OVER_VOLTAGE">45312</symbol>
+        <symbol id="BUS_UNDER_VOLTAGE">45328</symbol>
+        <symbol id="BUS_OVER_CURRENT">45568</symbol>
+        <symbol id="INTERNAL_OVERVOLTAGE">45824</symbol>
+        <symbol id="RAPID_SHUTDOWN_FAULT">46096</symbol>
+        <symbol id="BATTERY_GENERIC">47104</symbol>
+        <symbol id="BATTERY_READY">47120</symbol>
+        <symbol id="BATTERY_NOT_READY">47136</symbol>
+        <symbol id="BATTERY_CONNECTED">47152</symbol>
+        <symbol id="BATTERY_DISCONNECTED">47168</symbol>
+        <symbol id="BATTERY_UNDER_CHARGE">47184</symbol>
+        <symbol id="BATTERY_OVER_CHARGE">47200</symbol>
+        <symbol id="BATTERY_BAD_MODULE">47216</symbol>
+        <symbol id="BMS_GENERIC">47360</symbol>
+        <symbol id="BMS_ALARM">47376</symbol>
+        <symbol id="BMS_WARNING">47392</symbol>
+        <symbol id="BMS_ERROR">47408</symbol>
+        <symbol id="GROUND_FAULT">49152</symbol>
+        <symbol id="GROUND_FAULT_LOCKOUT">49168</symbol>
+        <symbol id="INSULATION_FAULT">49184</symbol>
+        <symbol id="INPUT_LOW">49408</symbol>
+        <symbol id="INPUT_SENSOR_FAULT">49664</symbol>
+        <symbol id="INPUT_OVER_CURRENT">49920</symbol>
+        <symbol id="INPUT_OVERSPEED">50176</symbol>
+        <symbol id="INPUT_HIGH">50432</symbol>
+        <symbol id="ARC_FAULT">50688</symbol>
+        <symbol id="ARC_FAULT_LOCKOUT">50704</symbol>
+        <symbol id="INPUT_READY">50944</symbol>
+        <symbol id="INPUT_REVERSED">51200</symbol>
+        <symbol id="INPUT_OVER_VOLTAGE">51456</symbol>
+        <symbol id="GRID_FAULT">53248</symbol>
+        <symbol id="GRID_OVER_VOLTAGE">53264</symbol>
+        <symbol id="GRID_OVER_CURRENT">53280</symbol>
+        <symbol id="GRID_OVER_FREQUENCY">53296</symbol>
+        <symbol id="GRID_UNDER_VOLTAGE">53312</symbol>
+        <symbol id="GRID_UNDER_FREQUENCY">53328</symbol>
+        <symbol id="GRID_OVER_VOLTAGE_FAST">53344</symbol>
+        <symbol id="GRID_HIGH_IMPEDANCE">53360</symbol>
+        <symbol id="TRANSFER_FAIL">53504</symbol>
+        <symbol id="ISLAND_OVERLOAD">53520</symbol>
+        <symbol id="SETPOINT_CRC_FAULT">57344</symbol>
+        <symbol id="EEPROM_FAULT">57600</symbol>
+        <symbol id="FLASH_FAULT">57856</symbol>
+        <symbol id="PLM_RESTART">58112</symbol>
+        <symbol id="DEBUG_DATA_COLLECTION">58368</symbol>
+        <symbol id="EVPATTERN_LOCKOUT">58624</symbol>
+        <symbol id="BAD_RESET_ERROR">58880</symbol>
+        <symbol id="PLM_FAULT">59136</symbol>
+        <symbol id="DEFAULT_TRAP">61440</symbol>
+        <symbol id="ADDRESS_ERROR">61456</symbol>
+        <symbol id="STACK_ERROR">61472</symbol>
+        <symbol id="OSCILLATOR_FAIL">61488</symbol>
+        <symbol id="MATH_ERROR">61504</symbol>
+        <symbol id="DMAC_ERROR">61520</symbol>
+      </point>
+      <point id="RB" offset="8" type="bitfield16" mandatory="true">
+        <symbol id="ENABLE_MASTER">0</symbol>
+        <symbol id="ENABLE_SOURCE">1</symbol>
+        <symbol id="ENABLE_SINK">2</symbol>
+        <symbol id="RESERVED3">3</symbol>
+        <symbol id="BUS_CONNECTED">4</symbol>
+        <symbol id="BUS_DISCONNECTED">5</symbol>
+        <symbol id="SOURCING">6</symbol>
+        <symbol id="SINKING">7</symbol>
+        <symbol id="BUS_VOLTAGE_LOW">8</symbol>
+        <symbol id="BUS_VOLTAGE_HIGH">9</symbol>
+        <symbol id="BUS_IMBALANCE">10</symbol>
+        <symbol id="RESERVED11">11</symbol>
+        <symbol id="PLC_GOOD">12</symbol>
+        <symbol id="HEARTBEAT_GOOD">13</symbol>
+        <symbol id="ADAPTIVE_VREBUS_ACTIVE">14</symbol>
+        <symbol id="RESERVED15">15</symbol>
+      </point>
+      <point id="VT_sf" offset="9" type="sunssf" mandatory="true" />
+      <point id="I_sf" offset="10" type="sunssf" mandatory="true" />
+      <point id="Pad0" offset="11" type="pad" mandatory="true"/>
+    </block>
+  </model>
+  <strings id="64207">
+    <model>
+      <label>REbus Status</label>
+      <description>REbus status data that is defined commonly across Generac REbus devices</description>
+      <notes></notes>
+    </model>
+    <point id="P">
+      <label>REbus Power</label>
+      <description>REbus power. Positive indicates the device is sourcing to REbus, and negative indicates sinking from REbus.</description>
+      <notes></notes>
+    </point>
+    <point id="E">
+      <label>Accumulated Energy</label>
+      <description>Total accumulated energy (exact definition differs by device)</description>
+      <notes></notes>
+    </point>    
+    <point id="V">
+      <label>REbus Voltage </label>
+      <description>REbus DC Bus Voltage</description>
+      <notes></notes>
+    </point>
+    <point id="I">
+      <label>REbus Current</label>
+      <description>REbus current. Positive indicates the device is sourcing to REbus, and negative indicates sinking from REbus.</description>
+      <notes></notes>
+    </point>
+    <point id="T">
+      <label>Device Temperature</label>
+      <description>Device temperature</description>
+      <notes></notes>
+    </point>
+    <point id="VT_sf">
+      <label>VT_sf</label>
+      <description>Scale factor for V and T</description>
+      <notes></notes>
+    </point>
+    <point id="I_sf">
+      <label>I_sf</label>
+      <description>Scale factor for I</description>
+      <notes></notes>
+    </point>
+    <point id="RB">
+      <label>REbusBits</label>
+      <description>REbus status register</description>
+      <notes></notes>
+    </point>
+    <point id="St">
+      <label>State</label>
+      <description/>
+      <notes>State is a status field used by Generac for operations and maintenance purposes</notes>
+      <symbol id="UNKNOWN">
+        <label>device offline</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISABLED">
+        <label>disabled</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ESTOP_ACTIVE">
+        <label>e-stop active</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INITIALIZING">
+        <label>initializing</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="POWERING_UP">
+        <label>powering up</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CONNECTING_BUS">
+        <label>connecting to REbus</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISCONNECTING_BUS">
+        <label>disconnecting REbus</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TESTING_BUS">
+        <label>testing REbus...</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LOW_BUS_VOLTAGE">
+        <label>low REbus voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="STANDBY">
+        <label>standby</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="WAITING">
+        <label>waiting</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="WAITING_NO_INPUT">
+        <label>waiting: no input</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="WAITING_HEARTBEAT">
+        <label>waiting: no heartbeat</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CONNECTING_GRID">
+        <label>connecting grid</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISCONNECTING_GRID">
+        <label>disconnecting grid</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GRID_CONNECTED">
+        <label>grid connected</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ISLANDED">
+        <label>islanded</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CONNECTING_GENERATOR">
+        <label>connecting gen</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GENERATOR_CONNECTED">
+        <label>gen connected</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISCONNECTING_GENERATOR">
+        <label>disconnecting gen</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ISLAND_OVERLOAD">
+        <label>island overload</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ISLANDED_WITH_ACCPV">
+        <label>islanded: AC PV on </label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ISLANDED_WITHOUT_ACCPV">
+        <label>islanded: AC PV off</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LOW_INPUT_VOLTAGE">
+        <label>low input voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TESTING_DEVICE_INPUT">
+        <label>testing input</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="SAFETY_CHECKS">
+        <label>safety checks</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CONNECTING_INPUT">
+        <label>connecting input</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISCONNECTING_INPUT">
+        <label>disconnecting input</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATING">
+        <label>calibrating</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATION_SUCCESS">
+        <label>calibration success!</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATION_NEEDED">
+        <label>calibration required</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BURN_IN">
+        <label>burning in</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BURN_IN_DONE">
+        <label>burn in done</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="SCHEDULER_OVERRIDDEN">
+        <label>running, overridden</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="SCHEDULER_DISABLED">
+        <label>scheduler disabled</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="SCHEDULER_NOT_CONFIGURED">
+        <label>scheduler not configured</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RUNNING">
+        <label>running</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="MAKING_POWER">
+        <label>making power</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LIMITING_POWER">
+        <label>limiting power</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LOW_WIND">
+        <label>low wind</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="HIGH_WIND">
+        <label>high wind</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LOW_SUN">
+        <label>low sun</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GROUND_FAULT">
+        <label>ground fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INSULATION_FAULT">
+        <label>insulation fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GROUND_FAULT_LOCKOUT">
+        <label>ground fault lockout</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ARC_FAULT">
+        <label>arc fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BUS_OVER_VOLTAGE">
+        <label>high REbus voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TEST_SUCCESS">
+        <label>test success</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TEST_FAILURE">
+        <label>test failure</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TESTING_AFD">
+        <label>testing AFD</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TESTING_PVRSS">
+        <label>testing PVRSS</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TESTING_GFD">
+        <label>testing GFD</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TEST_FAIL_PVRSS">
+        <label>PVRSS selftest failed</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TEST_FAIL_PVRSS_LOWVOC">
+        <label>PVRSS fail: low input</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TEST_FAIL_PVRSS_COUNT_MISMATCH">
+        <label>PVRSS count mismatch</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TEST_FAIL_PVRSS_VLOW_HIGH">
+        <label>PVRSS fail: hi input</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TEST_FAIL_PVRSS_VLOW_TIMEOUT">
+        <label>PVRSS fail: timeout</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TEST_FAIL_AFD">
+        <label>AFD selftest failed</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TEST_FAIL_GFD">
+        <label>GFD selftest failed</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TEST_FAIL_PVRSS_NOT_CONFIGURED">
+        <label>PVRSS not configured</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="UPDATING_FIRMWARE">
+        <label>updating firmware</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CHARGING_BATTERY">
+        <label>charging</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="FLOAT_CHARGING_BATTERY">
+        <label>float charging</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BULK_CHARGING_BATTERY">
+        <label>bulk charging</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ABSORPTION_CHARGING_BATTERY">
+        <label>absorption charging</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="EQUALIZE_CHARGING_BATTERY">
+        <label>equalizing</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISCHARGING_BATTERY">
+        <label>discharging</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LOW_BATTERY_VOLTAGE">
+        <label>low battery voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CELL_IMBALANCE">
+        <label>cell imbalance</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ERROR_GENERIC">
+        <label>error</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="OVER_VOLTAGE_INPUT">
+        <label>input over voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="OVER_VOLTAGE_OUTPUT">
+        <label>output over voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="OVER_CURRENT_INPUT">
+        <label>input over current</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="OVER_CURRENT_OUTPUT">
+        <label>output over current</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ERROR_LOW_BATTERY_VOLTAGE">
+        <label>low battery voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="OVER_TEMPERATURE">
+        <label>over temperature</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GROUND_FAULT_LOCKOUT_DEFUNCT">
+        <label>ground fault lockout</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INSULATION_FAULT_LOCKOUT">
+        <label>insulation fault lockout</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ARC_FAULT_LOCKOUT">
+        <label>arc fault lockout</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="PVRSS_LOCKOUT">
+        <label>PVRSS lockout error</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INPUT_REVERSED">
+        <label>input reversed</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ERROR_REBUS_FAULT">
+        <label>error: REbus fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ERROR_INTERNAL_BUS_FAULT">
+        <label>error: int DC fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CONFIGURATION_ERROR">
+        <label>config error</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BAD_RESET_ERROR">
+        <label>bad reset error</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="WIRING_ERROR">
+        <label>wiring error</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ERROR_FUSE_BLOWN">
+        <label>fuse blown error</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATION_0">
+        <label>calibration mode</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATION_1">
+        <label>calibration mode</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATION_2">
+        <label>calibration mode</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATION_3">
+        <label>calibration mode</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+    </point>
+    <point id="Ev">
+      <label>Last Event</label>
+      <description/>
+      <notes>The most recent event that occurred on the device</notes>
+      <symbol id="GENERIC">
+        <label>generic event</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="POWERUP">
+        <label>power up</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="SUPPLY_UNDERVOLTAGE">
+        <label>supply under voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DAILY_EVENT">
+        <label>daily event</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="FIRMWARE_RECEIVED">
+        <label>firmware received</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="SUPPLY_OVERVOLTAGE">
+        <label>supply over voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CT_CALIBRATION_NIBBLED">
+        <label>ct cal = </label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CT_CALIBRATION_SUCCESS">
+        <label>ct cal success</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CT_CALIBRATION_FAULT">
+        <label>ct cal fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="FIRMWARE_REJECTED">
+        <label>firmware rejected</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ENABLE">
+        <label>enable</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISABLE">
+        <label>disable</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="MANUAL_DISABLE">
+        <label>manual disable</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="EXTERNAL_ESTOP">
+        <label>external estop</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ENTERING_ISLANDED">
+        <label>entering islanded</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="SYSMODE_CHANGE">
+        <label>sysmode change</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="HEARTBEAT_LOST">
+        <label>heartbeat lost</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="SYSMODE_BAD">
+        <label>unauthorized sysmode</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DEBUG_TRACE">
+        <label>debug trace recorded</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TOU_ENTRY_ACTIVATED">
+        <label>TOU entry activated</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="PVRSS_INSTALLED_COUNT_CHANGED">
+        <label>PVRSS count changed</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="PVRSS_LOCKOUT_CLEARED">
+        <label>PVRSS lockout cleared</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="PVRSS_LOCKOUT_SET">
+        <label>PVRSS lockout set</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="SOFTWARE_VERSION">
+        <label>software version mismatch</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="HARDWARE_VERSION">
+        <label>hardware version mismatch</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INTERRUPT_FAULT">
+        <label>interrupt fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GATEDRIVE_FAULT">
+        <label>gate drive fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TIMER_FAULT">
+        <label>int. timer fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="MUX_STUCK">
+        <label>mux stuck</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RELAY_FAULT">
+        <label>relay fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TRANSISTOR_FAILURE">
+        <label>transistor failure</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="OVER_TEMPERATURE">
+        <label>over temp shutdown</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="FAN_FAILURE">
+        <label>fan failure</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="FUSE_BLOWN">
+        <label>fuse blown</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="MISWIRING">
+        <label>miswiring</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ALTERNATOR_BAD">
+        <label>bad alternator</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="REVERSE_ROTATION">
+        <label>reverse rotation</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BUS_FAULT">
+        <label>REbus fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BUS_NO_LOAD">
+        <label>REbus no load</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BUS_PRECHARGE_FAIL">
+        <label>precharge fail</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BUS_OVER_VOLTAGE">
+        <label>REbus over voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BUS_UNDER_VOLTAGE">
+        <label>REbus under voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BUS_OVER_CURRENT">
+        <label>REbus over current</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INTERNAL_OVERVOLTAGE">
+        <label>internal over voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RAPID_SHUTDOWN_FAULT">
+        <label>PVRSS selftest failed</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BATTERY_GENERIC">
+        <label>battery issue</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BATTERY_READY">
+        <label>battery ready</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BATTERY_NOT_READY">
+        <label>battery not ready</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BATTERY_CONNECTED">
+        <label>battery connected</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BATTERY_DISCONNECTED">
+        <label>battery disconnected</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BATTERY_UNDER_CHARGE">
+        <label>battery under charge</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BATTERY_OVER_CHARGE">
+        <label>battery over charge</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BATTERY_BAD_MODULE">
+        <label>battery over charge</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BMS_GENERIC">
+        <label>BMS generic</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BMS_ALARM">
+        <label>BMS alarm</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BMS_WARNING">
+        <label>BMS warning</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BMS_ERROR">
+        <label>BMS error</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GROUND_FAULT">
+        <label>ground fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GROUND_FAULT_LOCKOUT">
+        <label>ground fault lockout</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INSULATION_FAULT">
+        <label>insulation fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INPUT_LOW">
+        <label>input low</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INPUT_SENSOR_FAULT">
+        <label>input sensor fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INPUT_OVER_CURRENT">
+        <label>input over current</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INPUT_OVERSPEED">
+        <label>input over speed</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INPUT_HIGH">
+        <label>input high</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ARC_FAULT">
+        <label>arc fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ARC_FAULT_LOCKOUT">
+        <label>arc fault lockout</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INPUT_READY">
+        <label>input ready</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INPUT_REVERSED">
+        <label>input reversed</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INPUT_OVER_VOLTAGE">
+        <label>input over voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GRID_FAULT">
+        <label>grid fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GRID_OVER_VOLTAGE">
+        <label>grid over voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GRID_OVER_CURRENT">
+        <label>grid over current</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GRID_OVER_FREQUENCY">
+        <label>grid over frequency</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GRID_UNDER_VOLTAGE">
+        <label>grid under voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GRID_UNDER_FREQUENCY">
+        <label>grid under frequency</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GRID_OVER_VOLTAGE_FAST">
+        <label>grid overvoltage fast</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GRID_HIGH_IMPEDANCE">
+        <label>grid high impedance</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TRANSFER_FAIL">
+        <label>transfer sw fail</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ISLAND_OVERLOAD">
+        <label>island overload</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="SETPOINT_CRC_FAULT">
+        <label>bad spt crc</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="EEPROM_FAULT">
+        <label>EEPROM failure</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="FLASH_FAULT">
+        <label>FLASH fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="PLM_RESTART">
+        <label>PLM restart</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DEBUG_DATA_COLLECTION">
+        <label>debug data collected</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="EVPATTERN_LOCKOUT">
+        <label>event pattern lockout</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BAD_RESET_ERROR">
+        <label>bad reset error</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="PLM_FAULT">
+        <label>PLM fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DEFAULT_TRAP">
+        <label>default trap</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ADDRESS_ERROR">
+        <label>address error trap</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="STACK_ERROR">
+        <label>stack error trap</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="OSCILLATOR_FAIL">
+        <label>osc. fail trap</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="MATH_ERROR">
+        <label>math error trap</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DMAC_ERROR">
+        <label>dmac error trap</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+    </point>        
+  </strings>
+</sunSpecModels>

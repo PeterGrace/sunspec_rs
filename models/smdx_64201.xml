@@ -1,0 +1,38 @@
+<sunSpecModels v="1">
+  <!-- 64201: Inverter Export Measurements -->
+  <model id="64201" len="6" name="REbus_exp">
+    <block len="6">
+      <point id="Px1" offset="0" type="int16" mandatory="true" units="W"/>
+      <point id="Px2" offset="1" type="int16" mandatory="true" units="W"/>
+      <point id="Whx" offset="2" type="acc32" mandatory="true" units="Wh"/>
+      <point id="Whin" offset="4" type="acc32" mandatory="true" units="Wh"/>
+    </block>
+  </model>
+  <strings id="64201">
+    <model>
+      <label>Generac Inverter Export model</label>
+      <description>Generac Vendor model for inverters with current transducers</description>
+      <notes></notes>
+    </model>
+    <point id="Px1">
+      <label>Power export line 1</label>
+      <description>RMS power to/from grid on line 1</description>
+      <notes>if no CTs connected, this value will be 0x8000</notes>
+    </point>
+    <point id="Px2">
+      <label>Power export line 2</label>
+      <description>RMS power to/from grid on line 2</description>
+      <notes>if no CTs connected, this value will be 0x8000</notes>
+    </point>
+    <point id="Whx">
+      <label>Energy exported</label>
+      <description>Energy exported to grid</description>
+      <notes></notes>
+    </point>
+    <point id="Whin">
+      <label>Energy imported</label>
+      <description>Total imported energy to REbus</description>
+      <notes>does not include local loads</notes>
+    </point>
+  </strings>
+</sunSpecModels>

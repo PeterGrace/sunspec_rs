@@ -32,22 +32,28 @@ pub async fn main() {
             process::exit(1);
         }
     };
-    //ss.models = SunSpecConnection::populate_models(ss.ctx).await;
-    ss.models.insert(1, ModelData { id: 1, len: 66, address: 40002, model: None });
+
+    ss.models = ss.clone().populate_models().await;
+
     let mut ssd = SunSpecData::default();
     ss.models.iter().for_each(|(id, md)| {
         let id = id.clone();
         let ssd = ssd.clone();
         let m = ssd.get_model(id);
     });
+
+    let modelid = 64207;
+    let field = "Ev";
+
     let mut md = ss.models.get(&1).unwrap().clone();
     if md.model.is_none() {
-        md.model = ssd.get_model(1);
+        md.model = ssd.get_model(modelid);
     }
-
-    let field = "Md";
-    info!("Attempting to call get point on model 1, field {field}");
-    let point = ss.get_point(md, field).await;
+    let model_name = md.clone().model.unwrap().name;
+    info!("Attempting to call get point on model {}, field {field}",model_name);
+    if let Some(pt) = ss.get_point(md, field).await {
+        info!("We received a PointType of {:#?}", pt);
+    }
 
 
 

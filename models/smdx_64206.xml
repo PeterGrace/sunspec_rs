@@ -1,0 +1,299 @@
+<sunSpecModels v="1">
+  <!-- 64206: PWRcell Configuration -->
+  <model id="64206" len="46" name="EIconfig">
+    <block len="46">
+      <point id="Conn" offset="0" access="rw" type="enum16" mandatory="true">
+        <symbol id="DISABLED">0</symbol>
+        <symbol id="ENABLED">1</symbol>
+      </point>
+      <point id="Pwd" offset="1" access="rw" type="uint64" mandatory="true"/>
+      <point id="SRD" offset="5" type="enum16" mandatory="true">
+        <symbol id="IEEE_1547">0</symbol>
+        <symbol id="RULE_14H_1">1</symbol>
+        <symbol id="RULE_14H_2">2</symbol>
+        <symbol id="RULE_21">3</symbol>
+        <symbol id="RULE_PREPA">4</symbol>
+        <symbol id="ISONE">5</symbol>
+        <symbol id="RULE_LADWP">6</symbol>
+        <symbol id="RULE_PECO">7</symbol>
+        <symbol id="RULE_MISO">8</symbol>
+      </point>
+      <point id="Def" offset="6" type="enum16" mandatory="true">
+        <symbol id="NOT_DEFAULTED">0</symbol>
+        <symbol id="DEFAULTED">1</symbol>
+        <symbol id="UNKNOWN">2</symbol>
+      </point>
+      <point id="ZExp" offset="7" access="rw" type="enum16" mandatory="true">
+        <symbol id="DISABLED">0</symbol>
+        <symbol id="ENABLED">1</symbol>
+      </point>
+      <point id="IslandEna" offset="8" access="rw" type="enum16" mandatory="true">
+        <symbol id="ISLANDING_DISABLED">0</symbol>
+        <symbol id="ISLANDING_ENABLED">1</symbol>
+      </point>
+      <point id="ActSysMds" offset="9" access="rw" type="bitfield16" mandatory="true">
+        <symbol id="SAFETY_SHUTDOWN">0</symbol>
+        <symbol id="GRID_TIE">1</symbol>
+        <symbol id="SELF_SUPPLY">2</symbol>
+        <symbol id="CLEAN_BACKUP">3</symbol>
+        <symbol id="PRIORITY_BACKUP">4</symbol>
+        <symbol id="REMOTE_ARBITRAGE">5</symbol>
+        <symbol id="SELL">6</symbol>
+      </point>
+      <point id="CTTrig" offset="10" access="rw" type="enum16" mandatory="true">
+        <symbol id="AUTO">0</symbol>
+        <symbol id="TRIGGER">1</symbol>
+      </point>
+      <point id="ClrDisp" offset="11" access="rw" type="enum16" mandatory="true">
+        <symbol id="NO">0</symbol>
+        <symbol id="CLEAR">1</symbol>
+      </point>
+      <point id="PLMCh" offset="12" access="rw" type="enum16" mandatory="true">
+        <symbol id="CH_0">0</symbol>
+        <symbol id="CH_1">1</symbol>
+        <symbol id="CH_2">2</symbol>
+        <symbol id="CH_3">3</symbol>
+        <symbol id="CH_4">4</symbol>
+        <symbol id="CH_5">5</symbol>
+        <symbol id="CH_6">6</symbol>
+        <symbol id="CH_7">7</symbol>
+        <symbol id="CH_8">8</symbol>
+        <symbol id="CH_9">9</symbol>
+        <symbol id="CH_10">10</symbol>
+        <symbol id="CH_11">11</symbol>
+        <symbol id="CH_12">12</symbol>
+      </point>
+      <point id="PLMEna" offset="13" access="rw" type="enum16" mandatory="true">
+        <symbol id="PLM_DISABLED">0</symbol>
+        <symbol id="PLM_ENABLED">1</symbol>
+      </point>
+      <point id="GPLMRst" offset="14" access="rw" type="enum16" mandatory="true">
+        <symbol id="RESET">1</symbol>
+      </point>
+      <point id="GPLMCh" offset="15" access="rw" type="enum16" mandatory="true">
+        <symbol id="NONE">0</symbol>
+        <symbol id="CH_1">1</symbol>
+        <symbol id="CH_2">2</symbol>
+        <symbol id="CH_3">3</symbol>
+        <symbol id="CH_4">4</symbol>
+        <symbol id="CH_5">5</symbol>
+        <symbol id="CH_6">6</symbol>
+        <symbol id="CH_7">7</symbol>
+        <symbol id="CH_8">8</symbol>
+        <symbol id="CH_9">9</symbol>
+        <symbol id="CH_10">10</symbol>
+        <symbol id="CH_11">11</symbol>
+        <symbol id="CH_12">12</symbol>
+      </point>
+      <point id="SS_Src" offset="16" access="rw" type="uint16" units="W" mandatory="true"/>
+      <point id="SS_Sink" offset="17" access="rw" type="uint16" units="W" mandatory="true"/>
+      <point id="XFREna" offset="18" access="rw" type="enum16" mandatory="true">
+        <symbol id="DISABLED">0</symbol>
+        <symbol id="ENABLED">1</symbol>
+      </point>
+      <point id="XFRV_sf" offset="19" type="sunssf" mandatory="true"/>
+      <point id="XFRV" offset="20" access="rw" type="uint16" units="V" sf="XFRV_sf" mandatory="true"/>
+      <point id="XFRTms" offset="21" access="rw" type="uint16" units="s" mandatory="true"/>
+      <point id="ZImp" offset="22" access="rw" type="enum16" mandatory="true">
+        <symbol id="N/A">32768</symbol>
+        <symbol id="DISABLED">0</symbol>
+        <symbol id="ENABLED">1</symbol>
+      </point>
+      <point id="ZExpLim" offset="23" access="rw" type="uint16" units="W" mandatory="true"/>
+      <point id="ExpOverride" offset="24" access="rw" type="enum16" mandatory="true">
+        <symbol id="DISABLED">0</symbol>
+        <symbol id="ENABLED">1</symbol>
+        <symbol id="N/A">32768</symbol>
+      </point>
+      <point id="Pad3" offset="25" type="pad" mandatory="true"/>
+      <point id="Pad4" offset="26" type="pad" mandatory="true"/>
+      <point id="Pad5" offset="27" type="pad" mandatory="true"/>
+      <point id="Pad6" offset="28" type="pad" mandatory="true"/>
+      <point id="Pad7" offset="29" type="pad" mandatory="true"/>
+      <point id="Pad8" offset="30" type="pad" mandatory="true"/>
+      <point id="Pad9" offset="31" type="pad" mandatory="true"/>
+      <point id="Pad10" offset="32" type="pad" mandatory="true"/>
+      <point id="Pad11" offset="33" type="pad" mandatory="true"/>
+      <point id="Pad12" offset="34" type="pad" mandatory="true"/>
+      <point id="Pad13" offset="35" type="pad" mandatory="true"/>
+      <point id="Pad14" offset="36" type="pad" mandatory="true"/>
+      <point id="Pad15" offset="37" type="pad" mandatory="true"/>
+      <point id="Pad16" offset="38" type="pad" mandatory="true"/>
+      <point id="Pad17" offset="39" type="pad" mandatory="true"/>
+      <point id="Pad18" offset="40" type="pad" mandatory="true"/>
+      <point id="Pad19" offset="41" type="pad" mandatory="true"/>
+      <point id="Pad20" offset="42" type="pad" mandatory="true"/>
+      <point id="Pad21" offset="43" type="pad" mandatory="true"/>
+      <point id="Pad22" offset="44" type="pad" mandatory="true"/>
+      <point id="Pad23" offset="45" type="pad" mandatory="true"/>
+    </block>
+  </model>
+  <strings id="64206">
+    <model>
+      <label>PWRcell Configuration</label>
+      <description>Configure PWRcell system settings</description>
+      <notes></notes>
+    </model>
+    <point id="Pwd">
+      <label>Access code</label>
+      <description>Access code</description>
+      <notes></notes>
+    </point>
+    <point id="Conn">
+      <label>Enable inverter</label>
+      <description>Enable inverter</description>
+      <notes></notes>
+    </point>
+    <point id="SRD">
+      <label>Compliance selection</label>
+      <description>Select which utility your inverter is being installed under.</description>
+      <notes>Inverter must be disabled for this selection to take effect. Different utilities require different inverter settings. This selection will define which utility settings the inverter will use. The selections will be listed with utility names and geographical locations.</notes>
+    </point>
+    <symbol id="IEEE_1547">
+      <label>IEEE 1547 (default)</label>
+      <description>'IEEE 1547' is the most common inverter compliance setting.</description>
+      <notes></notes>
+    </symbol>
+    <symbol id="RULE_14H_1">
+      <label>Hawai'i Rule 14H #1</label>
+      <description>Configure for HI Rule 14H Islands of O'ahu, Maui, Hawai'i (Big Island). If your installation is not on one of these islands, do not use this selection. </description>
+      <notes>For other islands contact Generac for information.</notes>
+    </symbol>
+    <symbol id="RULE_14H_2">
+      <label>Hawai'i Rule 14H #2</label>
+      <description>Configure for HI Rule 14H (Lana'i, Moloka'i)</description>
+      <notes>For other islands contact Generac for information.</notes>
+    </symbol>
+    <symbol id="RULE_21">
+      <label>California Rule 21</label>
+      <description>Configure for California Rule 21 settings.</description>
+      <notes></notes>
+    </symbol>
+    <symbol id="RULE_PREPA">
+      <label>Puerto Rico PREPA</label>
+      <description>Configure for Puerto Rico (PREPA) settings. </description>
+      <notes></notes>
+    </symbol>
+    <symbol id="ISONE">
+      <label>ISO New England</label>
+      <description>Configure ISO New England settings.</description>
+      <notes></notes>
+    </symbol>
+    <symbol id="RULE_LADWP">
+      <label>LADWP</label>
+      <description>Configure City of Los Angeles settings.</description>
+      <notes></notes>
+    </symbol>
+    <symbol id="RULE_PECO">
+      <label>PECO</label>
+      <description>Configure PECO settings.</description>
+      <notes></notes>
+    </symbol>
+    <symbol id="RULE_MISO">
+      <label>MISO</label>
+      <description>Configure MISO settings.</description>
+      <notes></notes>
+    </symbol>
+    <point id="Def">
+      <label>Compliance settings defaulted</label>
+      <description>Indicates whether or not the default settings from the Compliance Selection field have been applied.</description>
+      <notes>Note that this field will only update after your press submit</notes>
+    </point>
+    <point id="ZExp">
+      <label>Export Limiting</label>
+      <description>When enabled, reduces the inverter exporting power to the utility grid to the value of Export Limit (below). NOTE: THIS IS A SET ONCE ATTRIBUTE. To unset Export Limiting, please contact Generac.</description>
+      <notes></notes>
+    </point>
+    <point id="IslandEna">
+      <label>Enable Islanding</label>
+      <description>When enabled, PWRcell Inverter shall export backup power at its Protected Loads output terminals to connected load. This setting does not override or interfere with the anti-islanding capabilities of the inverter.</description>
+      <notes></notes>
+    </point>
+    <point id="ActSysMds">
+      <label>Enabled SysModes</label>
+      <description>Select the Operational Modes that will be available to this installation</description>
+      <notes></notes>
+    </point>
+    <point id="CTTrig">
+      <label>Trigger CT calibration</label>
+      <description>Trigger CT calibration</description>
+      <notes></notes>
+    </point>
+    <point id="ClrDisp">
+      <label>Clear display</label>
+      <description>Clear offline devices and reset the LCD display on the front cover of the inverter</description>
+      <notes></notes>
+    </point>
+    <point id="PLMCh">
+      <label>PLM channel</label>
+      <description>Power line modem channel. Default is channel 1</description>
+      <notes></notes>
+    </point>
+    <point id="PLMEna">
+      <label>PLM enable</label>
+      <description>Enable the inverter's power line modem. Do not disable unless guided by Generac Technical Support</description>
+      <notes></notes>
+    </point>
+    <point id="GPLMRst">
+      <label>Global PLM Reset</label>
+      <description>Reset all online devices (including those currently on different channels) to the default PLM channel (Ch 1)</description>
+      <notes></notes>
+    </point>
+    <point id="GPLMCh">
+      <label>PLM Group Set</label>
+      <description>Set PLM channel for all devices (including inverter) that are currently on the inverter's channel (PLMCh) to the channel indicated by this register. This will not affect devices that aren't currently on PLMCh. PLMCh will also be set to the value of this register.</description>
+      <notes></notes>
+    </point>
+    <point id="SS_Src">
+      <label>Self Supply Source Power</label>
+      <description>When in Self-Supply, the CT import power level above which causes the inverter to start exporting. With sufficient battery storage and/or PV generation, this will be the maximum load the meter will see.</description>
+      <notes></notes>
+    </point>
+    <point id="SS_Sink">
+      <label>Self Supply Sink Power</label>
+      <description>When in Self-Supply, the CT import power level below which causes the inverter to start importing. (i.e., max rate to charge batteries from the grid)</description>
+      <notes></notes>
+    </point>
+    <point id="XFREna">
+      <label>Enable External Transfer</label>
+      <description>Enable the use of an external transfer switch</description>
+      <notes></notes>
+    </point>
+    <point id="XFRV">
+      <label>External Transfer Voltage</label>
+      <description>Grid voltage below which to transfer local loads to the inverter, and above which to transfer loads to utility mains.</description>
+      <notes></notes>
+    </point>
+    <point id="XFRTms">
+      <label>External Transfer timeout</label>
+      <description>Amount of time after grid voltage returns to transfer local loads back to the utility mains. Grid voltage must be above External Transer Voltage for the entire time.</description>
+      <notes></notes>
+    </point>
+    <point id="ZImp">
+      <label>Zero Import</label>
+      <description>When enabled, prevents the batteries from charging with utility power. NOTE: THIS IS A SET ONCE ATTRIBUTE. This feature is only available for inverter firmware version &gt;13130. To unset Zero Import or request a firmware update, please contact Generac.</description>
+      <notes></notes>
+    </point>
+    <point id="ZExpLim">
+      <label>Export Limit</label>
+      <description>
+        The limit, in watts, that the inverter is allowed to push onto the grid. This setting will only take effect if Export Limiting (above) is ENABLED.
+        NOTE: This value can only be lowered. This feature is only available for inverter firmware version &gt;13200. For older firmware versions, the value 32768 may appear, and it can be ignored. To reset this limit or request a firmware update, please contact Generac.
+        NOTE: This feature requires CTs to be properly installed and calibrated prior to use. For more information on CT calibration, see the PWRcell Inverter Installation and Owner’s Manual.
+      </description>
+      <notes></notes>
+    </point>
+    <point id="ExpOverride">
+      <label>Export Override</label>
+      <description>Formerly called Zero Export, this setting will inhibit the PWRcell system from exporting power to the grid.
+        NOTE: This feature requires CTs to be properly installed and calibrated prior to use. For more information on CT calibration, see the PWRcell Inverter Installation and Owner’s Manual.
+      </description>
+      <notes></notes>
+    </point>
+    <point id="Pad3">
+      <label>Pad</label>
+      <description>Large pad for future model expansion</description>
+      <notes></notes>
+    </point>    
+  </strings>
+</sunSpecModels>

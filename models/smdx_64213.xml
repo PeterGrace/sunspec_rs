@@ -1,0 +1,513 @@
+<sunSpecModels v="1">
+  <!-- 64213: Generac Legacy Status Update -->
+  <model id="64213" len="28" name="legacy_status">
+    <block len="28" >
+      <point id="VT_sf" offset="0" type="sunssf" mandatory="true" />
+      <point id="I_sf"  offset="1" type="sunssf" mandatory="true" />      
+      <point id="St"    offset="2" type="enum16" mandatory="true" >
+        <symbol id="UNKNOWN">0</symbol>
+        <symbol id="DISABLED">16</symbol>
+        <symbol id="INITIALIZING">256</symbol>
+        <symbol id="POWERING_UP">272</symbol>
+        <symbol id="CONNECTING_BUS">288</symbol>
+        <symbol id="DISCONNECTING_BUS">304</symbol>
+        <symbol id="TESTING_BUS">320</symbol>
+        <symbol id="LOW_BUS_VOLTAGE">512</symbol>
+        <symbol id="STANDBY">768</symbol>
+        <symbol id="WAITING">784</symbol>
+        <symbol id="WAITING_NO_INPUT">800</symbol>
+        <symbol id="CONNECTING_GRID">2048</symbol>
+        <symbol id="DISCONNECTING_GRID">2064</symbol>
+        <symbol id="GRID_CONNECTED">2080</symbol>
+        <symbol id="ISLANDED">2096</symbol>
+        <symbol id="CONNECTING_GENERATOR">2112</symbol>
+        <symbol id="GENERATOR_PARALLEL">2128</symbol>
+        <symbol id="LOW_INPUT_VOLTAGE">4096</symbol>
+        <symbol id="TESTING_DEVICE_INPUT">4112</symbol>
+        <symbol id="CONNECTING_INPUT">4352</symbol>
+        <symbol id="DISCONNECTING_INPUT">4368</symbol>
+        <symbol id="CALIBRATING">4608</symbol>
+        <symbol id="CALIBRATION_SUCCESS">4624</symbol>
+        <symbol id="CALIBRATION_NEEDED">4640</symbol>
+        <symbol id="BURN_IN">4656</symbol>
+        <symbol id="BURN_IN_DONE">4672</symbol>
+        <symbol id="SCHEDULER_OVERRIDDEN">4864</symbol>
+        <symbol id="SCHEDULER_DISABLED">4880</symbol>
+        <symbol id="RUNNING">8192</symbol>
+        <symbol id="MAKING_POWER">8208</symbol>
+        <symbol id="LIMITING_POWER">8224</symbol>
+        <symbol id="LOW_WIND">12288</symbol>
+        <symbol id="HIGH_WIND">12304</symbol>
+        <symbol id="LOW_SUN">12544</symbol>
+        <symbol id="CHARGING_BATTERY">24576</symbol>
+        <symbol id="FLOAT_CHARGING_BATTERY">24592</symbol>
+        <symbol id="BULK_CHARGING_BATTERY">24608</symbol>
+        <symbol id="ABSORPTION_CHARGING_BATTERY">24624</symbol>
+        <symbol id="EQUALIZE_CHARGING_BATTERY">24640</symbol>
+        <symbol id="DISCHARGING_BATTERY">24832</symbol>
+        <symbol id="LOW_BATTERY_VOLTAGE">24848</symbol>
+        <symbol id="ERROR_GENERIC">28672</symbol>
+        <symbol id="OVER_VOLTAGE_INPUT">28688</symbol>
+        <symbol id="OVER_VOLTAGE_OUTPUT">28704</symbol>
+        <symbol id="OVER_CURRENT_INPUT">28720</symbol>
+        <symbol id="OVER_CURRENT_OUTPUT">28736</symbol>
+        <symbol id="ERROR_LOW_BATTERY_VOLTAGE">28752</symbol>
+        <symbol id="OVER_TEMPERATURE">28928</symbol>
+        <symbol id="GROUND_FAULT">29184</symbol>
+        <symbol id="INSULATION_FAULT">29200</symbol>
+        <symbol id="CALIBRATION_0">32256</symbol>
+        <symbol id="CALIBRATION_1">32272</symbol>
+        <symbol id="CALIBRATION_2">32288</symbol>
+        <symbol id="CALIBRATION_3">32304</symbol>
+      </point>        
+      <point id="P"     offset="3" type="int16" mandatory="true" units="W"/>
+      <point id="E"     offset="4" type="uint32" mandatory="true" units="Wh"/>
+      <point id="Rb"    offset="6" type="bitfield16" mandatory="true" >
+        <symbol id="ENABLE_MASTER">0</symbol>
+        <symbol id="ENABLE_SOURCE">1</symbol>
+        <symbol id="ENABLE_SINK">2</symbol>
+        <symbol id="RESERVED3">3</symbol>
+        <symbol id="BUS_CONNECTED">4</symbol>
+        <symbol id="BUS_DISCONNECTED">5</symbol>
+        <symbol id="SOURCING">6</symbol>
+        <symbol id="SINKING">7</symbol>
+        <symbol id="BUS_VOLTAGE_LOW">8</symbol>
+        <symbol id="BUS_VOLTAGE_HIGH">9</symbol>
+        <symbol id="BUS_IMBALANCE">10</symbol>
+        <symbol id="RESERVED11">11</symbol>
+        <symbol id="PLC_GOOD">12</symbol>
+        <symbol id="HEARTBEAT_GOOD">13</symbol>
+        <symbol id="ADAPTIVE_VREBUS_ACTIVE">14</symbol>
+        <symbol id="RESERVED15">15</symbol>
+      </point>
+      <point id="V"     offset="7" sf="VT_sf" type="int16" mandatory="true" units="V"/>
+      <point id="I"     offset="8" sf="I_sf" type="int16" mandatory="true" units="A"/>
+      <point id="T"     offset="9" sf="VT_sf" type="int16" mandatory="true" units="C"/>
+      <point id="O0"    offset="10" type="uint16" mandatory="true" />
+      <point id="O1"    offset="11" type="uint16" mandatory="true" />
+      <point id="O2"    offset="12" type="uint16" mandatory="true" />
+      <point id="O3"    offset="13" type="uint16" mandatory="true" />
+      <point id="O4"    offset="14" type="uint16" mandatory="true" />
+      <point id="O5"    offset="15" type="uint16" mandatory="true" />
+      <point id="O6"    offset="16" type="uint16" mandatory="true" />
+      <point id="O7"    offset="17" type="uint16" mandatory="true" />
+      <point id="O8"    offset="18" type="uint16" mandatory="true" />
+      <point id="O9"    offset="19" type="uint16" mandatory="true" />
+      <point id="OA"    offset="20" type="uint16" mandatory="true" />
+      <point id="OB"    offset="21" type="uint16" mandatory="true" />
+      <point id="OC"    offset="22" type="uint16" mandatory="true" />
+      <point id="OD"    offset="23" type="uint16" mandatory="true" />
+      <point id="OE"    offset="24" type="uint16" mandatory="true" />
+      <point id="OF"    offset="25" type="uint16" mandatory="true" />
+      <point id="OG"    offset="26" type="uint16" mandatory="true" />
+      <point id="Pad"   offset="27" type="pad" mandatory="true" />
+    </block>
+  </model>
+  <strings id="64213">
+    <model>
+      <label>RCP Legacy Status Update</label>
+      <description>Status update data</description>
+      <notes></notes>
+    </model>
+    <point id="VT_sf">
+      <label>VT_sf</label>
+      <description>Scale factor for V and T</description>
+      <notes></notes>
+    </point>
+    <point id="I_sf">
+      <label>I_sf</label>
+      <description>Scale factor for I</description>
+      <notes></notes>
+    </point>
+    <point id="St">
+      <label>State</label>
+      <description>RCP state code</description>
+      <notes>State is a status field used by Generac for operations and maintenance purposes</notes>
+      <symbol id="UNKNOWN">
+        <label>device offline</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISABLED">
+        <label>disabled</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INITIALIZING">
+        <label>initializing</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="POWERING_UP">
+        <label>powering up</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CONNECTING_BUS">
+        <label>connecting to REbus</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISCONNECTING_BUS">
+        <label>disconnecting REbus</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TESTING_BUS">
+        <label>testing REbus...</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LOW_BUS_VOLTAGE">
+        <label>low REbus voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="STANDBY">
+        <label>standby</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="WAITING">
+        <label>waiting</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="WAITING_NO_INPUT">
+        <label>waiting - no input</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CONNECTING_GRID">
+        <label>connecting grid</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISCONNECTING_GRID">
+        <label>disconnecting grid</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GRID_CONNECTED">
+        <label>grid connected</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ISLANDED">
+        <label>islanded</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CONNECTING_GENERATOR">
+        <label>connecting generator</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GENERATOR_PARALLEL">
+        <label>generator parallel</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LOW_INPUT_VOLTAGE">
+        <label>low input voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="TESTING_DEVICE_INPUT">
+        <label>testing input...</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CONNECTING_INPUT">
+        <label>connecting input</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISCONNECTING_INPUT">
+        <label>disconnecting input</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATING">
+        <label>calibrating</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATION_SUCCESS">
+        <label>calibration success!</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATION_NEEDED">
+        <label>calibration required</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BURN_IN">
+        <label>burning in</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BURN_IN_DONE">
+        <label>burn in done</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="SCHEDULER_OVERRIDDEN">
+        <label>running, overridden</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="SCHEDULER_DISABLED">
+        <label>scheduler disabled</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RUNNING">
+        <label>running</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="MAKING_POWER">
+        <label>making power</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LIMITING_POWER">
+        <label>limiting power</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LOW_WIND">
+        <label>low wind</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="HIGH_WIND">
+        <label>high wind</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LOW_SUN">
+        <label>low sun</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CHARGING_BATTERY">
+        <label>charging</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="FLOAT_CHARGING_BATTERY">
+        <label>float charging</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BULK_CHARGING_BATTERY">
+        <label>bulk charging</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ABSORPTION_CHARGING_BATTERY">
+        <label>absorption charging</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="EQUALIZE_CHARGING_BATTERY">
+        <label>equalizing</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="DISCHARGING_BATTERY">
+        <label>discharging</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LOW_BATTERY_VOLTAGE">
+        <label>low battery voltage</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ERROR_GENERIC">
+        <label>error</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="OVER_VOLTAGE_INPUT">
+        <label>over voltage input</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="OVER_VOLTAGE_OUTPUT">
+        <label>over voltage output</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="OVER_CURRENT_INPUT">
+        <label>over current input</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="OVER_CURRENT_OUTPUT">
+        <label>over current output</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ERROR_LOW_BATTERY_VOLTAGE">
+        <label>error: low batt volts</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="OVER_TEMPERATURE">
+        <label>over temperature</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="GROUND_FAULT">
+        <label>err: ground fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="INSULATION_FAULT">
+        <label>err: insulation fault</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATION_0">
+        <label>calibration mode</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATION_1">
+        <label>calibration 1</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATION_2">
+        <label>calibration 2</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CALIBRATION_3">
+        <label>calibration 3</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+    </point>
+    <point id="P">
+      <label>REbus Power</label>
+      <description>REbus power (positive means the device is sourcing power onto REbus, negative means the device is sinking power from REbus) </description>
+      <notes></notes>
+    </point>
+    <point id="E">
+      <label>Accumulated Energy</label>
+      <description>Total accumulated energy (exact definition differs by device)</description>
+      <notes></notes>
+    </point>
+    <point id="Rb">
+      <label>REbus Bits</label>
+      <description>Status flags</description>
+      <notes>REbusBits is a status field used by Generac for operations and maintenance purposes</notes>
+    </point>
+    <point id="V">
+      <label>REbus Voltage </label>
+      <description>REbus voltage</description>
+      <notes></notes>
+    </point>
+    <point id="I">
+      <label>REbus Current</label>
+      <description>REbus current</description>
+      <notes></notes>
+    </point>
+    <point id="T">
+      <label>Device Temperature</label>
+      <description>Device temperature</description>
+      <notes></notes>
+    </point>
+    <point id="O0">
+      <label>Otherdata 0</label>
+      <description>Otherdata 0</description>
+      <notes></notes>
+    </point>
+    <point id="O1">
+      <label>Otherdata 1</label>
+      <description>Otherdata 1</description>
+      <notes></notes>
+    </point>
+    <point id="O2">
+      <label>Otherdata 2</label>
+      <description>Otherdata 2</description>
+      <notes></notes>
+    </point>
+    <point id="O3">
+      <label>Otherdata 3</label>
+      <description>Otherdata 3</description>
+      <notes></notes>
+    </point>
+    <point id="O4">
+      <label>Otherdata 4</label>
+      <description>Otherdata 4</description>
+      <notes></notes>
+    </point>
+    <point id="O5">
+      <label>Otherdata 5</label>
+      <description>Otherdata 5</description>
+      <notes></notes>
+    </point>
+    <point id="O6">
+      <label>Otherdata 6</label>
+      <description>Otherdata 6</description>
+      <notes></notes>
+    </point>
+    <point id="O7">
+      <label>Otherdata 7</label>
+      <description>Otherdata 7</description>
+      <notes></notes>
+    </point>
+    <point id="O8">
+      <label>Otherdata 8</label>
+      <description>Otherdata 8</description>
+      <notes></notes>
+    </point>
+    <point id="O9">
+      <label>Otherdata 9</label>
+      <description>Otherdata 9</description>
+      <notes></notes>
+    </point>
+    <point id="OA">
+      <label>Otherdata A</label>
+      <description>Otherdata 10</description>
+      <notes></notes>
+    </point>
+    <point id="OB">
+      <label>Otherdata B</label>
+      <description>Otherdata 11</description>
+      <notes></notes>
+    </point>
+    <point id="OC">
+      <label>Otherdata C</label>
+      <description>Otherdata 12</description>
+      <notes></notes>
+    </point>
+    <point id="OD">
+      <label>Otherdata D</label>
+      <description>Otherdata 13</description>
+      <notes></notes>
+    </point>
+    <point id="OE">
+      <label>Otherdata E</label>
+      <description>Otherdata 14</description>
+      <notes></notes>
+    </point>
+    <point id="OF">
+      <label>Otherdata F</label>
+      <description>Otherdata 15</description>
+      <notes></notes>
+    </point>
+    <point id="OG">
+      <label>Otherdata G</label>
+      <description>Otherdata 16</description>
+      <notes></notes>
+    </point>
+  </strings>
+</sunSpecModels>

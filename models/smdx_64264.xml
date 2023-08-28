@@ -1,0 +1,140 @@
+<sunSpecModels v="1">
+    <model id="64264" len="24" name="pvrss_telemetry">
+        <block len="24">
+            <point id="LastUpdatedUTCTimestamp" type="uint32" offset="0" />
+            <point id="Status" type="bitfield16" offset="2">
+                <symbol id="INSTALLED_COUNT_IS_LOCKED">0</symbol>
+                <symbol id="LOCKOUT_ERROR">1</symbol>
+                <symbol id="AUTOCONFIG_ACTIVE">2</symbol>
+                <symbol id="MANUAL_TEST_ACTIVE">3</symbol>
+                <symbol id="VLOW_HIGH_RANGE">4</symbol>
+                <symbol id="VOC_HIGH_RANGE">5</symbol>
+            </point>
+            <point id="SelfTestResults" type="enum16" offset="3">
+                <symbol id="SUCCESS">0</symbol>
+                <symbol id="VOC_LOW">1</symbol>
+                <symbol id="NONE">2</symbol>
+                <symbol id="VLOW_HIGH">3</symbol>
+                <symbol id="COUNT_MISMATCH">4</symbol>
+                <symbol id="VLOW_TIMEOUT">5</symbol>
+                <symbol id="NOT_CONFIGURED">6</symbol>
+                <symbol id="COUNT_OUT_OF_RANGE">7</symbol>
+                <symbol id="VLOW_LOW">8</symbol>
+            </point>
+            <point id="TimesCountResultWasSuccess" type="uint16" offset="4" />
+            <point id="TimesCountResultWasLowSun" type="uint16" offset="5" />
+            <point id="TimesCountResultWasFail" type="uint16" offset="6" />
+            <point id="TimesCountResultWasConsecutiveFail" type="uint16" offset="7" />
+            <point id="WaitTimeBeforeCountingAgain" type="uint16" offset="8" />
+            <point id="NumStrings" type="uint16" offset="9" />
+            <point id="InstalledCount" type="uint16" units="Num SnapRS" offset="10" />
+            <point id="DetectedCount" type="uint16" units="Num SnapRS" offset="11" />
+            <point id="CalculatedOffset" type="int16" offset="12" />
+            <point id="VWhenSnapRSOff" type="uint16" units="V" sf="X100_SF" offset="13" />
+            <point id="VWhenSnapRSOn" type="uint16" units="V" sf="X10_SF" offset="14" />
+            <point id="Vlow" type="uint16" offset="15" />
+            <point id="VocCompensated" type="uint32" offset="16" />
+            <point id="CalculatedCountNumerator" type="uint32" offset="18" />
+            <point id="CalculatedCountDenominator" type="uint32" offset="20" />
+            <point id="X10_SF" access="r" type="sunssf" offset="22" />
+            <point id="X100_SF" access="r" type="sunssf" offset="23" />
+        </block>
+    </model>
+    <strings id="64264" locale="en">
+        <model>
+            <label>PVRSS Telemetry</label>
+            <description></description>
+            <notes></notes>
+        </model>
+        <point id="LastUpdatedUTCTimestamp">
+            <label>Last Updated UTC Timestamp</label>
+            <description>Unix timestamp of when this model data was collected (seconds since 1970-01-01)</description>
+            <notes></notes>
+        </point>
+        <point id="Status">
+            <label>Status</label>
+            <description>The state of PVRSS</description>
+            <notes></notes>
+        </point>
+        <point id="SelfTestResults">
+            <label>Self Test Results</label>
+            <description>The results of the last self test</description>
+            <notes></notes>
+        </point>
+        <point id="TimesCountResultWasSuccess">
+            <label>Times Count Result Was Success</label>
+            <description>The total number of successful counting attempts since the PV Link last powered up</description>
+            <notes></notes>
+        </point>
+        <point id="TimesCountResultWasLowSun">
+            <label>Times Count Result Was LowSun</label>
+            <description>The total number of counting attempts that resulted in low sun since the PV Link last powered up</description>
+            <notes></notes>
+        </point>
+        <point id="TimesCountResultWasFail">
+            <label>Times Count Result Was Fail</label>
+            <description>The total number of failed counting attempts since the PV Link last powered up</description>
+            <notes></notes>
+        </point>
+        <point id="TimesCountResultWasConsecutiveFail">
+            <label>Times Count Result Was Consecutive Fail</label>
+            <description>The number of failed counting attempts in a row</description>
+            <notes></notes>
+        </point>
+        <point id="WaitTimeBeforeCountingAgain">
+            <label>Wait Time Before Counting Again</label>
+            <description></description>
+            <notes></notes>
+        </point>
+        <point id="NumStrings">
+            <label>Number of PV Strings</label>
+            <description></description>
+            <notes></notes>
+        </point>
+        <point id="InstalledCount">
+            <label>SnapRS Installed Count</label>
+            <description></description>
+            <notes></notes>
+        </point>
+        <point id="DetectedCount">
+            <label>SnapRS Detected Count</label>
+            <description></description>
+            <notes></notes>
+        </point>
+        <point id="CalculatedOffset">
+            <label>Calculated SnapRS Offset</label>
+            <description>Error in the calculation</description>
+            <notes></notes>
+        </point>
+        <point id="VWhenSnapRSOff">
+            <label>Voltage When SnapRS Off</label>
+            <description></description>
+            <notes></notes>
+        </point>
+        <point id="VWhenSnapRSOn">
+            <label>Voltage When SnapRS On</label>
+            <description></description>
+            <notes></notes>
+        </point>
+        <point id="Vlow">
+            <label>Raw Voltage When SnapRS Off</label>
+            <description></description>
+            <notes></notes>
+        </point>
+        <point id="VocCompensated">
+            <label>Raw Voltage When SnapRS On</label>
+            <description>Adjusted to have same range/units as Vlow</description>
+            <notes></notes>
+        </point>
+        <point id="CalculatedCountNumerator">
+            <label>Calculated Count Numerator</label>
+            <description>Numerator used to calculate detected count</description>
+            <notes></notes>
+        </point>
+        <point id="CalculatedCountDenominator">
+            <label>Calculated Count Denominator</label>
+            <description>Denominator used to calculate detected count</description>
+            <notes></notes>
+        </point>
+    </strings>
+</sunSpecModels>

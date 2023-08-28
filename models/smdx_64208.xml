@@ -1,0 +1,203 @@
+<sunSpecModels v="1">
+  <!-- 64208: Inverter Status-->
+  <model id="64208" len="22" name="inverter_status">
+    <block len="22">
+      <point id="SysMd" offset="0" type="enum16" mandatory="true">	
+        <symbol id="SAFETY_SHUTDOWN">0</symbol> 	
+        <symbol id="GRID_TIE">1</symbol> 	
+        <symbol id="SELF_SUPPLY">2</symbol> 	
+        <symbol id="CLEAN_BACKUP">3</symbol> 	
+        <symbol id="PRIORITY_BACKUP">4</symbol> 	
+        <symbol id="REMOTE_ARBITRAGE">5</symbol> 	
+        <symbol id="SELL">6</symbol> 	
+      </point>
+      <point id="CTPow" offset="1" type="int16" units="W" mandatory="true"/>
+      <point id="WhIn" offset="2" type="uint32" units="Wh" mandatory="true"/>
+      <point id="WhOut" offset="4" type="uint32" units="Wh" mandatory="true"/>
+      <point id="ErrorWord" offset="6" type="bitfield16" mandatory="true">
+        <symbol id="LINE1_OVERCURRENT">0</symbol>
+        <symbol id="AC_PRECHARGE_FAIL">1</symbol>
+        <symbol id="DC_OVERCURRENT">2</symbol>
+        <symbol id="DC_UNBALANCED_CURRENT">3</symbol>
+        <symbol id="GATEDRIVE_FAULT">4</symbol>
+        <symbol id="BAD_THERMISTER">5</symbol>
+        <symbol id="OVERTEMP_COMP">6</symbol>
+        <symbol id="DC_PRECHARGE_FAIL">7</symbol>
+        <symbol id="XFR_SWITCH_FAIL">8</symbol>
+        <symbol id="FLASH_FAIL">9</symbol>
+        <symbol id="EEPROM_FAIL">10</symbol>
+        <symbol id="AINV_INVALID">11</symbol>
+      </point>
+      <point id="EnableBits" offset="7" type="bitfield16" mandatory="true">
+        <symbol id="DEADMAN">0</symbol>
+        <symbol id="DEADMAN_UP">1</symbol>
+        <symbol id="UNLOCK_GRIDSYNC">2</symbol>
+        <symbol id="CTCAL">3</symbol>
+        <symbol id="REBUS_CONNECT">4</symbol>
+        <symbol id="GRID_DISCONNECT">5</symbol>
+        <symbol id="OUTPUT_CONNECT">6</symbol>
+        <symbol id="LINE3_CONNECT">7</symbol>
+        <symbol id="VOLTAGE_MODE">8</symbol>
+        <symbol id="CURRENT_MODE">9</symbol>
+        <symbol id="BRIDGE">10</symbol>
+        <symbol id="NEUT_BRIDGE">11</symbol>
+        <symbol id="UNUSED12">12</symbol>
+        <symbol id="AUTOFAN_ON">13</symbol>
+        <symbol id="LCM_RCP">14</symbol>
+        <symbol id="USB_RCP">15</symbol>
+      </point>
+      <point id="RelayStatus" offset="8" type="bitfield16" mandatory="true">
+        <symbol id="AC_PRECHARGE">0</symbol>
+        <symbol id="DC_PRECHARGE">1</symbol>
+        <symbol id="REBUS_CONNECTED">2</symbol>
+        <symbol id="REBUS_DISCONNETED">3</symbol>
+        <symbol id="GRID_CONNECTED">4</symbol>
+        <symbol id="GRID_DISCONNECTED">5</symbol>
+        <symbol id="OUTPUT_CONNECTED">6</symbol>
+        <symbol id="OUTPUT_DISCONNECTED">7</symbol>
+        <symbol id="LINE3_CONNECTED">8</symbol>
+        <symbol id="LINE3_DISCONNECTED">9</symbol>
+        <symbol id="LINE3_RETURNING">10</symbol>
+        <symbol id="UNUSED11">11</symbol>
+        <symbol id="UNUSED12">12</symbol>
+        <symbol id="UNUSED13">13</symbol>
+        <symbol id="UNUSED14">14</symbol>
+        <symbol id="UNUSED15">15</symbol>
+      </point>
+      <point id="StatusWord" offset="9" type="bitfield16" mandatory="true">
+        <symbol id="V1_LOCKED">0</symbol>
+        <symbol id="V2_LOCKED">1</symbol>
+        <symbol id="FREQ_LOCKED">2</symbol>
+        <symbol id="PHASE_LOCKED">3</symbol>
+        <symbol id="LOCKED_TO_GRID">4</symbol>
+        <symbol id="PRERES_OVERTEMP">5</symbol>
+        <symbol id="QPRIORITY">6</symbol>
+        <symbol id="EXT_TRANSFERRED">7</symbol>
+        <symbol id="MFLT_ACTIVE">8</symbol>
+        <symbol id="ESTOP_ACTIVE">9</symbol>
+        <symbol id="GF_ACTIVE">10</symbol>
+        <symbol id="AF_ACTIVE">11</symbol>
+        <symbol id="PLM_READY">12</symbol>
+        <symbol id="INST_IFACE">13</symbol>
+        <symbol id="XESTOP_ACTIVE">14</symbol>
+        <symbol id="UNUSED15">15</symbol>        
+      </point>
+      <point id="LineStatus" offset="10" type="bitfield16" mandatory="true">
+        <symbol id="V1_LOW">0</symbol>
+        <symbol id="V1_HIGH">1</symbol>
+        <symbol id="V2_LOW">2</symbol>
+        <symbol id="V2_HIGH">3</symbol>
+        <symbol id="V3_LOW">4</symbol>
+        <symbol id="V3_HIGH">5</symbol>
+        <symbol id="FREQ_LOW">6</symbol>
+        <symbol id="FREQ_HIGH">7</symbol>
+        <symbol id="UNLOCK">8</symbol>
+        <symbol id="NO_ZCROSS">9</symbol>
+        <symbol id="HIGH_IMP">10</symbol>
+        <symbol id="GRIDFAULT">11</symbol>
+        <symbol id="GT_SPLIT_OR_REVERSE">12</symbol>
+        <symbol id="GT_3PHASE">13</symbol>
+        <symbol id="CESSATION">14</symbol>
+        <symbol id="GENMODE">15</symbol>        
+      </point>
+      <point id="Pad0" offset="11" type="pad" mandatory="true"/>														
+      <point id="Pad1" offset="12" type="pad" mandatory="true"/>														
+      <point id="Pad2" offset="13" type="pad" mandatory="true"/>														
+      <point id="Pad3" offset="14" type="pad" mandatory="true"/>														
+      <point id="Pad4" offset="15" type="pad" mandatory="true"/>														
+      <point id="Pad5" offset="16" type="pad" mandatory="true"/>														
+      <point id="Pad6" offset="17" type="pad" mandatory="true"/>														
+      <point id="Pad7" offset="18" type="pad" mandatory="true"/>														
+      <point id="Pad8" offset="19" type="pad" mandatory="true"/>														
+      <point id="Pad9" offset="20" type="pad" mandatory="true"/>														
+      <point id="Pad10" offset="21" type="pad" mandatory="true"/>														
+    </block>
+  </model>
+  <strings id="64208">
+    <model>
+      <label>Inverter Status</label>
+      <description>Miscellaneous Generac inverter status registers</description>
+      <notes></notes>
+    </model>
+    <point id="SysMd">
+      <label>System Operating Mode</label>
+      <description></description>
+      <notes></notes>
+      <symbol id="SAFETY_SHUTDOWN">
+        <label>Saftey Shutdown</label>
+        <description>All devices disabled and DC bus de-energized.</description>
+        <notes>Make sure to open all mechanical disconnects and test all connections with electrical meter before servicing equipment.</notes>
+      </symbol>
+      <symbol id="GRID_TIE">
+        <label>Grid Tie</label>
+        <description>Support local loads and export solar power to the utility grid.</description>
+        <notes>Batteries are inactive in Grid Tie mode.</notes>
+      </symbol>
+      <symbol id="SELF_SUPPLY">
+        <label>Self Supply</label>
+        <description>Utilize both solar power and battery power to support local loads before exporting surplus solar to utility grid.</description>
+        <notes>Battery power will not be exported to the utility grid in Self Supply. Current transformers (CTs) are required for Self Supply</notes>
+      </symbol>
+      <symbol id="CLEAN_BACKUP">
+        <label>Clean Backup</label>
+        <description>Charge batteries from solar only before supporting local loads and exporting to utility grid.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="PRIORITY_BACKUP">
+        <label>Priority Backup</label>
+        <description>Charge batteries with both solar and the utility grid</description>
+        <notes>Priority Backup will charge the batteries as fast as possible.</notes>
+      </symbol>
+      <symbol id="SELL">
+        <label>Sell</label>
+        <description>Export full capacity, including battery power, to utility grid.</description>
+        <notes>Sell mode will cause batteries to discharge to the utility grid</notes>
+      </symbol>
+    </point>
+    <point id="CTPow">
+      <label>External CT Power measurement</label>
+      <description>Positive is exporting, negative is importing. Reads 0x8000 when CTs are not connected.</description>
+      <notes></notes>
+    </point>
+    <point id="WhIn">
+      <label>Total AC Energy Imported</label>
+      <description>As measured from CTs</description>
+      <notes></notes>
+    </point>
+    <point id="WhOut">
+      <label>Total AC Energy Exported</label>
+      <description>As measured from CTs</description>
+      <notes></notes>
+    </point>
+    <point id="ErrorWord">
+      <label>Error status</label>
+      <description>Error status bitfield</description>
+      <notes></notes>
+    </point>
+    <point id="EnableBits">
+      <label>Enable bits</label>
+      <description>Internal status register</description>
+      <notes></notes>
+    </point>
+    <point id="RelayStatus">
+      <label>Relay status</label>
+      <description>Internal status register</description>
+      <notes></notes>
+    </point>
+    <point id="StatusWord">
+      <label>General status</label>
+      <description>Internal status register</description>
+      <notes></notes>
+    </point>
+    <point id="LineStatus">
+      <label>AC Line Status</label>
+      <description>Internal status register</description>
+      <notes></notes>
+    </point>
+    <point id="Pad0">
+      <label>Pad</label>
+      <description>Large pad for future model expansion</description>
+      <notes></notes>
+    </point>
+  </strings>
+</sunSpecModels>

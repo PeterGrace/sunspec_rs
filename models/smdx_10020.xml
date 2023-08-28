@@ -1,0 +1,82 @@
+<sunSpecModels v="1">
+    <model id="10020" len="9" name="dc_generator_status">
+        <block len="9">
+            <point id="Health"              type="enum16"                               offset="0">
+                <symbol id="HEALTH_UNKNOWN">0</symbol>
+                <symbol id="ALARM">1</symbol>
+                <symbol id="WARNING">2</symbol>
+                <symbol id="READY">3</symbol>
+            </point>
+            <point id="RunHours"            type="uint16"   units="h"   sf="Tenth_SF"   offset="1"/>
+            <point id="Tenth_SF"            type="sunssf"                               offset="2"/>
+            <point id="ActiveECode"         type="uint16"                               offset="3"/>
+            <point id="EnergyIn"            type="uint32"   units="Wh"                  offset="4"/>
+            <point id="EnergyOut"           type="uint32"   units="Wh"                  offset="6"/>
+            <point id="AutoStartState"      type="enum16"                               offset="8">
+                <symbol id="AUTO_STATE_UNKNOWN">0</symbol>
+                <symbol id="IN_AUTO">1</symbol>
+                <symbol id="NOT_IN_AUTO">2</symbol>
+            </point>
+        </block>
+    </model>
+    <strings id="10020" locale="en">
+        <model>
+            <label>DC-Coupled Generator Status</label>
+            <description>Communicates details about the current behavior of a DC-coupled generator connected to an ESS</description>
+            <notes>Length of this model will be used as crude versioning technique for expected future additions</notes>
+        </model>
+        <point id="Health">
+            <label>Generator Health</label>
+            <description>Indicates presence of any faults (alarms or warnings) that impact the generator's ability to run</description>
+            <symbol id="HEALTH_UNKNOWN">
+                <label>Generator unknown/unset health state</label>
+                <description>This constant is defined to reserve the numeric default value as meaningless.</description>
+            </symbol>
+            <symbol id="ALARM">
+                <label>Generator ALARM health state</label>
+                <description>The generator has an alarm-level fault and cannot run (red)</description>
+            </symbol>
+            <symbol id="WARNING">
+                <label>Generator WARNING health state</label>
+                <description>The generator has a warning-level fault but can still run (yellow)</description>
+            </symbol>
+            <symbol id="READY">
+                <label>Generator READY health state</label>
+                <description>The generator has no active alarms or warnings and can run (green)</description>
+            </symbol>
+        </point>
+        <point id="RunHours">
+            <label>Generator Lifetime Run Hours</label>
+            <description>A running total of the number of hours for which the generator has run</description>
+        </point>
+        <point id="ActiveECode">
+            <label>Active E-Code</label>
+            <description>Contains the E-Code value for any currently-active fault (alarm or warning) on generator.  If multiple faults are active, the E-Code for the highest-priority fault is reported.</description>
+            <notes>We will design a separate model to communicate the list of all active faults in the future, once software functionality requries it.</notes>
+        </point>
+        <point id="EnergyIn">
+            <label>Energy In</label>
+            <description>Contains the lifetime total amount of energy consumed by the generator, in watt-hours.</description>
+        </point>
+        <point id="EnergyOut">
+            <label>Energy Out</label>
+            <description>Contains the lifetime total amount of energy produced by the generator, in watt-hours.</description>
+        </point>
+         <point id="AutoStartState">
+            <label>Generator Start/Stop Mode</label>
+            <description>The generator is designed to start automatically most of the time.  This field reports if the generator is in auto mode or not.</description>
+            <symbol id="AUTO_STATE_UNKNOWN">
+                <label>Generator unknown/unset start/stop mode</label>
+                <description>This constant is defined to reserve the numeric default value as meaningless.</description>
+            </symbol>
+            <symbol id="IN_AUTO">
+                <label>Generator IN_AUTO start/stop mode</label>
+                <description>The generator is ready to start if necessary to charge the ESS battery</description>
+            </symbol>
+            <symbol id="NOT_IN_AUTO">
+                <label>Generator NOT_IN_AUTO start/stop mode</label>
+                <description>The generator will not start on its own when the ESS battery is in need of charging</description>
+            </symbol>
+        </point>
+    </strings>
+</sunSpecModels>
