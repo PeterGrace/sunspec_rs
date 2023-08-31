@@ -23,7 +23,7 @@ pub enum PointType {
     acc32(ResponseType),
     enum32(ResponseType),
     bitfield32(ResponseType),
-    sunssf(i16),
+    sunssf(ResponseType),
     #[default]
     pad,
 }

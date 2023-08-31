@@ -49,9 +49,9 @@ impl ModelData {
         if let Some(value) = self.scale_factors.get(name) {
             return Some(*value);
         } else {
-            if let Some(PointType::sunssf(val)) = conn.get_point(self.clone(),name).await {
-                self.scale_factors.insert(name.to_string(), val);
-                return Some(val);
+            if let Some(ResponseType::Integer(val)) = conn.get_point(self.clone(),name).await {
+                self.scale_factors.insert(name.to_string(), val as i16);
+                return Some(val as i16);
             } else {
                 return None
             }
@@ -158,7 +158,7 @@ impl SunSpecConnection {
         models
     }
     #[async_recursion]
-    pub async fn get_point(mut self, md: ModelData, name: &str) -> Option<PointType> {
+    pub async fn get_point(mut self, md: ModelData, name: &str) -> Option<ResponseType> {
         let mut point = Point::default();
         let mut symbols: Option<Vec<Symbol>> = None;
 
@@ -185,7 +185,7 @@ impl SunSpecConnection {
                     match self.get_string(2 + md.address + point.offset, point.len.unwrap()).await {
                         Ok(rs) => {
                             info!("{}/{name} is {rs}!",model.name);
-                            return Some(PointType::string(ResponseType::String(rs)));
+                            return Some(ResponseType::String(rs));
                         }
                         Err(e) => {
                             error!("{e}");
@@ -206,10 +206,10 @@ impl SunSpecConnection {
                                         adj = (rs / (10*sf.abs())).into();
                                     }
 
-                                    return Some(PointType::int16(ResponseType::Float(adj)));
+                                    return Some(ResponseType::Float(adj));
                                 }
                             }
-                            return Some(PointType::int16(ResponseType::Integer(rs as i32)));
+                            return Some(ResponseType::Integer(rs as i32));
                         }
                         Err(e) => {
                             error!("{e}");
@@ -229,10 +229,10 @@ impl SunSpecConnection {
                                     } else {
                                         adj = (rs.as_f32() / (10_f32*sf.abs() as f32));
                                     }
-                                    return Some(PointType::uint16(ResponseType::Float(adj)));
+                                    return Some(ResponseType::Float(adj));
                                 }
                             }
-                            return Some(PointType::uint16(ResponseType::Integer(rs as i32)));
+                            return Some(ResponseType::Integer(rs as i32));
                         }
                         Err(e) => {
                             error!("{e}");
@@ -252,7 +252,7 @@ impl SunSpecConnection {
                                     }
                                 });
                                 if symbol_name.len() > 0 {
-                                    return Some(PointType::enum16(ResponseType::String(symbol_name)));
+                                    return Some(ResponseType::String(symbol_name));
                                 } else {
                                     return None;
                                 }
@@ -276,7 +276,7 @@ impl SunSpecConnection {
                                         values.push(s.id.clone());
                                     };
                                 };
-                                return Some(PointType::bitfield16(ResponseType::Array(values)));
+                                return Some(ResponseType::Array(values));
                             } else {
                                 warn!("We tried to parse a bitfield but there aren't symbols for this point.");
                                 return None;
@@ -292,7 +292,7 @@ impl SunSpecConnection {
                     match self.get_i16(2 + md.address + point.offset).await {
                         Ok(rs) => {
                             info!("{}/{name} is {rs}!",model.name);
-                            return Some(PointType::sunssf(rs));
+                            return Some(ResponseType::Integer(rs as i32));
                         }
                         Err(e) => {
                             error!("{e}");
