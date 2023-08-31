@@ -35,4 +35,6 @@ lazy_static = "1.4.0"
 url = "2.4.0"
 pprof = { version = "0.12", features = ["flamegraph"] }
 indicatif = "0.17.6"
+bitvec ="1.0.1"
+async-recursion = "1.0.4"
 

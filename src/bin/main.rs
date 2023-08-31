@@ -24,7 +24,7 @@ pub async fn main() {
         .init();
 
     let socket_addr = "127.0.0.1:5083".parse().unwrap();
-    let slave = Slave(6);
+    let slave = Slave(3);
     let mut ss = match SunSpecConnection::new(socket_addr, Some(slave)).await {
         Ok(mb) => mb,
         Err(e) => {
@@ -42,37 +42,34 @@ pub async fn main() {
         let m = ssd.get_model(id);
     });
 
-    let modelid = 64207;
-    let field = "Ev";
+    // let modelid = match ssd.clone().get_model_id_from_name("freq_watt".to_string()) {
+    //     Ok(result) => {
+    //         match result {
+    //             Some(val) => val,
+    //             None => {
+    //                 error!("Couldn't find model.");
+    //                 process::exit(1)
+    //             }
+    //         }
+    //     }
+    //     Err(e) => {
+    //         error!("Multiple models detected: {e}");
+    //         process::exit(1);
+    //     }
+    // };
 
-    let mut md = ss.models.get(&1).unwrap().clone();
+    let modelid = 102;
+    let fields:Vec<&str> = vec!["RelayStatus", "PhVphA","PhVphB"];
+
+    let mut md = ss.models.get(&modelid).unwrap().clone();
     if md.model.is_none() {
         md.model = ssd.get_model(modelid);
     }
     let model_name = md.clone().model.unwrap().name;
-    info!("Attempting to call get point on model {}, field {field}",model_name);
-    if let Some(pt) = ss.get_point(md, field).await {
-        info!("We received a PointType of {:#?}", pt);
-    }
-
-
-
-
-    //  let suns = ss.ctx.get_string(40000, 2).await.unwrap();
-    //
-    //  let id = ss.ctx.get_u16(40002).await.unwrap();
-    //  let length = ss.ctx.get_u16(40003).await.unwrap();
-    //  let Mn = match ss.ctx.get_string(40004, 16).await {
-    //      Ok(b) => b,
-    //      Err(e) => {
-    //          error!("{e}");
-    //          process::exit(1);
-    //      }
-    //  };
-    // let Md = ss.ctx.get_string(40020, 16).await.unwrap();
-    // let Opt = ss.ctx.get_string(40036, 8).await.unwrap();
-    // let Vr = ss.ctx.get_string(40044, 8).await.unwrap();
-    // let SN = ss.ctx.get_string(40052, 16).await.unwrap();
-    // let DA = ss.ctx.get_u16(40068).await.unwrap();
-    //  println!("{suns} {id} {length} {Mn} {Md} {Opt} {Vr} {SN} {DA}");
+    info!("Attempting to call get point on model {}, fields {:#?}",model_name, fields);
+    for f in fields {
+        if let Some(pt) = ss.clone().get_point(md.clone(), f).await {
+            info!("We received a PointType of {:#?}", pt);
+        }
+    };
 }

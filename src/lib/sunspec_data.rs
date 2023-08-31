@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::ffi::CString;
 use serde::{Serialize, Deserialize};
 
 use std::io;
@@ -11,17 +12,18 @@ use serde_xml_rs::from_reader;
 #[derive(Deserialize, Default, Debug, Clone)]
 #[serde(tag="untagged")]
 pub enum PointType {
-    string(String),
-    int16(i16),
-    uint16(u16),
-    acc16(u16),
-    enum16(String),
-    bitfield16(Vec<String>),
-    int32(i32),
-    uint32(u32),
-    acc32(u32),
-    enum32(String),
-    bitfield32(Vec<String>),
+    string(ResponseType),
+    int16(ResponseType),
+    uint16(ResponseType),
+    acc16(ResponseType),
+    enum16(ResponseType),
+    bitfield16(ResponseType),
+    int32(ResponseType),
+    uint32(ResponseType),
+    acc32(ResponseType),
+    enum32(ResponseType),
+    bitfield32(ResponseType),
+    sunssf(i16),
     #[default]
     pad,
 }
@@ -71,7 +73,10 @@ pub struct Point {
     pub(crate) len: Option<u16>,
     pub(crate) mandatory: Option<bool>,
     pub(crate) access: Option<Access>,
-    pub(crate) symbol: Option<Vec<Symbol>>
+    pub(crate) symbol: Option<Vec<Symbol>>,
+    pub(crate) units: Option<String>,
+    #[serde(rename="sf")]
+    pub(crate) scale_factor: Option<String>
 }
 #[derive(Debug, Clone, Deserialize)]
 pub struct Symbol {
@@ -101,9 +106,19 @@ struct PointLiteral {
 }
 
 #[derive(Deserialize)]
+struct SymbolLiteral {
+    id: String,
+    label: Option<String>,
+    description: Option<String>,
+    notes: Option<String>
+}
+
+
+#[derive(Deserialize)]
 enum LiteralType {
     model(ModelLiteral),
     point(PointLiteral),
+    symbol(SymbolLiteral)
 }
 
 #[derive(Deserialize)]
@@ -115,6 +130,15 @@ pub struct SunSpecModels {
 #[derive(Default, Debug, Clone)]
 pub struct SunSpecData {
     models: HashMap<u16, Model>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub enum ResponseType {
+    String(String),
+    Integer(i32),
+    Float(f32),
+    Boolean(bool),
+    Array(Vec<String>)
 }
 
 impl SunSpecData {
@@ -134,6 +158,29 @@ impl SunSpecData {
         };
 
         Ok(ssm.model)
+    }
+    pub fn get_model_id_from_name(self, name: String) -> anyhow::Result<Option<u16>> {
+        let mut candidates: Vec<u16> = vec![];
+        info!("models is of length {}",self.models.len());
+        self.models.iter().for_each(|(i,m)| {
+            info!("{}", m.name.clone());
+            if m.name == name {
+                candidates.push(i.clone());
+            }
+        });
+        match candidates.len() {
+            0 => {
+                return Ok(None);
+            },
+            1 => {
+                return Ok(Some(candidates[0]));
+            },
+            _ => {
+                anyhow::bail!("More than one model with name {name}: {:#?}", candidates);
+            }
+        }
+
+
     }
     pub fn get_model(mut self, id: u16) -> Option<Model> {
         let lookup = self.models.get(&id);
