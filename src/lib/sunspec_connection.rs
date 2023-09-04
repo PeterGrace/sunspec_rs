@@ -212,7 +212,7 @@ impl SunSpecConnection {
     //endregion
 
     //region inner holding registers retry logic
-    pub async fn retry_read_holding_registers(self, addr: Address, q: Quantity) -> anyhow::Result<Vec<Word>> {
+    pub(crate) async fn retry_read_holding_registers(self, addr: Address, q: Quantity) -> anyhow::Result<Vec<Word>> {
         let retry_strategy = ExponentialBackoff::from_millis(500)
             .map(jitter) // add jitter to delays
             .take(5);    // limit to 3 retries
@@ -521,7 +521,7 @@ impl SunSpecConnection {
 }
 
 //region acftual code that reads holding registers (for retry logic)
-pub async fn action_read_holding_registers(actx: &Arc<Mutex<Context>>, addr: Address, q: Quantity) -> anyhow::Result<Vec<Word>> {
+pub(crate) async fn action_read_holding_registers(actx: &Arc<Mutex<Context>>, addr: Address, q: Quantity) -> anyhow::Result<Vec<Word>> {
     let mut ctx = actx.lock().await;
     match ctx.read_holding_registers(addr, q).await {
         Ok(data) => {
