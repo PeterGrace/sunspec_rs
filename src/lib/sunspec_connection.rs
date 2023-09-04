@@ -148,7 +148,9 @@ impl SunSpecConnection {
     }
     pub async fn get_i32(&mut self, addr: Address) -> anyhow::Result<i32> {
         match self.clone().retry_read_holding_registers(addr, 2).await {
-            Ok(data) => Ok(((data[0] << 16) | data[1]) as i32),
+            // because holding_registers works in 16 bit "words", we need to combine two words into
+            // one word here to get a 32 bit number.
+            Ok(data) => Ok((data[0] as i32) << 16 | data[1] as i32),
             Err(e) => {
                 anyhow::bail!("Can't read: {e}");
             }
@@ -156,7 +158,9 @@ impl SunSpecConnection {
     }
     pub async fn get_u32(&mut self, addr: Address) -> anyhow::Result<u32> {
         match self.clone().retry_read_holding_registers(addr, 2).await {
-            Ok(data) => Ok(((data[0] << 16) | data[1]) as u32),
+            // because holding_registers works in 16 bit "words", we need to combine two words into
+            // one word here to get a 32 bit number.
+            Ok(data) => Ok((data[0] as u32) << 16 | data[1] as u32),
             Err(e) => {
                 anyhow::bail!("Can't read: {e}");
             }

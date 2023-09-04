@@ -33,8 +33,8 @@ pub async fn main() {
     let ssd = SunSpecData::default();
     ss.models = ss.clone().populate_models(ssd.clone()).await;
 
-    let modelid = 102;
-    let fields:Vec<&str> = vec!["PhVphA","PhVphB"];
+    let modelid = 64207;
+    let fields:Vec<&str> = vec!["E"];
 
 
     let md = ss.models.get(&modelid).unwrap().clone();
