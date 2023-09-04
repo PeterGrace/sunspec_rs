@@ -3,15 +3,6 @@ use std::collections::HashMap;
 use std::fs::File;
 use crate::sunspec_models::{Model, PointType, SunSpecModels};
 
-
-#[derive(Default)]
-pub struct ResolvedPoint {
-    pub pt: PointType,
-    pub label: Option<String>,
-    pub description: Option<String>,
-    pub notes: Option<String>,
-}
-
 #[derive(Default, Debug)]
 pub struct ResolvedModel {
     pub model: Model,
