@@ -140,14 +140,21 @@ impl SunSpecConnection {
         };
         Ok(data)
     }
-    pub async fn get_u32(&mut self, addr: Address) -> anyhow::Result<u32> {
-        let data = match self.clone().retry_read_holding_registers(addr, 2).await {
-            Ok(data) => data[0],
+    pub async fn get_i32(&mut self, addr: Address) -> anyhow::Result<i32> {
+        match self.clone().retry_read_holding_registers(addr, 2).await {
+            Ok(data) => Ok(((data[0] << 16) | data[1]) as i32),
             Err(e) => {
                 anyhow::bail!("Can't read: {e}");
             }
-        };
-        Ok(data)
+        }
+    }
+    pub async fn get_u32(&mut self, addr: Address) -> anyhow::Result<u32> {
+        match self.clone().retry_read_holding_registers(addr, 2).await {
+            Ok(data) => Ok(((data[0] << 16) | data[1]) as u32),
+            Err(e) => {
+                anyhow::bail!("Can't read: {e}");
+            }
+        }
     }
     pub async fn retry_read_holding_registers(self, addr: Address, q: Quantity) -> anyhow::Result<Vec<Word>> {
         let retry_strategy = ExponentialBackoff::from_millis(500)
@@ -401,7 +408,7 @@ impl SunSpecConnection {
                         if symbols.is_some() {
                             let mut symbol_name: String = "".to_string();
                             symbols.unwrap().iter().for_each(|s| {
-                                if s.symbol.parse::<u16>().unwrap() == rs {
+                                if s.symbol.parse::<u32>().unwrap() == rs {
                                     symbol_name = s.id.clone();
                                 }
                             });
