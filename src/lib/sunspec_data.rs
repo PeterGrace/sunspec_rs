@@ -3,25 +3,36 @@ use serde::Deserialize;
 use std::fs::File;
 
 
-
-
 #[derive(Deserialize, Default, Debug, Clone)]
-#[serde(tag="untagged")]
+#[serde(tag = "untagged")]
 pub enum PointType {
-    string(ResponseType),
-    int16(ResponseType),
-    uint16(ResponseType),
-    acc16(ResponseType),
-    enum16(ResponseType),
-    bitfield16(ResponseType),
-    int32(ResponseType),
-    uint32(ResponseType),
-    acc32(ResponseType),
-    enum32(ResponseType),
-    bitfield32(ResponseType),
-    sunssf(ResponseType),
+    #[serde(rename = "string")]
+    String(ResponseType),
+    #[serde(rename = "int16")]
+    Int16(ResponseType),
+    #[serde(rename = "uint16")]
+    UnsignedInt16(ResponseType),
+    #[serde(rename = "acc16")]
+    Accumulator16(ResponseType),
+    #[serde(rename = "enum16")]
+    Enum16(ResponseType),
+    #[serde(rename = "bitfield16")]
+    Bitfield16(ResponseType),
+    #[serde(rename = "int32")]
+    Int32(ResponseType),
+    #[serde(rename = "uint32")]
+    UnsignedInt32(ResponseType),
+    #[serde(rename = "acc32")]
+    Accumulator32(ResponseType),
+    #[serde(rename = "enum32")]
+    Enum32(ResponseType),
+    #[serde(rename = "bitfield32")]
+    Bitfield32(ResponseType),
+    #[serde(rename = "sunssf")]
+    SunSpecScaleFactor(ResponseType),
+    #[serde(rename = "pad")]
     #[default]
-    pad,
+    Pad
 }
 
 #[derive(Default)]
@@ -29,21 +40,24 @@ pub struct ResolvedPoint {
     pt: PointType,
     label: Option<String>,
     description: Option<String>,
-    notes: Option<String>
+    notes: Option<String>,
 }
+
 #[derive(Default)]
 pub struct ResolvedModel {
     model: Model,
     label: Option<String>,
     description: Option<String>,
-    notes: Option<String>
+    notes: Option<String>,
 }
 
 
 #[derive(Deserialize, Clone, Debug)]
 pub enum Access {
-    r,
-    rw,
+    #[serde(rename = "r")]
+    ReadOnly,
+    #[serde(rename = "rw")]
+    ReadWrite,
 }
 
 #[derive(Deserialize, Debug, Default, Clone)]
@@ -71,36 +85,40 @@ pub struct Point {
     pub access: Option<Access>,
     pub symbol: Option<Vec<Symbol>>,
     pub units: Option<String>,
-    #[serde(rename="sf")]
+    #[serde(rename = "sf")]
     pub scale_factor: Option<String>,
     pub value: Option<ResponseType>,
-    pub literal: Option<PointLiteral>
+    pub literal: Option<PointLiteral>,
 }
+
 #[derive(Debug, Clone, Deserialize)]
 pub struct Symbol {
     pub(crate) id: String,
-    #[serde(rename="$value")]
-    pub(crate) symbol: String
+    #[serde(rename = "$value")]
+    pub(crate) symbol: String,
 }
+
 #[derive(Deserialize, Debug)]
 pub struct Strings {
     id: String,
     locale: Option<String>,
     #[serde(rename = "$value")]
-    literals: Vec<LiteralType>
+    literals: Vec<LiteralType>,
 }
+
 #[derive(Deserialize, Debug, Clone)]
 pub struct ModelLiteral {
     label: Option<String>,
     description: Option<String>,
-    notes: Option<String>
+    notes: Option<String>,
 }
+
 #[derive(Deserialize, Debug, Clone)]
 pub struct PointLiteral {
     id: String,
     label: Option<String>,
     description: Option<String>,
-    notes: Option<String>
+    notes: Option<String>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -108,15 +126,18 @@ pub struct SymbolLiteral {
     id: String,
     label: Option<String>,
     description: Option<String>,
-    notes: Option<String>
+    notes: Option<String>,
 }
 
 
 #[derive(Deserialize, Debug, Clone)]
 pub enum LiteralType {
-    model(ModelLiteral),
-    point(PointLiteral),
-    symbol(SymbolLiteral)
+    #[serde(rename = "model")]
+    Model(ModelLiteral),
+    #[serde(rename = "point")]
+    Point(PointLiteral),
+    #[serde(rename = "symbol")]
+    Symbol(SymbolLiteral),
 }
 
 #[derive(Deserialize)]
@@ -130,13 +151,13 @@ pub struct SunSpecData {
     pub models: HashMap<u16, Model>,
 }
 
-#[derive(Deserialize, Debug,Clone)]
+#[derive(Deserialize, Debug, Clone)]
 pub enum ResponseType {
     String(String),
     Integer(i32),
     Float(f32),
     Boolean(bool),
-    Array(Vec<String>)
+    Array(Vec<String>),
 }
 
 impl SunSpecData {
@@ -163,10 +184,9 @@ impl SunSpecData {
         if lookup.is_none() {
             match SunSpecData::load_model(id) {
                 Ok(m) => {
-
                     self.models.insert(id, m.clone());
                     Some(m)
-                },
+                }
                 Err(e) => {
                     warn!("Can't load model for {id}: {e}");
                     None
@@ -176,5 +196,4 @@ impl SunSpecData {
             Some(lookup.unwrap().clone())
         }
     }
-
 }

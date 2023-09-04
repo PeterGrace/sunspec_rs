@@ -9,7 +9,7 @@ use cli_args::CliArgs;
 use clap::Parser;
 use tracing_log::AsTrace;
 use tracing_subscriber;
-use sunspec_rs::sunspec::SunSpecConnection;
+use sunspec_rs::sunspec_connection::SunSpecConnection;
 use sunspec_rs::sunspec_data::SunSpecData;
 
 #[tokio::main(flavor = "current_thread")]
