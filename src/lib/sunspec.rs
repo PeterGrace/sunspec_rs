@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::net::SocketAddr;
 use std::string::ToString;
 use std::sync::Arc;
 use bitvec::macros::internal::funty::Fundamental;
@@ -8,8 +9,9 @@ use tokio_modbus::{Address, Quantity, Slave};
 use tokio_modbus::client::{Context, Reader, tcp};
 use tokio_retry::Retry;
 use tokio_retry::strategy::{ExponentialBackoff, jitter};
-use crate::sunspec_data::{Model, Point, PointType, ResponseType, Symbol};
+use crate::sunspec_data::{Model, Point, ResponseType, SunSpecData, Symbol};
 use async_recursion::async_recursion;
+use anyhow::bail;
 
 const SUNSPEC_END_MODEL_ID: u16 = 65535;
 const POINT_TYPE_STRING: &str = "string";
@@ -31,8 +33,9 @@ pub type Word = u16;
 
 #[derive(Debug, Clone)]
 pub struct SunSpecConnection {
+    pub addr: SocketAddr,
+    slave_num: Option<u8>,
     pub(crate) ctx: Arc<Mutex<Context>>,
-    slave_id: Option<Slave>,
     pub models: HashMap<u16, ModelData>,
 }
 
@@ -41,29 +44,79 @@ pub struct ModelData {
     pub id: u16,
     pub len: u16,
     pub address: Address,
-    pub model: Option<Model>,
+    pub model: Model,
     pub scale_factors: HashMap<String, i16>,
 }
+
 impl ModelData {
-    pub async fn get_scale_factor(mut self, name: &str, mut conn: SunSpecConnection) -> Option<i16> {
+    pub async fn new(data: SunSpecData, id: u16, len: u16, address: Address) -> anyhow::Result<Self> {
+        let model = data.get_model(id);
+        if model.is_none() {
+            bail!("Couldn't get model for id {id}");
+        }
+        Ok(
+            ModelData {
+                id,
+                len,
+                address,
+                model: model.unwrap(),
+                scale_factors: HashMap::default()
+            }
+        )
+    }
+    pub async fn get_scale_factor(mut self, name: &str, conn: SunSpecConnection) -> Option<i16> {
         if let Some(value) = self.scale_factors.get(name) {
             return Some(*value);
         } else {
-            if let Some(ResponseType::Integer(val)) = conn.get_point(self.clone(),name).await {
-                self.scale_factors.insert(name.to_string(), val as i16);
-                return Some(val as i16);
+            if let Some(point) = conn.get_point(self.clone(), name).await {
+
+                if let Some(ResponseType::Integer(val)) = point.value {
+                    self.scale_factors.insert(name.to_string(), val as i16);
+                    return Some(val as i16);
+                };
             } else {
-                return None
-            }
+                return None;
+            };
         }
+        return None;
     }
 }
 
 
 impl SunSpecConnection {
-    pub async fn new(socket_addr: String, slave_id: Option<Slave>) -> anyhow::Result<Self> {
+    // pub async fn restart_connection(mut self) -> anyhow::Result<()> {
+    //     let mut ctx = self.ctx.lock().await;
+    //     ctx.disconnect().await.unwrap();
+    //
+    //     let mut newctx: Context;
+    //     if self.slave_num.is_some() {
+    //         newctx = match tcp::connect_slave(self.addr, Slave(self.slave_num.unwrap())).await {
+    //             Ok(ctx) => ctx,
+    //             Err(e) => {
+    //                 anyhow::bail!("Can't connect to slave: {e}");
+    //             }
+    //         };
+    //     } else {
+    //         newctx = match tcp::connect(self.addr).await {
+    //             Ok(ctx) => ctx,
+    //             Err(e) => {
+    //                 anyhow::bail!("Can't connect: {e}");
+    //             }
+    //         };
+    //     }
+    //
+    //     let arc_ctx = Arc::new(Mutex::new(newctx));
+    //     self.ctx = arc_ctx;
+    //     Ok(())
+    //
+    // }
+    pub async fn new(socket_addr: String, slave_num: Option<u8>) -> anyhow::Result<Self> {
         let socket_addr = socket_addr.parse().unwrap();
-        let mut ctx: Context;
+        let ctx: Context;
+        let slave_id = match slave_num {
+            Some(num) => Some(Slave(num)),
+            None => None
+        };
 
         if slave_id.is_some() {
             ctx = match tcp::connect_slave(socket_addr, slave_id.unwrap()).await {
@@ -84,9 +137,10 @@ impl SunSpecConnection {
         let arc_ctx = Arc::new(Mutex::new(ctx));
         Ok(
             SunSpecConnection {
+                addr: socket_addr,
+                slave_num,
                 ctx: arc_ctx,
                 models: HashMap::new(),
-                slave_id,
             }
         )
     }
@@ -127,8 +181,17 @@ impl SunSpecConnection {
         };
         Ok(data)
     }
-    pub async fn retry_read_holding_registers(mut self, addr: Address, q: Quantity) -> anyhow::Result<Vec<Word>> {
-        let retry_strategy = ExponentialBackoff::from_millis(1000)
+    pub async fn get_u32(&mut self, addr: Address) -> anyhow::Result<u16> {
+        let data = match self.clone().retry_read_holding_registers(addr, 2).await {
+            Ok(data) => data[0],
+            Err(e) => {
+                anyhow::bail!("Can't read: {e}");
+            }
+        };
+        Ok(data)
+    }
+    pub async fn retry_read_holding_registers(self, addr: Address, q: Quantity) -> anyhow::Result<Vec<Word>> {
+        let retry_strategy = ExponentialBackoff::from_millis(500)
             .map(jitter) // add jitter to delays
             .take(5);    // limit to 3 retries
 
@@ -141,7 +204,7 @@ impl SunSpecConnection {
         }
     }
 
-    pub async fn populate_models(mut self) -> HashMap<u16, ModelData> {
+    pub async fn populate_models(mut self, data:SunSpecData) -> HashMap<u16, ModelData> {
         let mut address = 40002;
         let mut models: HashMap<u16, ModelData> = HashMap::new();
         loop
@@ -151,18 +214,25 @@ impl SunSpecConnection {
             if id == SUNSPEC_END_MODEL_ID {
                 break;
             }
-            info!("found model with id {id}, and length {length}");
-            models.insert(id, ModelData { id, len: length, address, model: None, scale_factors: HashMap::new() });
+            debug!("found model with id {id}, and length {length}");
+            match ModelData::new(data.clone(), id, length, address).await {
+                Ok(md) => {
+                    models.insert(id, md);
+                },
+                Err(e) => {
+                    error!("Couldn't create ModelData: {e}");
+                }
+            };
             address = address + length + 2;
         };
         models
     }
+
     #[async_recursion]
-    pub async fn get_point(mut self, md: ModelData, name: &str) -> Option<ResponseType> {
+    pub async fn get_point(mut self, md: ModelData, name: &str) -> Option<Point> {
         let mut point = Point::default();
         let mut symbols: Option<Vec<Symbol>> = None;
-
-        if let Some(model) = md.model.clone() {
+            let model = md.model.clone();
             model.block.iter().for_each(|b| {
                 b.point.iter().for_each(|p| {
                     if p.id == name {
@@ -184,8 +254,12 @@ impl SunSpecConnection {
                 POINT_TYPE_STRING => {
                     match self.get_string(2 + md.address + point.offset, point.len.unwrap()).await {
                         Ok(rs) => {
-                            info!("{}/{name} is {rs}!",model.name);
-                            return Some(ResponseType::String(rs));
+                            debug!("{}/{name} is {rs}!",model.name);
+                            let mut val = rs.clone();
+                            // it is unlikely anyone wants the extra nulls at the end of the string
+                            val = val.trim_matches(char::from(0)).parse().ok()?;
+                            point.value = Some(ResponseType::String(val));
+                            return Some(point);
                         }
                         Err(e) => {
                             error!("{e}");
@@ -196,20 +270,22 @@ impl SunSpecConnection {
                 POINT_TYPE_INT16 => {
                     match self.get_i16(2 + md.address + point.offset).await {
                         Ok(rs) => {
-                            info!("{}/{name} is {rs}!",model.name);
-                            if let Some(sf_name) = point.scale_factor {
+                            debug!("{}/{name} is {rs}!",model.name);
+                            if let Some(sf_name) = point.clone().scale_factor {
                                 if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
                                     let mut adj: f32 = 0.0;
                                     if sf >= 0 {
-                                        adj = (rs * (10*sf.abs())).into();
+                                        adj = (rs * (10 * sf.abs())).into();
                                     } else {
-                                        adj = (rs / (10*sf.abs())).into();
+                                        adj = (rs / (10 * sf.abs())).into();
                                     }
 
-                                    return Some(ResponseType::Float(adj));
+                                    point.value = Some(ResponseType::Float(adj));
+                                    return Some(point);
                                 }
                             }
-                            return Some(ResponseType::Integer(rs as i32));
+                            point.value = Some(ResponseType::Integer(rs as i32));
+                            return Some(point);
                         }
                         Err(e) => {
                             error!("{e}");
@@ -220,19 +296,21 @@ impl SunSpecConnection {
                 POINT_TYPE_UINT16 => {
                     match self.get_u16(2 + md.address + point.offset).await {
                         Ok(rs) => {
-                            info!("{}/{name} is {rs}!",model.name);
-                            if let Some(sf_name) = point.scale_factor {
+                            debug!("{}/{name} is {rs}!",model.name);
+                            if let Some(sf_name) = point.clone().scale_factor {
                                 if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
                                     let mut adj: f32 = 0.0;
                                     if sf >= 0 {
-                                        adj = (rs.as_f32() * (10_f32*sf.abs() as f32));
+                                        adj = rs.as_f32() * (10_f32 * sf.abs() as f32);
                                     } else {
-                                        adj = (rs.as_f32() / (10_f32*sf.abs() as f32));
+                                        adj = rs.as_f32() / (10_f32 * sf.abs() as f32);
                                     }
-                                    return Some(ResponseType::Float(adj));
+                                    point.value = Some(ResponseType::Float(adj));
+                                    return Some(point);
                                 }
                             }
-                            return Some(ResponseType::Integer(rs as i32));
+                            point.value = Some(ResponseType::Integer(rs as i32));
+                            return Some(point);
                         }
                         Err(e) => {
                             error!("{e}");
@@ -243,7 +321,7 @@ impl SunSpecConnection {
                 POINT_TYPE_ENUM16 => {
                     match self.get_u16(2 + md.address + point.offset).await {
                         Ok(rs) => {
-                            info!("{}/{name} is {rs}!",model.name);
+                            debug!("{}/{name} is {rs}!",model.name);
                             if symbols.is_some() {
                                 let mut symbol_name: String = "".to_string();
                                 symbols.unwrap().iter().for_each(|s| {
@@ -252,7 +330,8 @@ impl SunSpecConnection {
                                     }
                                 });
                                 if symbol_name.len() > 0 {
-                                    return Some(ResponseType::String(symbol_name));
+                                    point.value = Some(ResponseType::String(symbol_name));
+                                    return Some(point);
                                 } else {
                                     return None;
                                 }
@@ -267,50 +346,77 @@ impl SunSpecConnection {
                 POINT_TYPE_BITFIELD16 => {
                     match self.get_u16(2 + md.address + point.offset).await {
                         Ok(rs) => {
-                            info!("{}/{name} is {rs}!",model.name);
+                            debug!("{}/{name} is {rs}!",model.name);
                             if symbols.is_some() {
                                 let mut values: Vec<String> = vec![];
                                 let bv = BitVec::<_, Lsb0>::from_element(rs.clone());
-                                for (idx, s) in symbols.unwrap().iter().enumerate() {
+                                for (s) in symbols.unwrap().iter() {
                                     if bv[s.symbol.parse::<usize>().unwrap()] {
                                         values.push(s.id.clone());
                                     };
                                 };
-                                return Some(ResponseType::Array(values));
+                                point.value = Some(ResponseType::Array(values));
+                                return Some(point);
                             } else {
                                 warn!("We tried to parse a bitfield but there aren't symbols for this point.");
                                 return None;
                             }
-                        },
+                        }
                         Err(e) => {
                             error!("{e}");
                             return None;
                         }
                     }
-                },
+                }
                 POINT_TYPE_SUNSSF => {
                     match self.get_i16(2 + md.address + point.offset).await {
                         Ok(rs) => {
-                            info!("{}/{name} is {rs}!",model.name);
-                            return Some(ResponseType::Integer(rs as i32));
+                            debug!("{}/{name} is {rs}!",model.name);
+                            point.value = Some(ResponseType::Integer(rs as i32));
+                            return Some(point);
                         }
                         Err(e) => {
                             error!("{e}");
                             return None;
                         }
                     }
-                },
+                }
+                POINT_TYPE_UINT32 => {
+                    match self.get_u32(2 + md.address + point.offset).await {
+                        Ok(rs) => {
+                            debug!("{}/{name} is {rs}!",model.name);
+                            if let Some(sf_name) = point.clone().scale_factor {
+                                if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
+                                    let mut adj: f32 = 0.0;
+                                    if sf >= 0 {
+                                        adj = rs.as_f32() * (10_f32 * sf.abs() as f32);
+                                    } else {
+                                        adj = rs.as_f32() / (10_f32 * sf.abs() as f32);
+                                    }
+                                    point.value = Some(ResponseType::Float(adj));
+                                    return Some(point);
+                                }
+                            }
+                            point.value = Some(ResponseType::Integer(rs as i32));
+                            return Some(point);
+                        }
+                        Err(e) => {
+                            error!("{e}");
+                            return None;
+                        }
+                    }
+                }
                 _ => {
-                    info!("{:#?}",point.r#type.as_str());
+                    debug!("{:#?}",point.r#type.as_str());
                     todo!("unimplemented");
                 }
             }
-        }
+
         None
     }
 }
 
-pub async fn action_read_holding_registers(mut actx: &Arc<Mutex<Context>>, addr: Address, q: Quantity) -> anyhow::Result<Vec<Word>> {
+pub async fn action_read_holding_registers(actx: &Arc<Mutex<Context>>, addr: Address, q: Quantity) -> anyhow::Result<Vec<Word>> {
     let mut ctx = actx.lock().await;
     match ctx.read_holding_registers(addr, q).await {
         Ok(data) => {
@@ -318,8 +424,24 @@ pub async fn action_read_holding_registers(mut actx: &Arc<Mutex<Context>>, addr:
         }
 
         Err(e) => {
-            warn!("err occcurred in retry: {e}");
-            anyhow::bail!("Error in retry: {e}");
+            match e.raw_os_error() {
+                None => {
+                    warn!("err occcurred in retry: {e}");
+                    anyhow::bail!("Error in retry: {e}");
+                }
+                Some(code) => {
+                    match code {
+                        // 32 => {
+                        //     //
+                        // }
+                        _ => {
+                        warn!("err occcurred in retry: {e}");
+                        anyhow::bail!("Error in retry: {e}");
+
+                        }
+                    }
+                }
+            }
         }
     }
 }

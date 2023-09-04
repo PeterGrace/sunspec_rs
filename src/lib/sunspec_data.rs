@@ -1,10 +1,6 @@
 use std::collections::HashMap;
-use std::ffi::CString;
-use serde::{Serialize, Deserialize};
-
-use std::io;
+use serde::Deserialize;
 use std::fs::File;
-use serde_xml_rs::from_reader;
 
 
 
@@ -67,16 +63,18 @@ pub struct Block {
 
 #[derive(Deserialize, Debug, Default, Clone)]
 pub struct Point {
-    pub(crate) id: String,
-    pub(crate) offset: u16,
-    pub(crate) r#type: String,
-    pub(crate) len: Option<u16>,
-    pub(crate) mandatory: Option<bool>,
-    pub(crate) access: Option<Access>,
-    pub(crate) symbol: Option<Vec<Symbol>>,
-    pub(crate) units: Option<String>,
+    pub id: String,
+    pub offset: u16,
+    pub r#type: String,
+    pub len: Option<u16>,
+    pub mandatory: Option<bool>,
+    pub access: Option<Access>,
+    pub symbol: Option<Vec<Symbol>>,
+    pub units: Option<String>,
     #[serde(rename="sf")]
-    pub(crate) scale_factor: Option<String>
+    pub scale_factor: Option<String>,
+    pub value: Option<ResponseType>,
+    pub literal: Option<PointLiteral>
 }
 #[derive(Debug, Clone, Deserialize)]
 pub struct Symbol {
@@ -84,29 +82,29 @@ pub struct Symbol {
     #[serde(rename="$value")]
     pub(crate) symbol: String
 }
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct Strings {
     id: String,
     locale: Option<String>,
     #[serde(rename = "$value")]
     literals: Vec<LiteralType>
 }
-#[derive(Deserialize)]
-struct ModelLiteral {
+#[derive(Deserialize, Debug, Clone)]
+pub struct ModelLiteral {
     label: Option<String>,
     description: Option<String>,
     notes: Option<String>
 }
-#[derive(Deserialize)]
-struct PointLiteral {
+#[derive(Deserialize, Debug, Clone)]
+pub struct PointLiteral {
     id: String,
     label: Option<String>,
     description: Option<String>,
     notes: Option<String>
 }
 
-#[derive(Deserialize)]
-struct SymbolLiteral {
+#[derive(Deserialize, Debug, Clone)]
+pub struct SymbolLiteral {
     id: String,
     label: Option<String>,
     description: Option<String>,
@@ -114,8 +112,8 @@ struct SymbolLiteral {
 }
 
 
-#[derive(Deserialize)]
-enum LiteralType {
+#[derive(Deserialize, Debug, Clone)]
+pub enum LiteralType {
     model(ModelLiteral),
     point(PointLiteral),
     symbol(SymbolLiteral)
@@ -129,10 +127,10 @@ pub struct SunSpecModels {
 
 #[derive(Default, Debug, Clone)]
 pub struct SunSpecData {
-    models: HashMap<u16, Model>,
+    pub models: HashMap<u16, Model>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug,Clone)]
 pub enum ResponseType {
     String(String),
     Integer(i32),
@@ -158,29 +156,6 @@ impl SunSpecData {
         };
 
         Ok(ssm.model)
-    }
-    pub fn get_model_id_from_name(self, name: String) -> anyhow::Result<Option<u16>> {
-        let mut candidates: Vec<u16> = vec![];
-        info!("models is of length {}",self.models.len());
-        self.models.iter().for_each(|(i,m)| {
-            info!("{}", m.name.clone());
-            if m.name == name {
-                candidates.push(i.clone());
-            }
-        });
-        match candidates.len() {
-            0 => {
-                return Ok(None);
-            },
-            1 => {
-                return Ok(Some(candidates[0]));
-            },
-            _ => {
-                anyhow::bail!("More than one model with name {name}: {:#?}", candidates);
-            }
-        }
-
-
     }
     pub fn get_model(mut self, id: u16) -> Option<Model> {
         let lookup = self.models.get(&id);
