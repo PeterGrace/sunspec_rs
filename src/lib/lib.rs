@@ -2,5 +2,5 @@
 extern crate tracing;
 pub mod sunspec_connection;
 pub mod sunspec_data;
-mod model_data;
-mod sunspec_models;
+pub mod model_data;
+pub mod sunspec_models;
