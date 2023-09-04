@@ -20,9 +20,8 @@ pub struct ResolvedModel {
     pub notes: Option<String>,
 }
 
-
-
-
+/// A struct that holds a hash of all known model definitions, used as a library for lazy-loading
+/// of data into a model as needed.
 #[derive(Default, Debug, Clone)]
 pub struct SunSpecData {
     pub models: HashMap<u16, SunSpecModels>,
@@ -30,6 +29,11 @@ pub struct SunSpecData {
 
 
 impl SunSpecData {
+    /// Load model data from disk
+    ///
+    /// # Arguments
+    ///
+    /// * `model_id` - The model id to load from disk.
     fn load_model(id: u16) -> anyhow::Result<SunSpecModels> {
         let filename = format!("models/smdx_{:05}.xml", id);
         let fd = match File::open(filename) {
@@ -47,6 +51,14 @@ impl SunSpecData {
 
         Ok(ssm)
     }
+    /// retrieve a model definition from the models repository
+    ///
+    /// # Arguments
+    ///
+    /// * `model_id` - The model id to load from disk.
+    ///
+    /// # Returns
+    /// Returns a valid SunSpecModels instance, or None if it didn't exist.
     pub fn get_model(mut self, id: u16) -> Option<SunSpecModels> {
         let lookup = self.models.get(&id);
 

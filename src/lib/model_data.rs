@@ -15,6 +15,14 @@ pub struct ModelData {
 }
 
 impl ModelData {
+    /// create new modeldata object
+    ///
+    /// # Arguments
+    ///
+    /// * `data` - an initialized SunSpecData object
+    /// * `id` - The model id number for the model in question
+    /// * `len` - The length of this model (returned when querying the model)
+    /// * `address` - Where this particular model exists in the address range
     pub async fn new(data: SunSpecData, id: u16, len: u16, address: Address) -> anyhow::Result<Self> {
         let model = data.get_model(id);
         if model.is_none() {
@@ -30,6 +38,13 @@ impl ModelData {
             }
         )
     }
+
+    /// For a given model point, retrieve its scale factor and store it for later re-use.
+    ///
+    /// # Arguments
+    ///
+    /// * `name` - The name of the point inside our model to query
+    /// * `conn` - The SunSpecConnection we have open already (so that we can query the proper connection)
     pub async fn get_scale_factor(mut self, name: &str, conn: SunSpecConnection) -> Option<i16> {
         if let Some(value) = self.scale_factors.get(name) {
             return Some(*value);
@@ -45,6 +60,8 @@ impl ModelData {
         }
         return None;
     }
+
+    /// Return a model object that contains descriptive data from the modelfile to explain what this model is
     pub async fn get_resolved_model(self) -> ResolvedModel {
         let mut resolved_model: ResolvedModel = ResolvedModel::default();
 
