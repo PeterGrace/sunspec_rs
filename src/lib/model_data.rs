@@ -1,9 +1,9 @@
-use std::collections::HashMap;
-use std::string::ToString;
-use tokio_modbus::Address;
 use crate::sunspec_connection::SunSpecConnection;
 use crate::sunspec_data::{ResolvedModel, SunSpecData};
 use crate::sunspec_models::{LiteralType, ResponseType, SunSpecModels};
+use std::collections::HashMap;
+use std::string::ToString;
+use tokio_modbus::Address;
 
 #[derive(Default, Debug, Clone)]
 pub struct ModelData {
@@ -23,20 +23,23 @@ impl ModelData {
     /// * `id` - The model id number for the model in question
     /// * `len` - The length of this model (returned when querying the model)
     /// * `address` - Where this particular model exists in the address range
-    pub async fn new(data: SunSpecData, id: u16, len: u16, address: Address) -> anyhow::Result<Self> {
+    pub async fn new(
+        data: SunSpecData,
+        id: u16,
+        len: u16,
+        address: Address,
+    ) -> anyhow::Result<Self> {
         let model = data.get_model(id);
         if model.is_none() {
             anyhow::bail!("Couldn't get model for id {id}");
         }
-        Ok(
-            ModelData {
-                id,
-                len,
-                address,
-                model: model.unwrap(),
-                scale_factors: HashMap::default(),
-            }
-        )
+        Ok(ModelData {
+            id,
+            len,
+            address,
+            model: model.unwrap(),
+            scale_factors: HashMap::default(),
+        })
     }
 
     /// For a given model point, retrieve its scale factor and store it for later re-use.
@@ -75,7 +78,7 @@ impl ModelData {
         }
 
         resolved_model.model = self.model.model;
-        debug!("resolved model is {:#?}",resolved_model);
-      resolved_model
+        debug!("resolved model is {:#?}", resolved_model);
+        resolved_model
     }
 }

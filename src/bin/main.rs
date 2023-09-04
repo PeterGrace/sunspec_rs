@@ -4,13 +4,13 @@ extern crate tokio;
 
 mod cli_args;
 
-use std::process;
-use cli_args::CliArgs;
 use clap::Parser;
-use tracing_log::AsTrace;
-use tracing_subscriber;
+use cli_args::CliArgs;
+use std::process;
 use sunspec_rs::sunspec_connection::SunSpecConnection;
 use sunspec_rs::sunspec_data::SunSpecData;
+use tracing_log::AsTrace;
+use tracing_subscriber;
 
 #[tokio::main]
 pub async fn main() {
@@ -34,13 +34,15 @@ pub async fn main() {
     ss.models = ss.clone().populate_models(ssd.clone()).await;
 
     let modelid = 64207;
-    let fields:Vec<&str> = vec!["E"];
-
+    let fields: Vec<&str> = vec!["E"];
 
     let md = ss.models.get(&modelid).unwrap().clone();
     let resolved_model = md.clone().get_resolved_model().await;
     let model_name = resolved_model.model.clone().name;
-    debug!("Attempting to call get point on model {}, fields {:#?}",model_name, fields);
+    debug!(
+        "Attempting to call get point on model {}, fields {:#?}",
+        model_name, fields
+    );
     for f in fields {
         if let Some(pt) = ss.clone().get_point(md.clone(), f).await {
             let mut message: String = String::default();
@@ -48,5 +50,5 @@ pub async fn main() {
             message = message + &*format!("{:#?}", pt);
             info!(message);
         }
-    };
+    }
 }

@@ -1,7 +1,6 @@
-use serde::{Serialize,Deserialize};
+use serde::{Deserialize, Serialize};
 
-
-#[derive(Serialize,Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ResponseType {
     String(String),
     Integer(i32),
@@ -10,16 +9,14 @@ pub enum ResponseType {
     Array(Vec<String>),
 }
 
-
-
-#[derive(Serialize,Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum Access {
     #[serde(rename = "r")]
     ReadOnly,
     #[serde(rename = "rw")]
     ReadWrite,
 }
-#[derive(Serialize,Deserialize, Default, Debug, Clone)]
+#[derive(Serialize, Deserialize, Default, Debug, Clone)]
 #[serde(tag = "untagged")]
 pub enum PointType {
     #[serde(rename = "string")]
@@ -51,7 +48,7 @@ pub enum PointType {
     Pad,
 }
 
-#[derive(Serialize,Deserialize, Debug, Default, Clone)]
+#[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct Model {
     pub id: u16,
     pub len: u16,
@@ -59,14 +56,14 @@ pub struct Model {
     pub block: Vec<Block>,
 }
 
-#[derive(Serialize,Deserialize, Debug, Default, Clone)]
+#[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct Block {
     len: u16,
     r#type: Option<String>,
     pub(crate) point: Vec<Point>,
 }
 
-#[derive(Serialize,Deserialize, Debug, Default, Clone)]
+#[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct Point {
     pub id: String,
     pub offset: u16,
@@ -89,7 +86,7 @@ pub struct Symbol {
     pub(crate) symbol: String,
 }
 
-#[derive(Serialize,Deserialize, Debug, Default, Clone)]
+#[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct Strings {
     pub(crate) id: String,
     pub(crate) locale: Option<String>,
@@ -97,14 +94,14 @@ pub struct Strings {
     pub(crate) literals: Vec<LiteralType>,
 }
 
-#[derive(Serialize,Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ModelLiteral {
     pub(crate) label: Option<String>,
     pub(crate) description: Option<String>,
     pub(crate) notes: Option<String>,
 }
 
-#[derive(Serialize,Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PointLiteral {
     pub(crate) id: String,
     pub(crate) label: Option<String>,
@@ -112,7 +109,7 @@ pub struct PointLiteral {
     pub(crate) notes: Option<String>,
 }
 
-#[derive(Serialize,Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SymbolLiteral {
     pub(crate) id: String,
     pub(crate) label: Option<String>,
@@ -120,8 +117,7 @@ pub struct SymbolLiteral {
     pub(crate) notes: Option<String>,
 }
 
-
-#[derive(Serialize,Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum LiteralType {
     #[serde(rename = "model")]
     Model(ModelLiteral),
@@ -131,7 +127,7 @@ pub enum LiteralType {
     Symbol(SymbolLiteral),
 }
 
-#[derive(Serialize,Deserialize, Clone, Debug, Default)]
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct SunSpecModels {
     pub model: Model,
     pub strings: Vec<Strings>,

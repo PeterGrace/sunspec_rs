@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
-use std::fs::File;
 use crate::sunspec_models::{Model, PointType, SunSpecModels};
+use std::fs::File;
 
 #[derive(Default, Debug)]
 pub struct ResolvedModel {
@@ -17,7 +17,6 @@ pub struct ResolvedModel {
 pub struct SunSpecData {
     pub models: HashMap<u16, SunSpecModels>,
 }
-
 
 impl SunSpecData {
     /// Load model data from disk
