@@ -9,7 +9,8 @@ use tokio_modbus::{Address, Quantity, Slave};
 use tokio_modbus::client::{Context, Reader, tcp};
 use tokio_retry::Retry;
 use tokio_retry::strategy::{ExponentialBackoff, jitter};
-use crate::sunspec_data::{Point, ResponseType, SunSpecData, Symbol};
+use crate::sunspec_models::{LiteralType, Point, ResponseType, Symbol};
+use crate::sunspec_data::SunSpecData;
 use async_recursion::async_recursion;
 use crate::model_data::ModelData;
 
@@ -40,9 +41,8 @@ pub struct SunSpecConnection {
 }
 
 
-
-
 impl SunSpecConnection {
+    //region connection restart (todo)
     // pub async fn restart_connection(mut self) -> anyhow::Result<()> {
     //     let mut ctx = self.ctx.lock().await;
     //     ctx.disconnect().await.unwrap();
@@ -69,6 +69,9 @@ impl SunSpecConnection {
     //     Ok(())
     //
     // }
+    //endregion
+
+    //region new sunspec connection
     pub async fn new(socket_addr: String, slave_num: Option<u8>) -> anyhow::Result<Self> {
         let socket_addr = socket_addr.parse().unwrap();
         let ctx: Context;
@@ -103,6 +106,9 @@ impl SunSpecConnection {
             }
         )
     }
+    //endregion
+
+    //region get value primitives
     pub async fn get_string(&mut self, addr: Address, quantity: Quantity) -> anyhow::Result<String> {
         let data = match self.clone().retry_read_holding_registers(addr, quantity).await {
             Ok(data) => data,
@@ -156,6 +162,9 @@ impl SunSpecConnection {
             }
         }
     }
+    //endregion
+
+    //region inner holding registers retry logic
     pub async fn retry_read_holding_registers(self, addr: Address, q: Quantity) -> anyhow::Result<Vec<Word>> {
         let retry_strategy = ExponentialBackoff::from_millis(500)
             .map(jitter) // add jitter to delays
@@ -169,7 +178,9 @@ impl SunSpecConnection {
             }
         }
     }
+    //endregion
 
+    //region gather models from the device and store them
     pub async fn populate_models(mut self, data: SunSpecData) -> HashMap<u16, ModelData> {
         let mut address = 40002;
         let mut models: HashMap<u16, ModelData> = HashMap::new();
@@ -193,16 +204,19 @@ impl SunSpecConnection {
         };
         models
     }
+    //endregion
 
+    //region get well-formed point for return to caller
     #[async_recursion]
     pub async fn get_point(mut self, md: ModelData, name: &str) -> Option<Point> {
         let mut point = Point::default();
         let mut symbols: Option<Vec<Symbol>> = None;
-        let model = md.model.clone();
+        let model = md.model.model.clone();
         model.block.iter().for_each(|b| {
             b.point.iter().for_each(|p| {
                 if p.id == name {
                     point = p.clone();
+                    // if this point also has associated symbols (enum/bitfield), copy them in too
                     if p.symbol.is_some() {
                         symbols = p.symbol.clone();
                     }
@@ -214,7 +228,18 @@ impl SunSpecConnection {
             warn!("You asked for point {name} but it doesn't exist in the model.");
             return None;
         }
+        //region if there's literals for this point, populate them
+        for string in md.model.strings.iter() {
+            for literal in string.literals.iter() {
+                if let LiteralType::Point(point_literal) = literal {
+                    if point_literal.id == name {
+                        point.literal = Some(point_literal.clone());
+                    }
+                }
+            }
+        }
 
+        //endregion
 
         match point.r#type.as_str() {
             POINT_TYPE_STRING => {
@@ -373,7 +398,7 @@ impl SunSpecConnection {
             }
             POINT_TYPE_ACC16 => {
                 warn!("16-bit accumulator isn't implemented yet");
-                return None
+                return None;
             }
             POINT_TYPE_INT32 => {
                 match self.get_i32(2 + md.address + point.offset).await {
@@ -436,8 +461,10 @@ impl SunSpecConnection {
 
         None
     }
+    //endregion
 }
 
+//region acftual code that reads holding registers (for retry logic)
 pub async fn action_read_holding_registers(actx: &Arc<Mutex<Context>>, addr: Address, q: Quantity) -> anyhow::Result<Vec<Word>> {
     let mut ctx = actx.lock().await;
     match ctx.read_holding_registers(addr, q).await {
@@ -466,3 +493,4 @@ pub async fn action_read_holding_registers(actx: &Arc<Mutex<Context>>, addr: Add
         }
     }
 }
+//endregion
