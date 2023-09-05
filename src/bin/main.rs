@@ -22,7 +22,7 @@ pub async fn main() {
         .init();
 
     let socket_addr = "127.0.0.1:5083".parse().unwrap();
-    let mut ss = match SunSpecConnection::new(socket_addr, Some(3)).await {
+    let mut ss = match SunSpecConnection::new(socket_addr, Some(4)).await {
         Ok(mb) => mb,
         Err(e) => {
             error!("Can't create modbus connection: {e}");
@@ -33,8 +33,8 @@ pub async fn main() {
     let ssd = SunSpecData::default();
     ss.models = ss.clone().populate_models(ssd.clone()).await;
 
-    let modelid = 64207;
-    let fields: Vec<&str> = vec!["E"];
+    let modelid = 804;
+    let fields: Vec<&str> = vec!["St"];
 
     let md = ss.models.get(&modelid).unwrap().clone();
     let resolved_model = md.clone().get_resolved_model().await;

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::sunspec_models::{Model, PointType, SunSpecModels};
+use crate::sunspec_models::{Model, SunSpecModels};
 use std::fs::File;
 
 #[derive(Default, Debug)]

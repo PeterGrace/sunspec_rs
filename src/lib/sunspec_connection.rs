@@ -350,29 +350,31 @@ impl SunSpecConnection {
                     return None;
                 }
             },
-            POINT_TYPE_UINT16 => match self.get_u16(2 + md.address + point.offset).await {
-                Ok(rs) => {
-                    debug!("{}/{name} is {rs}!", model.name);
-                    if let Some(sf_name) = point.clone().scale_factor {
-                        if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
-                            let mut _adj: f32 = 0.0;
-                            if sf >= 0 {
-                                _adj = rs.as_f32() * (10_f32 * sf.abs() as f32);
-                            } else {
-                                _adj = rs.as_f32() / (10_f32 * sf.abs() as f32);
+            POINT_TYPE_UINT16 | POINT_TYPE_ACC16 => {
+                match self.get_u16(2 + md.address + point.offset).await {
+                    Ok(rs) => {
+                        debug!("{}/{name} is {rs}!", model.name);
+                        if let Some(sf_name) = point.clone().scale_factor {
+                            if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
+                                let mut _adj: f32 = 0.0;
+                                if sf >= 0 {
+                                    _adj = rs.as_f32() * (10_f32 * sf.abs() as f32);
+                                } else {
+                                    _adj = rs.as_f32() / (10_f32 * sf.abs() as f32);
+                                }
+                                point.value = Some(ResponseType::Float(_adj));
+                                return Some(point);
                             }
-                            point.value = Some(ResponseType::Float(_adj));
-                            return Some(point);
                         }
+                        point.value = Some(ResponseType::Integer(rs as i32));
+                        return Some(point);
                     }
-                    point.value = Some(ResponseType::Integer(rs as i32));
-                    return Some(point);
+                    Err(e) => {
+                        error!("{e}");
+                        return None;
+                    }
                 }
-                Err(e) => {
-                    error!("{e}");
-                    return None;
-                }
-            },
+            }
             POINT_TYPE_ENUM16 => match self.get_u16(2 + md.address + point.offset).await {
                 Ok(rs) => {
                     debug!("{}/{name} is {rs}!", model.name);
@@ -432,32 +434,30 @@ impl SunSpecConnection {
                     return None;
                 }
             },
-            POINT_TYPE_UINT32 => match self.get_u32(2 + md.address + point.offset).await {
-                Ok(rs) => {
-                    debug!("{}/{name} is {rs}!", model.name);
-                    if let Some(sf_name) = point.clone().scale_factor {
-                        if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
-                            let mut _adj: f32 = 0.0;
-                            if sf >= 0 {
-                                _adj = rs.as_f32() * (10_f32 * sf.abs() as f32);
-                            } else {
-                                _adj = rs.as_f32() / (10_f32 * sf.abs() as f32);
+            POINT_TYPE_UINT32 | POINT_TYPE_ACC32 => {
+                match self.get_u32(2 + md.address + point.offset).await {
+                    Ok(rs) => {
+                        debug!("{}/{name} is {rs}!", model.name);
+                        if let Some(sf_name) = point.clone().scale_factor {
+                            if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
+                                let mut _adj: f32 = 0.0;
+                                if sf >= 0 {
+                                    _adj = rs.as_f32() * (10_f32 * sf.abs() as f32);
+                                } else {
+                                    _adj = rs.as_f32() / (10_f32 * sf.abs() as f32);
+                                }
+                                point.value = Some(ResponseType::Float(_adj));
+                                return Some(point);
                             }
-                            point.value = Some(ResponseType::Float(_adj));
-                            return Some(point);
                         }
+                        point.value = Some(ResponseType::Integer(rs as i32));
+                        return Some(point);
                     }
-                    point.value = Some(ResponseType::Integer(rs as i32));
-                    return Some(point);
+                    Err(e) => {
+                        error!("{e}");
+                        return None;
+                    }
                 }
-                Err(e) => {
-                    error!("{e}");
-                    return None;
-                }
-            },
-            POINT_TYPE_ACC16 => {
-                warn!("16-bit accumulator isn't implemented yet");
-                return None;
             }
             POINT_TYPE_INT32 => match self.get_i32(2 + md.address + point.offset).await {
                 Ok(rs) => {
@@ -482,7 +482,6 @@ impl SunSpecConnection {
                     return None;
                 }
             },
-            POINT_TYPE_ACC32 => {}
             POINT_TYPE_ENUM32 => match self.get_u32(2 + md.address + point.offset).await {
                 Ok(rs) => {
                     debug!("{}/{name} is {rs}!", model.name);
@@ -506,7 +505,31 @@ impl SunSpecConnection {
                     return None;
                 }
             },
-            POINT_TYPE_BITFIELD32 => {}
+            POINT_TYPE_BITFIELD32 => {
+                match self.get_u32(2 + md.address + point.offset).await {
+                    Ok(rs) => {
+                        debug!("{}/{name} is {rs}!", model.name);
+                        if symbols.is_some() {
+                            let mut values: Vec<String> = vec![];
+                            let bv = BitVec::<_, Lsb0>::from_element(rs.clone());
+                            for s in symbols.unwrap().iter() {
+                                if bv[s.symbol.parse::<usize>().unwrap()] {
+                                    values.push(s.id.clone());
+                                };
+                            }
+                            point.value = Some(ResponseType::Array(values));
+                            return Some(point);
+                        } else {
+                            warn!("We tried to parse a bitfield but there aren't symbols for this point.");
+                            return None;
+                        }
+                    }
+                    Err(e) => {
+                        error!("{e}");
+                        return None;
+                    }
+                }
+            }
             POINT_TYPE_PAD => {}
             _ => {
                 error!("unknown point type: {:#?}", point.r#type.as_str());

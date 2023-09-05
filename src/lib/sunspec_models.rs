@@ -96,17 +96,17 @@ pub struct Strings {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ModelLiteral {
-    pub(crate) label: Option<String>,
-    pub(crate) description: Option<String>,
-    pub(crate) notes: Option<String>,
+    pub label: Option<String>,
+    pub description: Option<String>,
+    pub notes: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PointLiteral {
-    pub(crate) id: String,
-    pub(crate) label: Option<String>,
-    pub(crate) description: Option<String>,
-    pub(crate) notes: Option<String>,
+    pub id: String,
+    pub label: Option<String>,
+    pub description: Option<String>,
+    pub notes: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
