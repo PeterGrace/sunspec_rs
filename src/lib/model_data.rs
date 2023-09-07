@@ -48,11 +48,11 @@ impl ModelData {
     ///
     /// * `name` - The name of the point inside our model to query
     /// * `conn` - The SunSpecConnection we have open already (so that we can query the proper connection)
-    pub async fn get_scale_factor(mut self, name: &str, conn: SunSpecConnection) -> Option<i16> {
+    pub async fn get_scale_factor(&mut self, name: &str, conn: SunSpecConnection) -> Option<i16> {
         if let Some(value) = self.scale_factors.get(name) {
             return Some(*value);
         } else {
-            if let Some(point) = conn.get_point(self.clone(), name).await {
+            if let Some(point) = conn.clone().get_point(self.clone(), name).await {
                 if let Some(ResponseType::Integer(val)) = point.value {
                     self.scale_factors.insert(name.to_string(), val as i16);
                     return Some(val as i16);

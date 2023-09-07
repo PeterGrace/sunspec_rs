@@ -8,11 +8,12 @@ use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::string::ToString;
 use std::sync::Arc;
+use thiserror::Error;
 use tokio::sync::Mutex;
 use tokio_modbus::client::{tcp, Context, Reader};
 use tokio_modbus::{Address, Quantity, Slave};
 use tokio_retry::strategy::{jitter, ExponentialBackoff};
-use tokio_retry::Retry;
+use tokio_retry::RetryIf;
 
 const SUNSPEC_END_MODEL_ID: u16 = 65535;
 const POINT_TYPE_STRING: &str = "string";
@@ -29,7 +30,25 @@ const POINT_TYPE_BITFIELD32: &str = "bitfield32";
 const POINT_TYPE_SUNSSF: &str = "sunssf";
 const POINT_TYPE_PAD: &str = "pad";
 
+const NOT_ACCUMULATED_32: u32 = 0x00000000;
+const NOT_IMPLEMENTED_U32: u32 = 0xffffffff;
+const NOT_IMPLEMENTED_I32: u32 = 0x80000000;
+const NOT_ACCUMULATED_16: u16 = 0x0000;
+const NOT_IMPLEMENTED_U16: u16 = 0xffff;
+const NOT_IMPLEMENTED_I16: u16 = 0x8000;
+
+const ERROR_ILLEGAL_DATA_VALUE: &str = "Illegal data value";
+
 pub type Word = u16;
+
+#[derive(Error, Debug, Default, PartialEq)]
+pub enum SunSpecCommError {
+    #[error("Unrecoverable error: {0}")]
+    FatalError(String),
+    #[error("Received transient error, will retry.")]
+    #[default]
+    TransientError,
+}
 
 /// A SunSpecConnection holds the address and slave id for the modbus connection, as well as the
 /// actual connection object itself as well as the modeldata for all of the exposed models on
@@ -158,7 +177,12 @@ impl SunSpecConnection {
     /// * `addr` - A memory offset address to read, e.g. 40002
     pub async fn get_i16(&mut self, addr: Address) -> anyhow::Result<i16> {
         let data = match self.clone().retry_read_holding_registers(addr, 1).await {
-            Ok(data) => data[0],
+            Ok(data) => {
+                if data[0] == NOT_IMPLEMENTED_I16 {
+                    anyhow::bail!("datapoint is not implemented (returned 0x8000)")
+                }
+                data[0]
+            }
             Err(e) => {
                 anyhow::bail!("Can't read: {e}");
             }
@@ -172,7 +196,13 @@ impl SunSpecConnection {
     /// * `addr` - A memory offset address to read, e.g. 40002
     pub async fn get_u16(&mut self, addr: Address) -> anyhow::Result<u16> {
         let data = match self.clone().retry_read_holding_registers(addr, 1).await {
-            Ok(data) => data[0],
+            Ok(data) => {
+                if data[0] == NOT_IMPLEMENTED_U16 {
+                    anyhow::bail!("datapoint is not implemented (returned 0xFFFF)")
+                }
+                data[0]
+            }
+
             Err(e) => {
                 anyhow::bail!("Can't read: {e}");
             }
@@ -190,7 +220,14 @@ impl SunSpecConnection {
         match self.clone().retry_read_holding_registers(addr, 2).await {
             // because holding_registers works in 16 bit "words", we need to combine two words into
             // one word here to get a 32 bit number.
-            Ok(data) => Ok((data[0] as i32) << 16 | data[1] as i32),
+            Ok(data) => {
+                let val = (data[0] as i32) << 16 | data[1] as i32;
+                if val == NOT_IMPLEMENTED_I32 as i32 {
+                    anyhow::bail!("datapoint is not implemented (returned 0x8000_0000)");
+                } else {
+                    Ok(val)
+                }
+            }
             Err(e) => {
                 anyhow::bail!("Can't read: {e}");
             }
@@ -207,7 +244,14 @@ impl SunSpecConnection {
         match self.clone().retry_read_holding_registers(addr, 2).await {
             // because holding_registers works in 16 bit "words", we need to combine two words into
             // one word here to get a 32 bit number.
-            Ok(data) => Ok((data[0] as u32) << 16 | data[1] as u32),
+            Ok(data) => {
+                let val = (data[0] as u32) << 16 | data[1] as u32;
+                if val == NOT_IMPLEMENTED_U32 {
+                    anyhow::bail!("datapoint is not implemented (returned 0xFFFF_FFFF)");
+                } else {
+                    Ok(val)
+                }
+            }
             Err(e) => {
                 anyhow::bail!("Can't read: {e}");
             }
@@ -226,9 +270,11 @@ impl SunSpecConnection {
             .take(5); // limit to 3 retries
 
         let ctx = self.ctx.clone();
-        match Retry::spawn(retry_strategy, || {
-            action_read_holding_registers(&ctx, addr, q)
-        })
+        match RetryIf::spawn(
+            retry_strategy,
+            || action_read_holding_registers(&ctx, addr, q),
+            |e: &SunSpecCommError| SunSpecCommError::TransientError == *e,
+        )
         .await
         {
             Ok(e) => Ok(e),
@@ -240,19 +286,32 @@ impl SunSpecConnection {
     //endregion
 
     //region gather models from the device and store them
-    pub async fn populate_models(mut self, data: SunSpecData) -> HashMap<u16, ModelData> {
+    pub async fn populate_models(
+        mut self,
+        data: &SunSpecData,
+    ) -> anyhow::Result<HashMap<u16, ModelData>> {
         let mut address = 40002;
         let mut models: HashMap<u16, ModelData> = HashMap::new();
         loop {
-            let id = self.get_u16(address).await.unwrap();
-            let length = self.get_u16(address + 1).await.unwrap();
-            if id == SUNSPEC_END_MODEL_ID {
+            let id = match self.get_i16(address).await {
+                Ok(id) => id,
+                Err(e) => {
+                    anyhow::bail!("Can't get model id: {e}");
+                }
+            };
+            let length = match self.get_u16(address + 1).await {
+                Ok(length) => length,
+                Err(e) => {
+                    anyhow::bail!("Can't get model length: {e}");
+                }
+            };
+            if id == SUNSPEC_END_MODEL_ID as i16 {
                 break;
             }
             debug!("found model with id {id}, and length {length}");
-            match ModelData::new(data.clone(), id, length, address).await {
+            match ModelData::new(data.clone(), id as u16, length, address).await {
                 Ok(md) => {
-                    models.insert(id, md);
+                    models.insert(id as u16, md);
                 }
                 Err(e) => {
                     error!("Couldn't create ModelData: {e}");
@@ -260,7 +319,7 @@ impl SunSpecConnection {
             };
             address = address + length + 2;
         }
-        models
+        Ok(models)
     }
     //endregion
 
@@ -275,7 +334,7 @@ impl SunSpecConnection {
     /// * `name` - The name of the point you're querying, e.g. "PhVPhA" -- you can find these
     ///            values specified in the sunspec model files.
     #[async_recursion]
-    pub async fn get_point(mut self, md: ModelData, name: &str) -> Option<Point> {
+    pub async fn get_point(mut self, mut md: ModelData, name: &str) -> Option<Point> {
         let mut point = Point::default();
         let mut symbols: Option<Vec<Symbol>> = None;
         let model = md.model.model.clone();
@@ -354,6 +413,12 @@ impl SunSpecConnection {
                 match self.get_u16(2 + md.address + point.offset).await {
                     Ok(rs) => {
                         debug!("{}/{name} is {rs}!", model.name);
+                        if point.r#type.as_str() == POINT_TYPE_ACC16 && rs == NOT_ACCUMULATED_16 {
+                            error!(
+                                "Accumulator datapoint not supported by device (0 value returned)"
+                            );
+                            return None;
+                        }
                         if let Some(sf_name) = point.clone().scale_factor {
                             if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
                                 let mut _adj: f32 = 0.0;
@@ -438,6 +503,12 @@ impl SunSpecConnection {
                 match self.get_u32(2 + md.address + point.offset).await {
                     Ok(rs) => {
                         debug!("{}/{name} is {rs}!", model.name);
+                        if point.r#type.as_str() == POINT_TYPE_ACC32 && rs == NOT_ACCUMULATED_32 {
+                            error!(
+                                "Accumulator datapoint not supported by device (0 value returned)"
+                            );
+                            return None;
+                        }
                         if let Some(sf_name) = point.clone().scale_factor {
                             if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
                                 let mut _adj: f32 = 0.0;
@@ -542,30 +613,33 @@ impl SunSpecConnection {
     //endregion
 }
 
-//region acftual code that reads holding registers (for retry logic)
+//region actual code that reads holding registers (for retry logic)
 pub(crate) async fn action_read_holding_registers(
     actx: &Arc<Mutex<Context>>,
     addr: Address,
     q: Quantity,
-) -> anyhow::Result<Vec<Word>> {
+) -> Result<Vec<Word>, SunSpecCommError> {
     let mut ctx = actx.lock().await;
     match ctx.read_holding_registers(addr, q).await {
         Ok(data) => Ok(data),
-
         Err(e) => {
             match e.raw_os_error() {
-                None => {
-                    warn!("err occurred in retry: {e}");
-                    anyhow::bail!("Error in retry: {e}");
-                }
+                None => match e.to_string().as_str() {
+                    ERROR_ILLEGAL_DATA_VALUE => {
+                        return Err(SunSpecCommError::FatalError(
+                            ERROR_ILLEGAL_DATA_VALUE.to_string(),
+                        ))
+                    }
+                    _ => return Err(SunSpecCommError::TransientError),
+                },
                 Some(code) => {
                     match code {
                         // 32 => {
                         //     //
                         // }
                         _ => {
-                            warn!("err occurred in retry: {e}");
-                            anyhow::bail!("Error in retry: {e}");
+                            warn!("OS-specific error occurred in retry: {:#?}", e);
+                            return Err(SunSpecCommError::TransientError);
                         }
                     }
                 }

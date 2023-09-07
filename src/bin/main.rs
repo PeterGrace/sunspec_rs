@@ -31,10 +31,15 @@ pub async fn main() {
     };
 
     let ssd = SunSpecData::default();
-    ss.models = ss.clone().populate_models(ssd.clone()).await;
+    match ss.clone().populate_models(&ssd).await {
+        Ok(m) => ss.models = m,
+        Err(e) => {
+            panic!("Can't populate models: {e}")
+        }
+    };
 
-    let modelid = 804;
-    let fields: Vec<&str> = vec!["St"];
+    let modelid = 1;
+    let fields: Vec<&str> = vec!["DA"];
 
     let md = ss.models.get(&modelid).unwrap().clone();
     let resolved_model = md.clone().get_resolved_model().await;
@@ -45,10 +50,7 @@ pub async fn main() {
     );
     for f in fields {
         if let Some(pt) = ss.clone().get_point(md.clone(), f).await {
-            let mut message: String = String::default();
-
-            message = message + &*format!("{:#?}", pt);
-            info!(message);
+            debug!("{:#?}", pt.value);
         }
     }
 }

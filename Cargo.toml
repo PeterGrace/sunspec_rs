@@ -17,6 +17,14 @@ path = "src/lib/lib.rs"
 name = "sunspec_test"
 path = "src/bin/main.rs"
 
+[[bin]]
+name = "get_models"
+path = "src/bin/tools/get_models/main.rs"
+
+[[bin]]
+name = "scan_slaves"
+path = "src/bin/tools/scan_slaves/main.rs"
+
 [dependencies]
 clap-verbosity-flag = "2.0.1"
 tokio = { version = "1.27.0", features = ["tracing", "macros", "rt-multi-thread"] }
@@ -25,20 +33,11 @@ tokio-retry = "0.3.0"
 tracing = "0.1.37"
 tracing-subscriber = "0.3.16"
 tracing-log = "0.1.3"
-serde_json = "1.0.99"
-serde_xml = "0.9.1"
 serde-xml-rs = "0.6.0"
 serde = { version = "1.0.185", features=["derive"]}
 clap = { version = "4.3.24", features = ["derive","env"] }
-reqwest = { version = "0.11.18", default-features=false, features=["rustls-tls","json"]}
-reqwest-retry = "0.2.2"
-reqwest-middleware = "0.2.3"
 anyhow = "1.0.75"
-config = {version = "0.13.3", features=["toml"]}
 lazy_static = "1.4.0"
-url = "2.4.0"
-pprof = { version = "0.12", features = ["flamegraph"] }
-indicatif = "0.17.6"
 bitvec ="1.0.1"
 async-recursion = "1.0.4"
-
+thiserror = "1.0.48"
