@@ -4,7 +4,7 @@ use clap::Parser;
 use clap_verbosity_flag;
 use sunspec_rs::sunspec_connection::SunSpecConnection;
 use sunspec_rs::sunspec_data::SunSpecData;
-use sunspec_rs::sunspec_models::ResponseType;
+use sunspec_rs::sunspec_models::ValueType;
 use tracing_log::AsTrace;
 use tracing_subscriber;
 
@@ -44,7 +44,7 @@ pub async fn main() {
         match ss.clone().get_point(md.clone(), "SN").await {
             Some(p) => {
                 if let Some(st) = p.value {
-                    if let ResponseType::String(s) = st {
+                    if let ValueType::String(s) = st {
                         if devices.contains(&s) {
                             warn!("Slave id {i} is a clone signal.");
                             continue;

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum ResponseType {
+pub enum ValueType {
     String(String),
     Integer(i32),
     Float(f32),
@@ -20,29 +20,29 @@ pub enum Access {
 #[serde(tag = "untagged")]
 pub enum PointType {
     #[serde(rename = "string")]
-    String(ResponseType),
+    String(ValueType),
     #[serde(rename = "int16")]
-    Int16(ResponseType),
+    Int16(ValueType),
     #[serde(rename = "uint16")]
-    UnsignedInt16(ResponseType),
+    UnsignedInt16(ValueType),
     #[serde(rename = "acc16")]
-    Accumulator16(ResponseType),
+    Accumulator16(ValueType),
     #[serde(rename = "enum16")]
-    Enum16(ResponseType),
+    Enum16(ValueType),
     #[serde(rename = "bitfield16")]
-    Bitfield16(ResponseType),
+    Bitfield16(ValueType),
     #[serde(rename = "int32")]
-    Int32(ResponseType),
+    Int32(ValueType),
     #[serde(rename = "uint32")]
-    UnsignedInt32(ResponseType),
+    UnsignedInt32(ValueType),
     #[serde(rename = "acc32")]
-    Accumulator32(ResponseType),
+    Accumulator32(ValueType),
     #[serde(rename = "enum32")]
-    Enum32(ResponseType),
+    Enum32(ValueType),
     #[serde(rename = "bitfield32")]
-    Bitfield32(ResponseType),
+    Bitfield32(ValueType),
     #[serde(rename = "sunssf")]
-    SunSpecScaleFactor(ResponseType),
+    SunSpecScaleFactor(ValueType),
     #[serde(rename = "pad")]
     #[default]
     Pad,
@@ -75,7 +75,7 @@ pub struct Point {
     pub units: Option<String>,
     #[serde(rename = "sf")]
     pub scale_factor: Option<String>,
-    pub value: Option<ResponseType>,
+    pub value: Option<ValueType>,
     pub literal: Option<PointLiteral>,
 }
 

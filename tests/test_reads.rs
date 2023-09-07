@@ -1,4 +1,4 @@
-use sunspec_rs::sunspec_models::ResponseType;
+use sunspec_rs::sunspec_models::ValueType;
 
 mod common;
 
@@ -14,7 +14,7 @@ pub async fn test_string() {
     let md = ss.models.get(&modelid).unwrap().clone();
     if let Some(pt) = ss.clone().get_point(md.clone(), field).await {
         if let Some(val) = pt.value {
-            if let ResponseType::String(testval) = val {
+            if let ValueType::String(testval) = val {
                 assert_eq!(expected, testval);
             } else {
                 panic!("Inappropriate responsetype")
@@ -39,7 +39,7 @@ pub async fn test_u16() {
     let md = ss.models.get(&modelid).unwrap().clone();
     if let Some(pt) = ss.clone().get_point(md.clone(), field).await {
         if let Some(val) = pt.value {
-            if let ResponseType::Integer(testval) = val {
+            if let ValueType::Integer(testval) = val {
                 assert_eq!(expected, testval);
             } else {
                 panic!("Inappropriate responsetype")
@@ -63,7 +63,7 @@ pub async fn test_u32() {
     let md = ss.models.get(&modelid).unwrap().clone();
     if let Some(pt) = ss.clone().get_point(md.clone(), field).await {
         if let Some(val) = pt.value {
-            if let ResponseType::Integer(testval) = val {
+            if let ValueType::Integer(testval) = val {
                 assert!(expected <= testval);
             } else {
                 panic!("Inappropriate responsetype")
@@ -87,7 +87,7 @@ pub async fn test_bitfield32() {
     let md = ss.models.get(&modelid).unwrap().clone();
     if let Some(pt) = ss.clone().get_point(md.clone(), field).await {
         if let Some(val) = pt.value {
-            if let ResponseType::Integer(testval) = val {
+            if let ValueType::Integer(testval) = val {
                 assert!(expected <= testval);
             } else {
                 panic!("Inappropriate responsetype")
@@ -112,7 +112,7 @@ pub async fn test_i32() {
     let md = ss.models.get(&modelid).unwrap().clone();
     if let Some(pt) = ss.clone().get_point(md.clone(), field).await {
         if let Some(val) = pt.value {
-            if let ResponseType::Integer(testval) = val {
+            if let ValueType::Integer(testval) = val {
                 assert!(expected <= testval);
             } else {
                 panic!("Inappropriate responsetype")

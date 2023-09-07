@@ -1,6 +1,6 @@
 use crate::sunspec_connection::SunSpecConnection;
 use crate::sunspec_data::{ResolvedModel, SunSpecData};
-use crate::sunspec_models::{LiteralType, ResponseType, SunSpecModels};
+use crate::sunspec_models::{LiteralType, SunSpecModels, ValueType};
 use std::collections::HashMap;
 use std::string::ToString;
 use tokio_modbus::Address;
@@ -53,7 +53,7 @@ impl ModelData {
             return Some(*value);
         } else {
             if let Some(point) = conn.clone().get_point(self.clone(), name).await {
-                if let Some(ResponseType::Integer(val)) = point.value {
+                if let Some(ValueType::Integer(val)) = point.value {
                     self.scale_factors.insert(name.to_string(), val as i16);
                     return Some(val as i16);
                 };
