@@ -23,7 +23,7 @@ pub async fn main() {
         .init();
 
     let socket_addr = "127.0.0.1:5083".parse().unwrap();
-    let mut ss = match SunSpecConnection::new(socket_addr, Some(9)).await {
+    let mut ss = match SunSpecConnection::new(socket_addr, Some(6)).await {
         Ok(mb) => mb,
         Err(e) => {
             error!("Can't create modbus connection: {e}");
@@ -39,32 +39,28 @@ pub async fn main() {
         }
     };
 
-    let modelid = 64263;
-    let field: &str = "Enable";
-    //let fields: Vec<&str> = vec!["DA"];
+    let modelid = 802;
+    //let field: &str = "State";
+    let fields: Vec<&str> = vec!["State", "Evt1"];
 
     let md = ss.models.get(&modelid).unwrap().clone();
     let resolved_model = md.clone().get_resolved_model().await;
-    match ss
-        .clone()
-        .set_point(md.clone(), field, ValueType::Integer(1))
-        .await
-    {
-        Ok(_) => {
-            info!("It should have worked!");
-        }
-        Err(e) => {
-            error!("Oh no, it didn't work: {e}")
-        }
-    }
-
-    // debug!(
-    //     "Attempting to call get point on model {}, fields {:#?}",
-    //     model_name, fields
-    // );
-    // for f in fields {
-    //     if let Some(pt) = ss.clone().get_point(md.clone(), f).await {
-    //         debug!("{:#?}", pt.value);
+    // match ss
+    //     .clone()
+    //     .set_point(md.clone(), field, ValueType::Integer(1))
+    //     .await
+    // {
+    //     Ok(_) => {
+    //         info!("It should have worked!");
+    //     }
+    //     Err(e) => {
+    //         error!("Oh no, it didn't work: {e}")
     //     }
     // }
+
+    for f in fields {
+        if let Some(pt) = ss.clone().get_point(md.clone(), f).await {
+            debug!("{:#?}", pt.value);
+        }
+    }
 }

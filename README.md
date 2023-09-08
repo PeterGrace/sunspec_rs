@@ -4,5 +4,6 @@ A rust library for interacting with sunspec-compliant modbus implementations.
 
 **TODO (maybe?)**:
   - Modbus-RTU (currently only supports modbus-tcp)
-  - Writing to modbus (currently only supports reading)
+  - Support "repeating" blocks
+  - Support creating "control" objects for properly annotated model points
   - ???

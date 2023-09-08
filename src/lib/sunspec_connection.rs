@@ -51,6 +51,17 @@ pub enum SunSpecCommError {
 }
 
 #[derive(Error, Debug, Default, PartialEq)]
+pub enum SunSpecReadError {
+    #[error("Error in read: {0}")]
+    OtherError(String),
+    #[error("Device reports this datapoint as not implemented.")]
+    DatapointNotImplemented,
+    #[error("default")]
+    #[default]
+    None,
+}
+
+#[derive(Error, Debug, Default, PartialEq)]
 pub enum SunSpecWriteError {
     #[error("Supplied point does not exist.")]
     PointDoesntExist,
@@ -164,7 +175,7 @@ impl SunSpecConnection {
         &mut self,
         addr: Address,
         quantity: Quantity,
-    ) -> anyhow::Result<String> {
+    ) -> Result<String, SunSpecReadError> {
         let data = match self
             .clone()
             .retry_read_holding_registers(addr, quantity)
@@ -172,7 +183,7 @@ impl SunSpecConnection {
         {
             Ok(data) => data,
             Err(e) => {
-                anyhow::bail!("Can't read: {e}");
+                return Err(SunSpecReadError::OtherError(e.to_string()));
             }
         };
         let bytes: Vec<u8> = data.iter().fold(vec![], |mut x, elem| {
@@ -183,7 +194,7 @@ impl SunSpecConnection {
         match String::from_utf8(bytes) {
             Ok(s) => Ok(s),
             Err(e) => {
-                anyhow::bail!("Couldn't format as string: {e}");
+                return Err(SunSpecReadError::OtherError(e.to_string()));
             }
         }
     }
@@ -192,17 +203,15 @@ impl SunSpecConnection {
     /// # Arguments
     ///
     /// * `addr` - A memory offset address to read, e.g. 40002
-    pub async fn get_i16(&mut self, addr: Address) -> anyhow::Result<i16> {
+    pub async fn get_i16(&mut self, addr: Address) -> Result<i16, SunSpecReadError> {
         let data = match self.clone().retry_read_holding_registers(addr, 1).await {
             Ok(data) => {
                 if data[0] == NOT_IMPLEMENTED_I16 {
-                    anyhow::bail!("datapoint is not implemented (returned 0x8000)")
+                    return Err(SunSpecReadError::DatapointNotImplemented);
                 }
                 data[0]
             }
-            Err(e) => {
-                anyhow::bail!("Can't read: {e}");
-            }
+            Err(e) => return Err(SunSpecReadError::OtherError(e.to_string())),
         };
         Ok(data as i16)
     }
@@ -211,18 +220,16 @@ impl SunSpecConnection {
     /// # Arguments
     ///
     /// * `addr` - A memory offset address to read, e.g. 40002
-    pub async fn get_u16(&mut self, addr: Address) -> anyhow::Result<u16> {
+    pub async fn get_u16(&mut self, addr: Address) -> Result<u16, SunSpecReadError> {
         let data = match self.clone().retry_read_holding_registers(addr, 1).await {
             Ok(data) => {
                 if data[0] == NOT_IMPLEMENTED_U16 {
-                    anyhow::bail!("datapoint is not implemented (returned 0xFFFF)")
+                    return Err(SunSpecReadError::DatapointNotImplemented);
                 }
                 data[0]
             }
 
-            Err(e) => {
-                anyhow::bail!("Can't read: {e}");
-            }
+            Err(e) => return Err(SunSpecReadError::OtherError(e.to_string())),
         };
         Ok(data)
     }
@@ -237,7 +244,7 @@ impl SunSpecConnection {
         match self.clone().retry_write_register(addr, word).await {
             Ok(_) => {}
             Err(e) => {
-                anyhow::bail!("Could not write point.");
+                anyhow::bail!("Could not write point: {e}");
             }
         };
         Ok(())
@@ -249,20 +256,20 @@ impl SunSpecConnection {
     /// # Arguments
     ///
     /// * `addr` - A memory offset address to read, e.g. 40002
-    pub async fn get_i32(&mut self, addr: Address) -> anyhow::Result<i32> {
+    pub async fn get_i32(&mut self, addr: Address) -> Result<i32, SunSpecReadError> {
         match self.clone().retry_read_holding_registers(addr, 2).await {
             // because holding_registers works in 16 bit "words", we need to combine two words into
             // one word here to get a 32 bit number.
             Ok(data) => {
                 let val = (data[0] as i32) << 16 | data[1] as i32;
                 if val == NOT_IMPLEMENTED_I32 as i32 {
-                    anyhow::bail!("datapoint is not implemented (returned 0x8000_0000)");
+                    return Err(SunSpecReadError::DatapointNotImplemented);
                 } else {
                     Ok(val)
                 }
             }
             Err(e) => {
-                anyhow::bail!("Can't read: {e}");
+                return Err(SunSpecReadError::OtherError(e.to_string()));
             }
         }
     }
@@ -273,20 +280,20 @@ impl SunSpecConnection {
     /// # Arguments
     ///
     /// * `addr` - A memory offset address to read, e.g. 40002
-    pub async fn get_u32(&mut self, addr: Address) -> anyhow::Result<u32> {
+    pub async fn get_u32(&mut self, addr: Address) -> Result<u32, SunSpecReadError> {
         match self.clone().retry_read_holding_registers(addr, 2).await {
             // because holding_registers works in 16 bit "words", we need to combine two words into
             // one word here to get a 32 bit number.
             Ok(data) => {
                 let val = (data[0] as u32) << 16 | data[1] as u32;
                 if val == NOT_IMPLEMENTED_U32 {
-                    anyhow::bail!("datapoint is not implemented (returned 0xFFFF_FFFF)");
+                    return Err(SunSpecReadError::DatapointNotImplemented);
                 } else {
                     Ok(val)
                 }
             }
             Err(e) => {
-                anyhow::bail!("Can't read: {e}");
+                return Err(SunSpecReadError::OtherError(e.to_string()));
             }
         }
     }
@@ -309,7 +316,7 @@ impl SunSpecConnection {
         )
         .await
         {
-            Ok(e) => Ok(()),
+            Ok(_) => Ok(()),
             Err(e) => {
                 anyhow::bail!("Error when trying to retry modbus command: {e}");
             }
@@ -397,7 +404,7 @@ impl SunSpecConnection {
     #[async_recursion]
     pub async fn set_point(
         mut self,
-        mut md: ModelData,
+        md: ModelData,
         name: &str,
         data: ValueType,
     ) -> Result<(), SunSpecWriteError> {
@@ -428,9 +435,35 @@ impl SunSpecConnection {
             },
         };
         match point.r#type.as_str() {
-            POINT_TYPE_ENUM16 => {
+            POINT_TYPE_UINT16 | POINT_TYPE_ENUM16 | POINT_TYPE_BITFIELD16 => {
                 if let ValueType::Integer(val) = data {
-                    if val >= 65536_i32.abs() {
+                    if val < 0 {
+                        return Err(SunSpecWriteError::ValueDoesntMatchPoint);
+                    }
+                    if val.abs() > 0xffff {
+                        return Err(SunSpecWriteError::ValueWouldOverflow);
+                    }
+                    match self
+                        .set_u16(2 + md.address + point.offset, val as u16)
+                        .await
+                    {
+                        Ok(_) => return Ok(()),
+                        Err(e) => {
+                            error!("Failure to write point: {e}");
+                            return Err(SunSpecWriteError::Default);
+                        }
+                    }
+                } else {
+                    error!("Point type {POINT_TYPE_ENUM16} requires an integer to set.");
+                    return Err(SunSpecWriteError::ValueDoesntMatchPoint);
+                }
+            }
+            POINT_TYPE_UINT32 | POINT_TYPE_ENUM32 | POINT_TYPE_BITFIELD32 => {
+                if let ValueType::Integer(val) = data {
+                    if val < 0 {
+                        return Err(SunSpecWriteError::ValueDoesntMatchPoint);
+                    }
+                    if val.abs() >= 0xfff_ffff {
                         return Err(SunSpecWriteError::ValueWouldOverflow);
                     }
                     match self
@@ -453,7 +486,6 @@ impl SunSpecConnection {
                 return Err(SunSpecWriteError::Default);
             }
         }
-        Ok(())
     }
     //endregion
 
@@ -468,13 +500,14 @@ impl SunSpecConnection {
     /// * `name` - The name of the point you're querying, e.g. "PhVPhA" -- you can find these
     ///            values specified in the sunspec model files.
     #[async_recursion]
-    pub async fn get_point(mut self, mut md: ModelData, name: &str) -> Option<Point> {
+    pub async fn get_point(mut self, mut md: ModelData, point_name: &str) -> Option<Point> {
         let mut point = Point::default();
         let mut symbols: Option<Vec<Symbol>> = None;
         let model = md.model.model.clone();
+        let model_name = model.name;
         model.block.iter().for_each(|b| {
             b.point.iter().for_each(|p| {
-                if p.id == name {
+                if p.id == point_name {
                     point = p.clone();
                     // if this point also has associated symbols (enum/bitfield), copy them in too
                     if p.symbol.is_some() {
@@ -484,14 +517,16 @@ impl SunSpecConnection {
             })
         });
         if point.id.len() == 0 {
-            warn!("You asked for point {name} but it doesn't exist in the model.");
+            warn!(
+                "You asked for point {model_name}/{point_name} but it doesn't exist in the model."
+            );
             return None;
         }
         //region if there's literals for this point, populate them
         for string in md.model.strings.iter() {
             for literal in string.literals.iter() {
                 if let LiteralType::Point(point_literal) = literal {
-                    if point_literal.id == name {
+                    if point_literal.id == point_name {
                         point.literal = Some(point_literal.clone());
                     }
                 }
@@ -507,7 +542,7 @@ impl SunSpecConnection {
                     .await
                 {
                     Ok(rs) => {
-                        debug!("{}/{name} is {rs}!", model.name);
+                        debug!("{model_name}/{point_name} is {rs}!");
                         let mut val = rs.clone();
                         // it is unlikely anyone wants the extra nulls at the end of the string
                         val = val.trim_matches(char::from(0)).parse().ok()?;
@@ -515,14 +550,14 @@ impl SunSpecConnection {
                         return Some(point);
                     }
                     Err(e) => {
-                        error!("{e}");
+                        error!("{model_name}/{point_name}: {e}");
                         return None;
                     }
                 };
             }
             POINT_TYPE_INT16 => match self.get_i16(2 + md.address + point.offset).await {
                 Ok(rs) => {
-                    debug!("{}/{name} is {rs}!", model.name);
+                    debug!("{model_name}/{point_name} is {rs}!");
                     if let Some(sf_name) = point.clone().scale_factor {
                         if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
                             let mut _adj: f32 = 0.0;
@@ -539,14 +574,14 @@ impl SunSpecConnection {
                     return Some(point);
                 }
                 Err(e) => {
-                    error!("{e}");
+                    error!("{model_name}/{point_name}: {e}");
                     return None;
                 }
             },
             POINT_TYPE_UINT16 | POINT_TYPE_ACC16 => {
                 match self.get_u16(2 + md.address + point.offset).await {
                     Ok(rs) => {
-                        debug!("{}/{name} is {rs}!", model.name);
+                        debug!("{model_name}/{point_name} is {rs}!");
                         if point.r#type.as_str() == POINT_TYPE_ACC16 && rs == NOT_ACCUMULATED_16 {
                             error!(
                                 "Accumulator datapoint not supported by device (0 value returned)"
@@ -569,14 +604,14 @@ impl SunSpecConnection {
                         return Some(point);
                     }
                     Err(e) => {
-                        error!("{e}");
+                        error!("{model_name}/{point_name}: {e}");
                         return None;
                     }
                 }
             }
             POINT_TYPE_ENUM16 => match self.get_u16(2 + md.address + point.offset).await {
                 Ok(rs) => {
-                    debug!("{}/{name} is {rs}!", model.name);
+                    debug!("{model_name}/{point_name} is {rs}!");
                     if symbols.is_some() {
                         let mut symbol_name: String = "".to_string();
                         symbols.unwrap().iter().for_each(|s| {
@@ -593,14 +628,14 @@ impl SunSpecConnection {
                     }
                 }
                 Err(e) => {
-                    error!("{e}");
+                    error!("{model_name}/{point_name}: {e}");
                     return None;
                 }
             },
             POINT_TYPE_BITFIELD16 => {
                 match self.get_u16(2 + md.address + point.offset).await {
                     Ok(rs) => {
-                        debug!("{}/{name} is {rs}!", model.name);
+                        debug!("{model_name}/{point_name} is {rs}!");
                         if symbols.is_some() {
                             let mut values: Vec<String> = vec![];
                             let bv = BitVec::<_, Lsb0>::from_element(rs.clone());
@@ -617,26 +652,26 @@ impl SunSpecConnection {
                         }
                     }
                     Err(e) => {
-                        error!("{e}");
+                        error!("{model_name}/{point_name}: {e}");
                         return None;
                     }
                 }
             }
             POINT_TYPE_SUNSSF => match self.get_i16(2 + md.address + point.offset).await {
                 Ok(rs) => {
-                    debug!("{}/{name} is {rs}!", model.name);
+                    debug!("{model_name}/{point_name} is {rs}!");
                     point.value = Some(ValueType::Integer(rs as i32));
                     return Some(point);
                 }
                 Err(e) => {
-                    error!("{e}");
+                    error!("{model_name}/{point_name}: {e}");
                     return None;
                 }
             },
             POINT_TYPE_UINT32 | POINT_TYPE_ACC32 => {
                 match self.get_u32(2 + md.address + point.offset).await {
                     Ok(rs) => {
-                        debug!("{}/{name} is {rs}!", model.name);
+                        debug!("{model_name}/{point_name} is {rs}!");
                         if point.r#type.as_str() == POINT_TYPE_ACC32 && rs == NOT_ACCUMULATED_32 {
                             error!(
                                 "Accumulator datapoint not supported by device (0 value returned)"
@@ -659,14 +694,14 @@ impl SunSpecConnection {
                         return Some(point);
                     }
                     Err(e) => {
-                        error!("{e}");
+                        error!("{model_name}/{point_name}: {e}");
                         return None;
                     }
                 }
             }
             POINT_TYPE_INT32 => match self.get_i32(2 + md.address + point.offset).await {
                 Ok(rs) => {
-                    debug!("{}/{name} is {rs}!", model.name);
+                    debug!("{model_name}/{point_name} is {rs}!");
                     if let Some(sf_name) = point.clone().scale_factor {
                         if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
                             let mut _adj: f32 = 0.0;
@@ -683,13 +718,13 @@ impl SunSpecConnection {
                     return Some(point);
                 }
                 Err(e) => {
-                    error!("{e}");
+                    error!("{model_name}/{point_name}: {e}");
                     return None;
                 }
             },
             POINT_TYPE_ENUM32 => match self.get_u32(2 + md.address + point.offset).await {
                 Ok(rs) => {
-                    debug!("{}/{name} is {rs}!", model.name);
+                    debug!("{model_name}/{point_name} is {rs}!");
                     if symbols.is_some() {
                         let mut symbol_name: String = "".to_string();
                         symbols.unwrap().iter().for_each(|s| {
@@ -706,14 +741,14 @@ impl SunSpecConnection {
                     }
                 }
                 Err(e) => {
-                    error!("{e}");
+                    error!("{model_name}/{point_name}: {e}");
                     return None;
                 }
             },
             POINT_TYPE_BITFIELD32 => {
                 match self.get_u32(2 + md.address + point.offset).await {
                     Ok(rs) => {
-                        debug!("{}/{name} is {rs}!", model.name);
+                        debug!("{model_name}/{point_name} is {rs}!");
                         if symbols.is_some() {
                             let mut values: Vec<String> = vec![];
                             let bv = BitVec::<_, Lsb0>::from_element(rs.clone());
@@ -730,14 +765,17 @@ impl SunSpecConnection {
                         }
                     }
                     Err(e) => {
-                        error!("{e}");
+                        error!("{model_name}/{point_name}: {e}");
                         return None;
                     }
                 }
             }
             POINT_TYPE_PAD => {}
             _ => {
-                error!("unknown point type: {:#?}", point.r#type.as_str());
+                error!(
+                    "{model_name}/{point_name}: unknown point type: {:#?}",
+                    point.r#type.as_str()
+                );
                 return None;
             }
         }
@@ -762,7 +800,7 @@ pub(crate) async fn action_read_holding_registers(
                     ERROR_ILLEGAL_DATA_VALUE => {
                         return Err(SunSpecCommError::FatalError(
                             ERROR_ILLEGAL_DATA_VALUE.to_string(),
-                        ))
+                        ));
                     }
                     _ => return Err(SunSpecCommError::TransientError),
                 },
@@ -797,7 +835,7 @@ pub(crate) async fn action_write_register(
                 ERROR_ILLEGAL_DATA_VALUE => {
                     return Err(SunSpecCommError::FatalError(
                         ERROR_ILLEGAL_DATA_VALUE.to_string(),
-                    ))
+                    ));
                 }
                 _ => return Err(SunSpecCommError::TransientError),
             },
