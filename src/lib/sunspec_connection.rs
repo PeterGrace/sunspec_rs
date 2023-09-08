@@ -8,8 +8,10 @@ use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::string::ToString;
 use std::sync::Arc;
+use std::time::Duration;
 use thiserror::Error;
 use tokio::sync::Mutex;
+use tokio::time::timeout;
 use tokio_modbus::client::{tcp, Context, Reader, Writer};
 use tokio_modbus::{Address, Quantity, Slave};
 use tokio_retry::strategy::{jitter, ExponentialBackoff};
@@ -37,7 +39,10 @@ const NOT_ACCUMULATED_16: u16 = 0x0000;
 const NOT_IMPLEMENTED_U16: u16 = 0xffff;
 const NOT_IMPLEMENTED_I16: u16 = 0x8000;
 
-const ERROR_ILLEGAL_DATA_VALUE: &str = "Illegal data value";
+const ERROR_ILLEGAL_DATA_VALUE: &str = "Modbus function 3: Illegal data value";
+
+const DEFAULT_NETWORK_TIMEOUT_MS: u64 = 5000_u64;
+const DEFAULT_BACKOFF_BASE_MS: u64 = 100_u64;
 
 pub type Word = u16;
 
@@ -304,9 +309,9 @@ impl SunSpecConnection {
         addr: Address,
         data: Word,
     ) -> anyhow::Result<()> {
-        let retry_strategy = ExponentialBackoff::from_millis(500)
+        let retry_strategy = ExponentialBackoff::from_millis(DEFAULT_BACKOFF_BASE_MS)
             .map(jitter) // add jitter to delays
-            .take(5); // limit to 3 retries
+            .take(3); // limit to 3 retries
 
         let ctx = self.ctx.clone();
         match RetryIf::spawn(
@@ -330,9 +335,9 @@ impl SunSpecConnection {
         addr: Address,
         q: Quantity,
     ) -> anyhow::Result<Vec<Word>> {
-        let retry_strategy = ExponentialBackoff::from_millis(500)
+        let retry_strategy = ExponentialBackoff::from_millis(DEFAULT_BACKOFF_BASE_MS)
             .map(jitter) // add jitter to delays
-            .take(5); // limit to 3 retries
+            .take(3); // limit to 3 retries
 
         let ctx = self.ctx.clone();
         match RetryIf::spawn(
@@ -792,30 +797,40 @@ pub(crate) async fn action_read_holding_registers(
     q: Quantity,
 ) -> Result<Vec<Word>, SunSpecCommError> {
     let mut ctx = actx.lock().await;
-    match ctx.read_holding_registers(addr, q).await {
-        Ok(data) => Ok(data),
-        Err(e) => {
-            match e.raw_os_error() {
+    match timeout(
+        Duration::from_millis(DEFAULT_NETWORK_TIMEOUT_MS),
+        ctx.read_holding_registers(addr, q),
+    )
+    .await
+    {
+        Ok(future) => match future {
+            Ok(data) => Ok(data),
+            Err(e) => match e.raw_os_error() {
                 None => match e.to_string().as_str() {
                     ERROR_ILLEGAL_DATA_VALUE => {
                         return Err(SunSpecCommError::FatalError(
                             ERROR_ILLEGAL_DATA_VALUE.to_string(),
                         ));
                     }
-                    _ => return Err(SunSpecCommError::TransientError),
-                },
-                Some(code) => {
-                    match code {
-                        // 32 => {
-                        //     //
-                        // }
-                        _ => {
-                            warn!("OS-specific error occurred in retry: {:#?}", e);
-                            return Err(SunSpecCommError::TransientError);
-                        }
+                    _ => {
+                        warn!("Non-os specific error: {e}");
+                        return Err(SunSpecCommError::TransientError);
                     }
-                }
-            }
+                },
+                Some(code) => match code {
+                    32 => {
+                        return Err(SunSpecCommError::FatalError(e.to_string()));
+                    }
+                    _ => {
+                        warn!("OS-specific error: {:#?}", e);
+                        return Err(SunSpecCommError::TransientError);
+                    }
+                },
+            },
+        },
+        Err(e) => {
+            warn!("Timeout attempting read: {e}");
+            return Err(SunSpecCommError::TransientError);
         }
     }
 }
@@ -828,24 +843,34 @@ pub(crate) async fn action_write_register(
     data: Word,
 ) -> Result<(), SunSpecCommError> {
     let mut ctx = actx.lock().await;
-    match ctx.write_single_register(addr, data).await {
-        Ok(_) => Ok(()),
-        Err(e) => match e.raw_os_error() {
-            None => match e.to_string().as_str() {
-                ERROR_ILLEGAL_DATA_VALUE => {
-                    return Err(SunSpecCommError::FatalError(
-                        ERROR_ILLEGAL_DATA_VALUE.to_string(),
-                    ));
-                }
-                _ => return Err(SunSpecCommError::TransientError),
-            },
-            Some(code) => match code {
-                _ => {
-                    warn!("OS-specific error occurred in retry: {:#?}", e);
-                    return Err(SunSpecCommError::TransientError);
-                }
+    match timeout(
+        Duration::from_millis(DEFAULT_NETWORK_TIMEOUT_MS),
+        ctx.write_single_register(addr, data),
+    )
+    .await
+    {
+        Ok(future) => match future {
+            Ok(_) => Ok(()),
+            Err(e) => match e.raw_os_error() {
+                None => match e.to_string().as_str() {
+                    ERROR_ILLEGAL_DATA_VALUE => {
+                        return Err(SunSpecCommError::FatalError(
+                            ERROR_ILLEGAL_DATA_VALUE.to_string(),
+                        ));
+                    }
+                    _ => return Err(SunSpecCommError::TransientError),
+                },
+                Some(code) => match code {
+                    _ => {
+                        warn!("OS-specific error occurred in retry: {:#?}", e);
+                        return Err(SunSpecCommError::TransientError);
+                    }
+                },
             },
         },
+        Err(e) => {
+            return Err(SunSpecCommError::TransientError);
+        }
     }
 }
 //endregion

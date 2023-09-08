@@ -39,15 +39,28 @@ pub async fn main() {
         }
     };
 
-    let modelid = 802;
-    //let field: &str = "State";
+    let field: &str = "AlmRst";
     let fields: Vec<&str> = vec!["State", "Evt1"];
 
-    let md = ss.models.get(&modelid).unwrap().clone();
-    let resolved_model = md.clone().get_resolved_model().await;
+    let md_802 = ss.models.get(&802).unwrap().clone();
     // match ss
     //     .clone()
-    //     .set_point(md.clone(), field, ValueType::Integer(1))
+    //     .set_point(md_802.clone(), field, ValueType::Integer(1))
+    //     .await
+    // {
+    //     Ok(_) => {
+    //         info!("It should have worked!");
+    //     }
+    //     Err(e) => {
+    //         error!("Oh no, it didn't work: {e}")
+    //     }
+    // }
+
+    // write alarm reset value
+    // let md_802 = ss.models.get(&802).unwrap().clone();
+    // match ss
+    //     .clone()
+    //     .set_point(md_802.clone(), field, ValueType::Integer(1))
     //     .await
     // {
     //     Ok(_) => {
@@ -59,7 +72,7 @@ pub async fn main() {
     // }
 
     for f in fields {
-        if let Some(pt) = ss.clone().get_point(md.clone(), f).await {
+        if let Some(pt) = ss.clone().get_point(md_802.clone(), f).await {
             debug!("{:#?}", pt.value);
         }
     }
