@@ -11,7 +11,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use thiserror::Error;
 use tokio::sync::Mutex;
-use tokio::time::timeout;
+use tokio::time::{sleep, timeout};
 use tokio_modbus::client::{tcp, Context, Reader, Writer};
 use tokio_modbus::{Address, Quantity, Slave};
 use tokio_retry::strategy::{jitter, ExponentialBackoff};
@@ -40,10 +40,13 @@ const NOT_IMPLEMENTED_U16: u16 = 0xffff;
 const NOT_IMPLEMENTED_I16: u16 = 0x8000;
 
 const ERROR_ILLEGAL_DATA_VALUE: &str = "Modbus function 3: Illegal data value";
-
-const DEFAULT_NETWORK_TIMEOUT_MS: u64 = 5000_u64;
+const ERROR_GATEWAY_DEVICE_FAILED_TO_RESPOND: &str =
+    "Modbus function 3: Gateway target device failed to respond";
+const ERROR_INVALID_RESPONSE_HEADER: &str = "Invalid response header: expected/request";
+const DEFAULT_NETWORK_TIMEOUT_MS: u64 = 10_000_u64;
 const DEFAULT_BACKOFF_BASE_MS: u64 = 100_u64;
 
+const RECONNECT_COURTESY_SLEEP_SECS: u64 = 10_u64;
 pub type Word = u16;
 
 #[derive(Error, Debug, Default, PartialEq)]
@@ -91,7 +94,7 @@ pub struct SunSpecConnection {
     /// an ip address:port pair resolved as a SocketAddr
     pub addr: SocketAddr,
     /// an optional number for modbus slave address
-    _slave_num: Option<u8>,
+    slave_num: Option<u8>,
     /// the tokio-modbus Context object that is used for communication
     pub(crate) ctx: Arc<Mutex<Context>>,
     /// a map of the model definitions related to this connection (populated via populate_models)
@@ -100,32 +103,40 @@ pub struct SunSpecConnection {
 
 impl SunSpecConnection {
     //region connection restart (todo)
-    // pub async fn restart_connection(mut self) -> anyhow::Result<()> {
-    //     let mut ctx = self.ctx.lock().await;
-    //     ctx.disconnect().await.unwrap();
-    //
-    //     let mut newctx: Context;
-    //     if self.slave_num.is_some() {
-    //         newctx = match tcp::connect_slave(self.addr, Slave(self.slave_num.unwrap())).await {
-    //             Ok(ctx) => ctx,
-    //             Err(e) => {
-    //                 anyhow::bail!("Can't connect to slave: {e}");
-    //             }
-    //         };
-    //     } else {
-    //         newctx = match tcp::connect(self.addr).await {
-    //             Ok(ctx) => ctx,
-    //             Err(e) => {
-    //                 anyhow::bail!("Can't connect: {e}");
-    //             }
-    //         };
-    //     }
-    //
-    //     let arc_ctx = Arc::new(Mutex::new(newctx));
-    //     self.ctx = arc_ctx;
-    //     Ok(())
-    //
-    // }
+    pub async fn restart_connection(mut self) {
+        let mut ctx = self.ctx.lock().await;
+        ctx.disconnect().await.unwrap();
+        sleep(Duration::from_secs(RECONNECT_COURTESY_SLEEP_SECS)).await;
+
+        let mut newctx: Context;
+        if self.slave_num.is_some() {
+            let slid = self.slave_num.unwrap();
+            newctx = match tcp::connect_slave(self.addr, Slave(slid)).await {
+                Ok(ctx) => {
+                    info!("Reconnected to modbus client at {}/{}", self.addr, slid);
+                    ctx
+                }
+                Err(e) => {
+                    panic!("Can't reconnect to slave: {e}");
+                }
+            };
+        } else {
+            newctx = match tcp::connect(self.addr).await {
+                Ok(ctx) => {
+                    info!("Reconnected to modbus client at {}", self.addr);
+                    ctx
+                }
+                Err(e) => {
+                    panic!("Can't reconnect: {e}");
+                }
+            };
+        }
+
+        let arc_ctx = Arc::new(Mutex::new(newctx));
+        drop(ctx);
+        drop(self.ctx);
+        self.ctx = arc_ctx;
+    }
     //endregion
 
     /// Return a new sunspec connection which is ready to communicate with the modbus host.
@@ -162,7 +173,7 @@ impl SunSpecConnection {
         let arc_ctx = Arc::new(Mutex::new(ctx));
         Ok(SunSpecConnection {
             addr: socket_addr,
-            _slave_num: slave_num,
+            slave_num: slave_num,
             ctx: arc_ctx,
             models: HashMap::new(),
         })
@@ -323,6 +334,7 @@ impl SunSpecConnection {
         {
             Ok(_) => Ok(()),
             Err(e) => {
+                self.restart_connection().await;
                 anyhow::bail!("Error when trying to retry modbus command: {e}");
             }
         }
@@ -342,13 +354,17 @@ impl SunSpecConnection {
         let ctx = self.ctx.clone();
         match RetryIf::spawn(
             retry_strategy,
-            || action_read_holding_registers(&ctx, addr, q),
+            || {
+                let future = action_read_holding_registers(&ctx, addr, q);
+                future
+            },
             |e: &SunSpecCommError| SunSpecCommError::TransientError == *e,
         )
         .await
         {
             Ok(e) => Ok(e),
             Err(e) => {
+                self.restart_connection().await;
                 anyhow::bail!("Error when trying to retry modbus command: {e}");
             }
         }
@@ -579,7 +595,11 @@ impl SunSpecConnection {
                     return Some(point);
                 }
                 Err(e) => {
-                    error!("{model_name}/{point_name}: {e}");
+                    error!(
+                        "{}:{} -- {model_name}/{point_name}: {e}",
+                        self.addr,
+                        self.slave_num.unwrap_or(0)
+                    );
                     return None;
                 }
             },
@@ -812,7 +832,15 @@ pub(crate) async fn action_read_holding_registers(
                             ERROR_ILLEGAL_DATA_VALUE.to_string(),
                         ));
                     }
+                    ERROR_GATEWAY_DEVICE_FAILED_TO_RESPOND => {
+                        return Err(SunSpecCommError::TransientError);
+                    }
                     _ => {
+                        if e.to_string().contains(ERROR_INVALID_RESPONSE_HEADER) {
+                            return Err(SunSpecCommError::FatalError(String::from(
+                                "out of order response",
+                            )));
+                        };
                         warn!("Non-os specific error: {e}");
                         return Err(SunSpecCommError::TransientError);
                     }
