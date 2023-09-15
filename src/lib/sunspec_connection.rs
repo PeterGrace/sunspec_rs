@@ -5,6 +5,7 @@ use async_recursion::async_recursion;
 use bitvec::macros::internal::funty::Fundamental;
 use bitvec::prelude::*;
 use std::collections::HashMap;
+use std::mem::replace;
 use std::net::SocketAddr;
 use std::string::ToString;
 use std::sync::Arc;
@@ -102,13 +103,13 @@ pub struct SunSpecConnection {
 }
 
 impl SunSpecConnection {
-    //region connection restart (todo)
+    //region connection restart
     pub async fn restart_connection(mut self) {
         let mut ctx = self.ctx.lock().await;
         ctx.disconnect().await.unwrap();
         sleep(Duration::from_secs(RECONNECT_COURTESY_SLEEP_SECS)).await;
 
-        let mut newctx: Context;
+        let newctx: Context;
         if self.slave_num.is_some() {
             let slid = self.slave_num.unwrap();
             newctx = match tcp::connect_slave(self.addr, Slave(slid)).await {
@@ -134,8 +135,8 @@ impl SunSpecConnection {
 
         let arc_ctx = Arc::new(Mutex::new(newctx));
         drop(ctx);
-        drop(self.ctx);
-        self.ctx = arc_ctx;
+        let oldctx = replace(&mut self.ctx, arc_ctx);
+        drop(oldctx);
     }
     //endregion
 
@@ -173,7 +174,7 @@ impl SunSpecConnection {
         let arc_ctx = Arc::new(Mutex::new(ctx));
         Ok(SunSpecConnection {
             addr: socket_addr,
-            slave_num: slave_num,
+            slave_num,
             ctx: arc_ctx,
             models: HashMap::new(),
         })
@@ -244,6 +245,19 @@ impl SunSpecConnection {
                 }
                 data[0]
             }
+
+            Err(e) => return Err(SunSpecReadError::OtherError(e.to_string())),
+        };
+        Ok(data)
+    }
+    /// Get a 16 bit unsigned integer from the modbus connection.  Do not check the value.
+    /// This function is used in populate_models.
+    /// # Arguments
+    ///
+    /// * `addr` - A memory offset address to read, e.g. 40002
+    async fn get_u16_no_check(&mut self, addr: Address) -> Result<u16, SunSpecReadError> {
+        let data = match self.clone().retry_read_holding_registers(addr, 1).await {
+            Ok(data) => data[0],
 
             Err(e) => return Err(SunSpecReadError::OtherError(e.to_string())),
         };
@@ -379,7 +393,7 @@ impl SunSpecConnection {
         let mut address = 40002;
         let mut models: HashMap<u16, ModelData> = HashMap::new();
         loop {
-            let id = match self.get_i16(address).await {
+            let id = match self.get_u16_no_check(address).await {
                 Ok(id) => id,
                 Err(e) => {
                     anyhow::bail!("Can't get model id: {e}");
@@ -391,10 +405,11 @@ impl SunSpecConnection {
                     anyhow::bail!("Can't get model length: {e}");
                 }
             };
-            if id == SUNSPEC_END_MODEL_ID as i16 {
+            if id == SUNSPEC_END_MODEL_ID {
                 break;
             }
-            debug!("found model with id {id}, and length {length}");
+            assert!(id >= 1);
+            info!("found model with id {id}, and length {length}");
             match ModelData::new(data.clone(), id as u16, length, address).await {
                 Ok(md) => {
                     models.insert(id as u16, md);
@@ -897,6 +912,7 @@ pub(crate) async fn action_write_register(
             },
         },
         Err(e) => {
+            warn!("Request timed out, retrying: {e}");
             return Err(SunSpecCommError::TransientError);
         }
     }

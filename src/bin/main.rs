@@ -7,9 +7,8 @@ mod cli_args;
 use clap::Parser;
 use cli_args::CliArgs;
 use std::process;
-use sunspec_rs::sunspec_connection::{SunSpecConnection, SunSpecWriteError};
+use sunspec_rs::sunspec_connection::SunSpecConnection;
 use sunspec_rs::sunspec_data::SunSpecData;
-use sunspec_rs::sunspec_models::ValueType;
 use tracing_log::AsTrace;
 use tracing_subscriber;
 
@@ -39,7 +38,7 @@ pub async fn main() {
         }
     };
 
-    let field: &str = "AlmRst";
+    let _field: &str = "AlmRst";
     let fields: Vec<&str> = vec!["State", "Evt1"];
 
     let md_802 = ss.models.get(&802).unwrap().clone();
