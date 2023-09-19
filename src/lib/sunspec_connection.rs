@@ -429,7 +429,7 @@ impl SunSpecConnection {
                 break;
             }
             assert!(id >= 1);
-            info!("found model with id {id}, and length {length}");
+            debug!("found model with id {id}, and length {length}");
             match ModelData::new(data.clone(), id as u16, length, address).await {
                 Ok(md) => {
                     models.insert(id as u16, md);
