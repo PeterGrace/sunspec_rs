@@ -42,7 +42,7 @@ pub async fn main() {
 
         let md = ss.models.get(&1).unwrap().clone();
         match ss.clone().get_point(md.clone(), "SN").await {
-            Some(p) => {
+            Ok(p) => {
                 if let Some(st) = p.value {
                     if let ValueType::String(s) = st {
                         if devices.contains(&s) {
@@ -54,8 +54,8 @@ pub async fn main() {
                     }
                 }
             }
-            None => {
-                warn!("No serial number in common? (slave {i})  Should not be possible.");
+            Err(e) => {
+                warn!("No serial number in common? (slave {i})  Should not be possible: {e}");
             }
         }
     }

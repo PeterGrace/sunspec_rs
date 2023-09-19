@@ -71,7 +71,7 @@ pub async fn main() {
     // }
 
     for f in fields {
-        if let Some(pt) = ss.clone().get_point(md_802.clone(), f).await {
+        if let Ok(pt) = ss.clone().get_point(md_802.clone(), f).await {
             debug!("{:#?}", pt.value);
         }
     }

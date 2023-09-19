@@ -52,7 +52,7 @@ impl ModelData {
         if let Some(value) = self.scale_factors.get(name) {
             return Some(*value);
         } else {
-            if let Some(point) = conn.clone().get_point(self.clone(), name).await {
+            if let Ok(point) = conn.clone().get_point(self.clone(), name).await {
                 if let Some(ValueType::Integer(val)) = point.value {
                     self.scale_factors.insert(name.to_string(), val as i16);
                     return Some(val as i16);

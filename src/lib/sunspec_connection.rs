@@ -58,9 +58,23 @@ pub enum SunSpecCommError {
     #[default]
     TransientError,
 }
+#[derive(Error, Debug, Default, PartialEq)]
+pub enum SunSpecPointError {
+    #[error("Unrecoverable error: {0}")]
+    CommError(String),
+    #[error("General Error: {0}")]
+    GeneralError(String),
+    #[error("point does not exist: {0}")]
+    DoesNotExist(String),
+    #[error("Undefined error")]
+    #[default]
+    UndefinedError,
+}
 
 #[derive(Error, Debug, Default, PartialEq)]
 pub enum SunSpecReadError {
+    #[error("Comm Error in read: {0}")]
+    CommError(String),
     #[error("Error in read: {0}")]
     OtherError(String),
     #[error("Device reports this datapoint as not implemented.")]
@@ -106,7 +120,9 @@ impl SunSpecConnection {
     //region connection restart
     pub async fn restart_connection(mut self) {
         let mut ctx = self.ctx.lock().await;
-        ctx.disconnect().await.unwrap();
+        if let Err(e) = ctx.disconnect().await {
+            error!("Couldn't disconnect from modbus: {e}");
+        }
         sleep(Duration::from_secs(RECONNECT_COURTESY_SLEEP_SECS)).await;
 
         let newctx: Context;
@@ -536,7 +552,11 @@ impl SunSpecConnection {
     /// * `name` - The name of the point you're querying, e.g. "PhVPhA" -- you can find these
     ///            values specified in the sunspec model files.
     #[async_recursion]
-    pub async fn get_point(mut self, mut md: ModelData, point_name: &str) -> Option<Point> {
+    pub async fn get_point(
+        mut self,
+        mut md: ModelData,
+        point_name: &str,
+    ) -> Result<Point, SunSpecPointError> {
         let mut point = Point::default();
         let mut symbols: Option<Vec<Symbol>> = None;
         let model = md.model.model.clone();
@@ -553,10 +573,11 @@ impl SunSpecConnection {
             })
         });
         if point.id.len() == 0 {
-            warn!(
+            let err = format!(
                 "You asked for point {model_name}/{point_name} but it doesn't exist in the model."
             );
-            return None;
+            warn!(err);
+            return Err(SunSpecPointError::DoesNotExist(err));
         }
         //region if there's literals for this point, populate them
         for string in md.model.strings.iter() {
@@ -581,13 +602,21 @@ impl SunSpecConnection {
                         debug!("{model_name}/{point_name} is {rs}!");
                         let mut val = rs.clone();
                         // it is unlikely anyone wants the extra nulls at the end of the string
-                        val = val.trim_matches(char::from(0)).parse().ok()?;
+                        val = match val.trim_matches(char::from(0)).parse() {
+                            Ok(v) => v,
+                            Err(e) => {
+                                return Err(SunSpecPointError::GeneralError(format!(
+                                    "Failure trimming string nulls: {e}"
+                                )));
+                            }
+                        };
                         point.value = Some(ValueType::String(val));
-                        return Some(point);
+                        return Ok(point);
                     }
                     Err(e) => {
-                        error!("{model_name}/{point_name}: {e}");
-                        return None;
+                        let err = format!("{model_name}/{point_name}: {e}");
+                        error!(err);
+                        return Err(SunSpecPointError::GeneralError(err));
                     }
                 };
             }
@@ -603,19 +632,20 @@ impl SunSpecConnection {
                                 _adj = (rs / (10 * sf.abs())).into();
                             }
                             point.value = Some(ValueType::Float(_adj));
-                            return Some(point);
+                            return Ok(point);
                         }
                     }
                     point.value = Some(ValueType::Integer(rs as i32));
-                    return Some(point);
+                    return Ok(point);
                 }
                 Err(e) => {
-                    error!(
+                    let err = format!(
                         "{}:{} -- {model_name}/{point_name}: {e}",
                         self.addr,
                         self.slave_num.unwrap_or(0)
                     );
-                    return None;
+                    error!(err);
+                    return Err(SunSpecPointError::GeneralError(err));
                 }
             },
             POINT_TYPE_UINT16 | POINT_TYPE_ACC16 => {
@@ -623,10 +653,11 @@ impl SunSpecConnection {
                     Ok(rs) => {
                         debug!("{model_name}/{point_name} is {rs}!");
                         if point.r#type.as_str() == POINT_TYPE_ACC16 && rs == NOT_ACCUMULATED_16 {
-                            error!(
+                            let err = format!(
                                 "Accumulator datapoint not supported by device (0 value returned)"
                             );
-                            return None;
+                            error!(err);
+                            return Err(SunSpecPointError::GeneralError(err));
                         }
                         if let Some(sf_name) = point.clone().scale_factor {
                             if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
@@ -637,41 +668,45 @@ impl SunSpecConnection {
                                     _adj = rs.as_f32() / (10_f32 * sf.abs() as f32);
                                 }
                                 point.value = Some(ValueType::Float(_adj));
-                                return Some(point);
+                                return Ok(point);
                             }
                         }
                         point.value = Some(ValueType::Integer(rs as i32));
-                        return Some(point);
+                        return Ok(point);
                     }
                     Err(e) => {
-                        error!("{model_name}/{point_name}: {e}");
-                        return None;
+                        let err = format!("{model_name}/{point_name}: {e}");
+                        error!(err);
+                        return Err(SunSpecPointError::GeneralError(err));
                     }
                 }
             }
-            POINT_TYPE_ENUM16 => match self.get_u16(2 + md.address + point.offset).await {
-                Ok(rs) => {
-                    debug!("{model_name}/{point_name} is {rs}!");
-                    if symbols.is_some() {
-                        let mut symbol_name: String = "".to_string();
-                        symbols.unwrap().iter().for_each(|s| {
-                            if s.symbol.parse::<u16>().unwrap() == rs {
-                                symbol_name = s.id.clone();
+            POINT_TYPE_ENUM16 => {
+                match self.get_u16(2 + md.address + point.offset).await {
+                    Ok(rs) => {
+                        debug!("{model_name}/{point_name} is {rs}!");
+                        if symbols.is_some() {
+                            let mut symbol_name: String = "".to_string();
+                            symbols.unwrap().iter().for_each(|s| {
+                                if s.symbol.parse::<u16>().unwrap() == rs {
+                                    symbol_name = s.id.clone();
+                                }
+                            });
+                            if symbol_name.len() > 0 {
+                                point.value = Some(ValueType::String(symbol_name));
+                                return Ok(point);
+                            } else {
+                                return Err(SunSpecPointError::GeneralError(format!("Enum failure: text symbol doesn't exist for point numeric value")));
                             }
-                        });
-                        if symbol_name.len() > 0 {
-                            point.value = Some(ValueType::String(symbol_name));
-                            return Some(point);
-                        } else {
-                            return None;
                         }
                     }
+                    Err(e) => {
+                        let err = format!("{model_name}/{point_name}: {e}");
+                        error!(err);
+                        return Err(SunSpecPointError::GeneralError(err));
+                    }
                 }
-                Err(e) => {
-                    error!("{model_name}/{point_name}: {e}");
-                    return None;
-                }
-            },
+            }
             POINT_TYPE_BITFIELD16 => {
                 match self.get_u16(2 + md.address + point.offset).await {
                     Ok(rs) => {
@@ -685,15 +720,17 @@ impl SunSpecConnection {
                                 };
                             }
                             point.value = Some(ValueType::Array(values));
-                            return Some(point);
+                            return Ok(point);
                         } else {
-                            warn!("We tried to parse a bitfield but there aren't symbols for this point.");
-                            return None;
+                            let err = format!("We tried to parse a bitfield but there aren't symbols for this point.");
+                            warn!(err);
+                            return Err(SunSpecPointError::GeneralError(err));
                         }
                     }
                     Err(e) => {
-                        error!("{model_name}/{point_name}: {e}");
-                        return None;
+                        let err = format!("{model_name}/{point_name}: {e}");
+                        error!(err);
+                        return Err(SunSpecPointError::GeneralError(err));
                     }
                 }
             }
@@ -701,11 +738,12 @@ impl SunSpecConnection {
                 Ok(rs) => {
                     debug!("{model_name}/{point_name} is {rs}!");
                     point.value = Some(ValueType::Integer(rs as i32));
-                    return Some(point);
+                    return Ok(point);
                 }
                 Err(e) => {
-                    error!("{model_name}/{point_name}: {e}");
-                    return None;
+                    let err = format!("{model_name}/{point_name}: {e}");
+                    error!(err);
+                    return Err(SunSpecPointError::GeneralError(err));
                 }
             },
             POINT_TYPE_UINT32 | POINT_TYPE_ACC32 => {
@@ -713,10 +751,11 @@ impl SunSpecConnection {
                     Ok(rs) => {
                         debug!("{model_name}/{point_name} is {rs}!");
                         if point.r#type.as_str() == POINT_TYPE_ACC32 && rs == NOT_ACCUMULATED_32 {
-                            error!(
+                            let err = format!(
                                 "Accumulator datapoint not supported by device (0 value returned)"
                             );
-                            return None;
+                            error!(err);
+                            return Err(SunSpecPointError::GeneralError(err));
                         }
                         if let Some(sf_name) = point.clone().scale_factor {
                             if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
@@ -727,15 +766,16 @@ impl SunSpecConnection {
                                     _adj = rs.as_f32() / (10_f32 * sf.abs() as f32);
                                 }
                                 point.value = Some(ValueType::Float(_adj));
-                                return Some(point);
+                                return Ok(point);
                             }
                         }
                         point.value = Some(ValueType::Integer(rs as i32));
-                        return Some(point);
+                        return Ok(point);
                     }
                     Err(e) => {
-                        error!("{model_name}/{point_name}: {e}");
-                        return None;
+                        let err = format!("{model_name}/{point_name}: {e}");
+                        error!(err);
+                        return Err(SunSpecPointError::GeneralError(err));
                     }
                 }
             }
@@ -751,40 +791,51 @@ impl SunSpecConnection {
                                 _adj = rs.as_f32() / (10_f32 * sf.abs() as f32);
                             }
                             point.value = Some(ValueType::Float(_adj));
-                            return Some(point);
+                            return Ok(point);
                         }
                     }
                     point.value = Some(ValueType::Integer(rs as i32));
-                    return Some(point);
+                    return Ok(point);
                 }
                 Err(e) => {
-                    error!("{model_name}/{point_name}: {e}");
-                    return None;
+                    let err = format!("{model_name}/{point_name}: {e}");
+                    error!(err);
+                    return Err(SunSpecPointError::GeneralError(err));
                 }
             },
-            POINT_TYPE_ENUM32 => match self.get_u32(2 + md.address + point.offset).await {
-                Ok(rs) => {
-                    debug!("{model_name}/{point_name} is {rs}!");
-                    if symbols.is_some() {
-                        let mut symbol_name: String = "".to_string();
-                        symbols.unwrap().iter().for_each(|s| {
-                            if s.symbol.parse::<u32>().unwrap() == rs {
-                                symbol_name = s.id.clone();
+            POINT_TYPE_ENUM32 => {
+                match self.get_u32(2 + md.address + point.offset).await {
+                    Ok(rs) => {
+                        debug!("{model_name}/{point_name} is {rs}!");
+                        if symbols.is_some() {
+                            let mut symbol_name: String = "".to_string();
+                            symbols.unwrap().iter().for_each(|s| {
+                                if s.symbol.parse::<u32>().unwrap() == rs {
+                                    symbol_name = s.id.clone();
+                                }
+                            });
+                            if symbol_name.len() > 0 {
+                                point.value = Some(ValueType::String(symbol_name));
+                                return Ok(point);
+                            } else {
+                                return Err(SunSpecPointError::GeneralError(format!("Enum failure: text symbol doesn't exist for point numeric value")));
                             }
-                        });
-                        if symbol_name.len() > 0 {
-                            point.value = Some(ValueType::String(symbol_name));
-                            return Some(point);
-                        } else {
-                            return None;
                         }
                     }
+                    Err(e) => {
+                        match e {
+                            SunSpecReadError::CommError(a) => {
+                                return Err(SunSpecPointError::CommError(a))
+                            }
+                            _ => {
+                                let err = format!("{model_name}/{point_name}: {e}");
+                                error!(err);
+                                return Err(SunSpecPointError::GeneralError(err));
+                            }
+                        };
+                    }
                 }
-                Err(e) => {
-                    error!("{model_name}/{point_name}: {e}");
-                    return None;
-                }
-            },
+            }
             POINT_TYPE_BITFIELD32 => {
                 match self.get_u32(2 + md.address + point.offset).await {
                     Ok(rs) => {
@@ -798,29 +849,39 @@ impl SunSpecConnection {
                                 };
                             }
                             point.value = Some(ValueType::Array(values));
-                            return Some(point);
+                            return Ok(point);
                         } else {
-                            warn!("We tried to parse a bitfield but there aren't symbols for this point.");
-                            return None;
+                            let err = format!("We tried to parse a bitfield but there aren't symbols for this point.");
+                            error!(err);
+                            return Err(SunSpecPointError::DoesNotExist(err));
                         }
                     }
                     Err(e) => {
-                        error!("{model_name}/{point_name}: {e}");
-                        return None;
+                        match e {
+                            SunSpecReadError::CommError(a) => {
+                                return Err(SunSpecPointError::CommError(a))
+                            }
+                            _ => {
+                                let err = format!("{model_name}/{point_name}: {e}");
+                                error!(err);
+                                return Err(SunSpecPointError::GeneralError(err));
+                            }
+                        };
                     }
                 }
             }
             POINT_TYPE_PAD => {}
             _ => {
-                error!(
+                let err = format!(
                     "{model_name}/{point_name}: unknown point type: {:#?}",
                     point.r#type.as_str()
                 );
-                return None;
+                error!(err);
+                return Err(SunSpecPointError::DoesNotExist(err));
             }
         }
 
-        None
+        Err(SunSpecPointError::UndefinedError)
     }
     //endregion
 }
