@@ -48,6 +48,7 @@ const DEFAULT_NETWORK_TIMEOUT_MS: u64 = 10_000_u64;
 const DEFAULT_BACKOFF_BASE_MS: u64 = 100_u64;
 
 const RECONNECT_COURTESY_SLEEP_SECS: u64 = 10_u64;
+
 pub type Word = u16;
 
 #[derive(Error, Debug, Default, PartialEq)]
@@ -58,6 +59,7 @@ pub enum SunSpecCommError {
     #[default]
     TransientError,
 }
+
 #[derive(Error, Debug, Default, PartialEq)]
 pub enum SunSpecPointError {
     #[error("Unrecoverable error: {0}")]
@@ -86,6 +88,8 @@ pub enum SunSpecReadError {
 
 #[derive(Error, Debug, Default, PartialEq)]
 pub enum SunSpecWriteError {
+    #[error("Communication error: {0}")]
+    CommError(String),
     #[error("Supplied point does not exist.")]
     PointDoesntExist,
     #[error("Supplied point is not writeable.")]
@@ -216,7 +220,7 @@ impl SunSpecConnection {
         {
             Ok(data) => data,
             Err(e) => {
-                return Err(SunSpecReadError::OtherError(e.to_string()));
+                return Err(SunSpecReadError::CommError(e.to_string()));
             }
         };
         let bytes: Vec<u8> = data.iter().fold(vec![], |mut x, elem| {
@@ -244,7 +248,7 @@ impl SunSpecConnection {
                 }
                 data[0]
             }
-            Err(e) => return Err(SunSpecReadError::OtherError(e.to_string())),
+            Err(e) => return Err(SunSpecReadError::CommError(e.to_string())),
         };
         Ok(data as i16)
     }
@@ -262,7 +266,7 @@ impl SunSpecConnection {
                 data[0]
             }
 
-            Err(e) => return Err(SunSpecReadError::OtherError(e.to_string())),
+            Err(e) => return Err(SunSpecReadError::CommError(e.to_string())),
         };
         Ok(data)
     }
@@ -275,7 +279,7 @@ impl SunSpecConnection {
         let data = match self.clone().retry_read_holding_registers(addr, 1).await {
             Ok(data) => data[0],
 
-            Err(e) => return Err(SunSpecReadError::OtherError(e.to_string())),
+            Err(e) => return Err(SunSpecReadError::CommError(e.to_string())),
         };
         Ok(data)
     }
@@ -285,12 +289,12 @@ impl SunSpecConnection {
     ///
     /// * `addr` - A memory offset address to read, e.g. 40002
     /// * `data` - A single 16 bit unsigned integer.
-    pub async fn set_u16(&mut self, addr: Address, data: u16) -> anyhow::Result<()> {
+    pub async fn set_u16(&mut self, addr: Address, data: u16) -> Result<(), SunSpecWriteError> {
         let word: Word = data;
         match self.clone().retry_write_register(addr, word).await {
             Ok(_) => {}
             Err(e) => {
-                anyhow::bail!("Could not write point: {e}");
+                return Err(SunSpecWriteError::CommError(e.to_string()));
             }
         };
         Ok(())
@@ -315,7 +319,7 @@ impl SunSpecConnection {
                 }
             }
             Err(e) => {
-                return Err(SunSpecReadError::OtherError(e.to_string()));
+                return Err(SunSpecReadError::CommError(e.to_string()));
             }
         }
     }
@@ -339,7 +343,7 @@ impl SunSpecConnection {
                 }
             }
             Err(e) => {
-                return Err(SunSpecReadError::OtherError(e.to_string()));
+                return Err(SunSpecReadError::CommError(e.to_string()));
             }
         }
     }
@@ -349,7 +353,7 @@ impl SunSpecConnection {
         self,
         addr: Address,
         data: Word,
-    ) -> anyhow::Result<()> {
+    ) -> Result<(), SunSpecCommError> {
         let retry_strategy = ExponentialBackoff::from_millis(DEFAULT_BACKOFF_BASE_MS)
             .map(jitter) // add jitter to delays
             .take(3); // limit to 3 retries
@@ -364,8 +368,8 @@ impl SunSpecConnection {
         {
             Ok(_) => Ok(()),
             Err(e) => {
-                self.restart_connection().await;
-                anyhow::bail!("Error when trying to retry modbus command: {e}");
+                //self.restart_connection().await;
+                return Err(e);
             }
         }
     }
@@ -376,7 +380,7 @@ impl SunSpecConnection {
         self,
         addr: Address,
         q: Quantity,
-    ) -> anyhow::Result<Vec<Word>> {
+    ) -> Result<Vec<Word>, SunSpecCommError> {
         let retry_strategy = ExponentialBackoff::from_millis(DEFAULT_BACKOFF_BASE_MS)
             .map(jitter) // add jitter to delays
             .take(3); // limit to 3 retries
@@ -394,8 +398,8 @@ impl SunSpecConnection {
         {
             Ok(e) => Ok(e),
             Err(e) => {
-                self.restart_connection().await;
-                anyhow::bail!("Error when trying to retry modbus command: {e}");
+                //self.restart_connection().await;
+                return Err(e);
             }
         }
     }
@@ -614,9 +618,17 @@ impl SunSpecConnection {
                         return Ok(point);
                     }
                     Err(e) => {
-                        let err = format!("{model_name}/{point_name}: {e}");
+                        let err = format!(
+                            "{}:{} -- {model_name}/{point_name}: {e}",
+                            self.addr,
+                            self.slave_num.unwrap_or(0)
+                        );
                         error!(err);
-                        return Err(SunSpecPointError::GeneralError(err));
+                        if let SunSpecReadError::CommError(_) = e {
+                            return Err(SunSpecPointError::CommError(err));
+                        } else {
+                            return Err(SunSpecPointError::GeneralError(err));
+                        }
                     }
                 };
             }
@@ -645,7 +657,11 @@ impl SunSpecConnection {
                         self.slave_num.unwrap_or(0)
                     );
                     error!(err);
-                    return Err(SunSpecPointError::GeneralError(err));
+                    if let SunSpecReadError::CommError(_) = e {
+                        return Err(SunSpecPointError::CommError(err));
+                    } else {
+                        return Err(SunSpecPointError::GeneralError(err));
+                    }
                 }
             },
             POINT_TYPE_UINT16 | POINT_TYPE_ACC16 => {
@@ -675,38 +691,52 @@ impl SunSpecConnection {
                         return Ok(point);
                     }
                     Err(e) => {
-                        let err = format!("{model_name}/{point_name}: {e}");
+                        let err = format!(
+                            "{}:{} -- {model_name}/{point_name}: {e}",
+                            self.addr,
+                            self.slave_num.unwrap_or(0)
+                        );
                         error!(err);
-                        return Err(SunSpecPointError::GeneralError(err));
-                    }
-                }
-            }
-            POINT_TYPE_ENUM16 => {
-                match self.get_u16(2 + md.address + point.offset).await {
-                    Ok(rs) => {
-                        debug!("{model_name}/{point_name} is {rs}!");
-                        if symbols.is_some() {
-                            let mut symbol_name: String = "".to_string();
-                            symbols.unwrap().iter().for_each(|s| {
-                                if s.symbol.parse::<u16>().unwrap() == rs {
-                                    symbol_name = s.id.clone();
-                                }
-                            });
-                            if symbol_name.len() > 0 {
-                                point.value = Some(ValueType::String(symbol_name));
-                                return Ok(point);
-                            } else {
-                                return Err(SunSpecPointError::GeneralError(format!("Enum failure: text symbol doesn't exist for point numeric value")));
-                            }
+                        if let SunSpecReadError::CommError(_) = e {
+                            return Err(SunSpecPointError::CommError(err));
+                        } else {
+                            return Err(SunSpecPointError::GeneralError(err));
                         }
                     }
-                    Err(e) => {
-                        let err = format!("{model_name}/{point_name}: {e}");
-                        error!(err);
+                }
+            }
+            POINT_TYPE_ENUM16 => match self.get_u16(2 + md.address + point.offset).await {
+                Ok(rs) => {
+                    debug!("{model_name}/{point_name} is {rs}!");
+                    if symbols.is_some() {
+                        let mut symbol_name: String = "".to_string();
+                        symbols.unwrap().iter().for_each(|s| {
+                            if s.symbol.parse::<u16>().unwrap() == rs {
+                                symbol_name = s.id.clone();
+                            }
+                        });
+                        if symbol_name.len() > 0 {
+                            point.value = Some(ValueType::String(symbol_name));
+                            return Ok(point);
+                        } else {
+                            return Err(SunSpecPointError::GeneralError(format!("Enum failure: text symbol doesn't exist for point numeric value (point is {rs})")));
+                        }
+                    }
+                }
+                Err(e) => {
+                    let err = format!(
+                        "{}:{} -- {model_name}/{point_name}: {e}",
+                        self.addr,
+                        self.slave_num.unwrap_or(0)
+                    );
+                    error!(err);
+                    if let SunSpecReadError::CommError(_) = e {
+                        return Err(SunSpecPointError::CommError(err));
+                    } else {
                         return Err(SunSpecPointError::GeneralError(err));
                     }
                 }
-            }
+            },
             POINT_TYPE_BITFIELD16 => {
                 match self.get_u16(2 + md.address + point.offset).await {
                     Ok(rs) => {
@@ -728,9 +758,17 @@ impl SunSpecConnection {
                         }
                     }
                     Err(e) => {
-                        let err = format!("{model_name}/{point_name}: {e}");
+                        let err = format!(
+                            "{}:{} -- {model_name}/{point_name}: {e}",
+                            self.addr,
+                            self.slave_num.unwrap_or(0)
+                        );
                         error!(err);
-                        return Err(SunSpecPointError::GeneralError(err));
+                        if let SunSpecReadError::CommError(_) = e {
+                            return Err(SunSpecPointError::CommError(err));
+                        } else {
+                            return Err(SunSpecPointError::GeneralError(err));
+                        }
                     }
                 }
             }
@@ -741,9 +779,17 @@ impl SunSpecConnection {
                     return Ok(point);
                 }
                 Err(e) => {
-                    let err = format!("{model_name}/{point_name}: {e}");
+                    let err = format!(
+                        "{}:{} -- {model_name}/{point_name}: {e}",
+                        self.addr,
+                        self.slave_num.unwrap_or(0)
+                    );
                     error!(err);
-                    return Err(SunSpecPointError::GeneralError(err));
+                    if let SunSpecReadError::CommError(_) = e {
+                        return Err(SunSpecPointError::CommError(err));
+                    } else {
+                        return Err(SunSpecPointError::GeneralError(err));
+                    }
                 }
             },
             POINT_TYPE_UINT32 | POINT_TYPE_ACC32 => {
@@ -773,9 +819,17 @@ impl SunSpecConnection {
                         return Ok(point);
                     }
                     Err(e) => {
-                        let err = format!("{model_name}/{point_name}: {e}");
+                        let err = format!(
+                            "{}:{} -- {model_name}/{point_name}: {e}",
+                            self.addr,
+                            self.slave_num.unwrap_or(0)
+                        );
                         error!(err);
-                        return Err(SunSpecPointError::GeneralError(err));
+                        if let SunSpecReadError::CommError(_) = e {
+                            return Err(SunSpecPointError::CommError(err));
+                        } else {
+                            return Err(SunSpecPointError::GeneralError(err));
+                        }
                     }
                 }
             }
@@ -798,9 +852,17 @@ impl SunSpecConnection {
                     return Ok(point);
                 }
                 Err(e) => {
-                    let err = format!("{model_name}/{point_name}: {e}");
+                    let err = format!(
+                        "{}:{} -- {model_name}/{point_name}: {e}",
+                        self.addr,
+                        self.slave_num.unwrap_or(0)
+                    );
                     error!(err);
-                    return Err(SunSpecPointError::GeneralError(err));
+                    if let SunSpecReadError::CommError(_) = e {
+                        return Err(SunSpecPointError::CommError(err));
+                    } else {
+                        return Err(SunSpecPointError::GeneralError(err));
+                    }
                 }
             },
             POINT_TYPE_ENUM32 => {
@@ -823,16 +885,17 @@ impl SunSpecConnection {
                         }
                     }
                     Err(e) => {
-                        match e {
-                            SunSpecReadError::CommError(a) => {
-                                return Err(SunSpecPointError::CommError(a))
-                            }
-                            _ => {
-                                let err = format!("{model_name}/{point_name}: {e}");
-                                error!(err);
-                                return Err(SunSpecPointError::GeneralError(err));
-                            }
-                        };
+                        let err = format!(
+                            "{}:{} -- {model_name}/{point_name}: {e}",
+                            self.addr,
+                            self.slave_num.unwrap_or(0)
+                        );
+                        error!(err);
+                        if let SunSpecReadError::CommError(_) = e {
+                            return Err(SunSpecPointError::CommError(err));
+                        } else {
+                            return Err(SunSpecPointError::GeneralError(err));
+                        }
                     }
                 }
             }
@@ -857,16 +920,17 @@ impl SunSpecConnection {
                         }
                     }
                     Err(e) => {
-                        match e {
-                            SunSpecReadError::CommError(a) => {
-                                return Err(SunSpecPointError::CommError(a))
-                            }
-                            _ => {
-                                let err = format!("{model_name}/{point_name}: {e}");
-                                error!(err);
-                                return Err(SunSpecPointError::GeneralError(err));
-                            }
-                        };
+                        let err = format!(
+                            "{}:{} -- {model_name}/{point_name}: {e}",
+                            self.addr,
+                            self.slave_num.unwrap_or(0)
+                        );
+                        error!(err);
+                        if let SunSpecReadError::CommError(_) = e {
+                            return Err(SunSpecPointError::CommError(err));
+                        } else {
+                            return Err(SunSpecPointError::GeneralError(err));
+                        }
                     }
                 }
             }
