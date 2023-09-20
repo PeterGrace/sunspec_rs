@@ -23,9 +23,21 @@ impl SunSpecData {
     ///
     /// # Arguments
     ///
-    /// * `model_id` - The model id to load from disk.
-    fn load_model(id: u16) -> anyhow::Result<SunSpecModels> {
-        let filename = format!("models/smdx_{:05}.xml", id);
+    /// * `id` - The model id to load from disk.
+    /// * `manufacturer` - The name of the manufacturer, for models >=64200
+    fn load_model(id: u16, manufacturer: Option<String>) -> anyhow::Result<SunSpecModels> {
+        let filename = match id {
+            f if f >= 64200 => {
+                if let Some(mn) = manufacturer {
+                    format!("models/{}/smdx_{:05}.xml", mn.to_ascii_lowercase(), f)
+                } else {
+                    format!("models/smdx_{:05}.xml", f)
+                }
+            }
+            _ => {
+                format!("models/smdx_{:05}.xml", id)
+            }
+        };
         let fd = match File::open(filename) {
             Ok(f) => f,
             Err(e) => {
@@ -49,11 +61,11 @@ impl SunSpecData {
     ///
     /// # Returns
     /// Returns a valid SunSpecModels instance, or None if it didn't exist.
-    pub fn get_model(mut self, id: u16) -> Option<SunSpecModels> {
+    pub fn get_model(mut self, id: u16, mn: Option<String>) -> Option<SunSpecModels> {
         let lookup = self.models.get(&id);
 
         if lookup.is_none() {
-            match SunSpecData::load_model(id) {
+            match SunSpecData::load_model(id, mn) {
                 Ok(m) => {
                     self.models.insert(id, m.clone());
                     Some(m)

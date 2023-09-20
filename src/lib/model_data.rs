@@ -28,8 +28,9 @@ impl ModelData {
         id: u16,
         len: u16,
         address: Address,
+        manufacturer: Option<String>,
     ) -> anyhow::Result<Self> {
-        let model = data.get_model(id);
+        let model = data.get_model(id, manufacturer);
         if model.is_none() {
             anyhow::bail!("Couldn't get model for id {id}");
         }

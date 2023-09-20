@@ -412,6 +412,19 @@ impl SunSpecConnection {
     ) -> anyhow::Result<HashMap<u16, ModelData>> {
         let mut address = 40002;
         let mut models: HashMap<u16, ModelData> = HashMap::new();
+        let manufacturer = match self.get_string(address + 2, 16).await {
+            Ok(s) => match s.trim_matches(char::from(0)).parse() {
+                Ok(s) => Some(s),
+                Err(e) => {
+                    warn!("Can't trim nulls on manufacturer name: {e}");
+                    None
+                }
+            },
+            Err(e) => {
+                warn!("Can't get manufacturer of this unit: {e}");
+                None
+            }
+        };
         loop {
             let id = match self.get_u16_no_check(address).await {
                 Ok(id) => id,
@@ -430,7 +443,15 @@ impl SunSpecConnection {
             }
             assert!(id >= 1);
             debug!("found model with id {id}, and length {length}");
-            match ModelData::new(data.clone(), id as u16, length, address).await {
+            match ModelData::new(
+                data.clone(),
+                id as u16,
+                length,
+                address,
+                manufacturer.clone(),
+            )
+            .await
+            {
                 Ok(md) => {
                     models.insert(id as u16, md);
                 }
