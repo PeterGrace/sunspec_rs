@@ -9,6 +9,7 @@ use cli_args::CliArgs;
 use std::process;
 use sunspec_rs::sunspec_connection::SunSpecConnection;
 use sunspec_rs::sunspec_data::SunSpecData;
+use sunspec_rs::sunspec_models::ValueType;
 use tracing_log::AsTrace;
 use tracing_subscriber;
 
@@ -22,7 +23,7 @@ pub async fn main() {
         .init();
 
     let socket_addr = "127.0.0.1:5083".parse().unwrap();
-    let mut ss = match SunSpecConnection::new(socket_addr, Some(6)).await {
+    let mut ss = match SunSpecConnection::new(socket_addr, Some(11), false).await {
         Ok(mb) => mb,
         Err(e) => {
             error!("Can't create modbus connection: {e}");
@@ -38,41 +39,33 @@ pub async fn main() {
         }
     };
 
-    let _field: &str = "AlmRst";
-    let fields: Vec<&str> = vec!["State", "Evt1"];
+    let _model: u16 = 64207_u16;
+    let _field: &str = "St";
+    let _fields: Vec<&str> = vec!["St"];
+    let write = false;
 
-    let md_802 = ss.models.get(&802).unwrap().clone();
-    // match ss
-    //     .clone()
-    //     .set_point(md_802.clone(), field, ValueType::Integer(1))
-    //     .await
-    // {
-    //     Ok(_) => {
-    //         info!("It should have worked!");
-    //     }
-    //     Err(e) => {
-    //         error!("Oh no, it didn't work: {e}")
-    //     }
-    // }
-
-    // write alarm reset value
-    // let md_802 = ss.models.get(&802).unwrap().clone();
-    // match ss
-    //     .clone()
-    //     .set_point(md_802.clone(), field, ValueType::Integer(1))
-    //     .await
-    // {
-    //     Ok(_) => {
-    //         info!("It should have worked!");
-    //     }
-    //     Err(e) => {
-    //         error!("Oh no, it didn't work: {e}")
-    //     }
-    // }
-
-    for f in fields {
-        if let Ok(pt) = ss.clone().get_point(md_802.clone(), f).await {
-            debug!("{:#?}", pt.value);
+    if write {
+        // write value
+        let md = ss.models.get(&_model).unwrap().clone();
+        match ss
+            .clone()
+            .set_point(md.clone(), _field, ValueType::Integer(1))
+            .await
+        {
+            Ok(_) => {
+                info!("It should have worked!");
+            }
+            Err(e) => {
+                error!("Oh no, it didn't work: {e}")
+            }
+        }
+    } else {
+        // read fields
+        let md = ss.models.get(&64207).unwrap().clone();
+        for f in _fields {
+            if let Ok(pt) = ss.clone().get_point(md.clone(), f).await {
+                debug!("{:#?}", pt.value);
+            }
         }
     }
 }

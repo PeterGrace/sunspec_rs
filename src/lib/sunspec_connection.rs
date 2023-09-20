@@ -118,6 +118,9 @@ pub struct SunSpecConnection {
     pub(crate) ctx: Arc<Mutex<Context>>,
     /// a map of the model definitions related to this connection (populated via populate_models)
     pub models: HashMap<u16, ModelData>,
+    /// boolean value that causes get_point to force an error if a symbol doesn't exist.  A false
+    /// value indicates that get_point can return a synthesized value instead (e.g., enum, bitfields)
+    pub strict_symbol: bool,
 }
 
 impl SunSpecConnection {
@@ -166,8 +169,14 @@ impl SunSpecConnection {
     ///
     /// * `socket_addr` - A String of format 'ip:port', e.g. '127.0.0.1:5021'
     /// * `slave_num` - An Option<u8> that indicates the targeted modbus slave device, if any
+    /// * `strict_symbol` - whether to use strict symbol lookup or allow synthesized
+    ///                     names based on point
     //region new sunspec connection
-    pub async fn new(socket_addr: String, slave_num: Option<u8>) -> anyhow::Result<Self> {
+    pub async fn new(
+        socket_addr: String,
+        slave_num: Option<u8>,
+        strict_symbol: bool,
+    ) -> anyhow::Result<Self> {
         let socket_addr = socket_addr.parse().unwrap();
         let ctx: Context;
         let slave_id = match slave_num {
@@ -197,6 +206,7 @@ impl SunSpecConnection {
             slave_num,
             ctx: arc_ctx,
             models: HashMap::new(),
+            strict_symbol,
         })
     }
     //endregion
@@ -740,7 +750,14 @@ impl SunSpecConnection {
                             point.value = Some(ValueType::String(symbol_name));
                             return Ok(point);
                         } else {
-                            return Err(SunSpecPointError::GeneralError(format!("Enum failure: text symbol doesn't exist for point numeric value (point is {rs})")));
+                            if self.strict_symbol {
+                                return Err(SunSpecPointError::GeneralError(
+                                    format!("Enum failure: text symbol doesn't exist for point numeric value (point is {rs})"))
+                                );
+                            } else {
+                                point.value = Some(ValueType::String(format!("ENUM16_{rs}")));
+                                return Ok(point);
+                            }
                         }
                     }
                 }
@@ -758,41 +775,43 @@ impl SunSpecConnection {
                     }
                 }
             },
-            POINT_TYPE_BITFIELD16 => {
-                match self.get_u16(2 + md.address + point.offset).await {
-                    Ok(rs) => {
-                        debug!("{model_name}/{point_name} is {rs}!");
-                        if symbols.is_some() {
-                            let mut values: Vec<String> = vec![];
-                            let bv = BitVec::<_, Lsb0>::from_element(rs.clone());
-                            for s in symbols.unwrap().iter() {
-                                if bv[s.symbol.parse::<usize>().unwrap()] {
-                                    values.push(s.id.clone());
-                                };
-                            }
-                            point.value = Some(ValueType::Array(values));
-                            return Ok(point);
-                        } else {
+            POINT_TYPE_BITFIELD16 => match self.get_u16(2 + md.address + point.offset).await {
+                Ok(rs) => {
+                    debug!("{model_name}/{point_name} is {rs}!");
+                    if symbols.is_some() {
+                        let mut values: Vec<String> = vec![];
+                        let bv = BitVec::<_, Lsb0>::from_element(rs.clone());
+                        for s in symbols.unwrap().iter() {
+                            if bv[s.symbol.parse::<usize>().unwrap()] {
+                                values.push(s.id.clone());
+                            };
+                        }
+                        point.value = Some(ValueType::Array(values));
+                        return Ok(point);
+                    } else {
+                        return if self.strict_symbol {
                             let err = format!("We tried to parse a bitfield but there aren't symbols for this point.");
-                            warn!(err);
-                            return Err(SunSpecPointError::GeneralError(err));
-                        }
-                    }
-                    Err(e) => {
-                        let err = format!(
-                            "{}:{} -- {model_name}/{point_name}: {e}",
-                            self.addr,
-                            self.slave_num.unwrap_or(0)
-                        );
-                        error!(err);
-                        if let SunSpecReadError::CommError(_) = e {
-                            return Err(SunSpecPointError::CommError(err));
+                            Err(SunSpecPointError::GeneralError(err))
                         } else {
-                            return Err(SunSpecPointError::GeneralError(err));
-                        }
+                            point.value = Some(ValueType::String(format!("BITFIELD16_{rs}")));
+                            Ok(point)
+                        };
                     }
                 }
-            }
+                Err(e) => {
+                    let err = format!(
+                        "{}:{} -- {model_name}/{point_name}: {e}",
+                        self.addr,
+                        self.slave_num.unwrap_or(0)
+                    );
+                    error!(err);
+                    if let SunSpecReadError::CommError(_) = e {
+                        return Err(SunSpecPointError::CommError(err));
+                    } else {
+                        return Err(SunSpecPointError::GeneralError(err));
+                    }
+                }
+            },
             POINT_TYPE_SUNSSF => match self.get_i16(2 + md.address + point.offset).await {
                 Ok(rs) => {
                     debug!("{model_name}/{point_name} is {rs}!");
@@ -886,75 +905,82 @@ impl SunSpecConnection {
                     }
                 }
             },
-            POINT_TYPE_ENUM32 => {
-                match self.get_u32(2 + md.address + point.offset).await {
-                    Ok(rs) => {
-                        debug!("{model_name}/{point_name} is {rs}!");
-                        if symbols.is_some() {
-                            let mut symbol_name: String = "".to_string();
-                            symbols.unwrap().iter().for_each(|s| {
-                                if s.symbol.parse::<u32>().unwrap() == rs {
-                                    symbol_name = s.id.clone();
-                                }
-                            });
-                            if symbol_name.len() > 0 {
-                                point.value = Some(ValueType::String(symbol_name));
-                                return Ok(point);
-                            } else {
-                                return Err(SunSpecPointError::GeneralError(format!("Enum failure: text symbol doesn't exist for point numeric value")));
+            POINT_TYPE_ENUM32 => match self.get_u32(2 + md.address + point.offset).await {
+                Ok(rs) => {
+                    debug!("{model_name}/{point_name} is {rs}!");
+                    if symbols.is_some() {
+                        let mut symbol_name: String = "".to_string();
+                        symbols.unwrap().iter().for_each(|s| {
+                            if s.symbol.parse::<u32>().unwrap() == rs {
+                                symbol_name = s.id.clone();
                             }
-                        }
-                    }
-                    Err(e) => {
-                        let err = format!(
-                            "{}:{} -- {model_name}/{point_name}: {e}",
-                            self.addr,
-                            self.slave_num.unwrap_or(0)
-                        );
-                        error!(err);
-                        if let SunSpecReadError::CommError(_) = e {
-                            return Err(SunSpecPointError::CommError(err));
-                        } else {
-                            return Err(SunSpecPointError::GeneralError(err));
-                        }
-                    }
-                }
-            }
-            POINT_TYPE_BITFIELD32 => {
-                match self.get_u32(2 + md.address + point.offset).await {
-                    Ok(rs) => {
-                        debug!("{model_name}/{point_name} is {rs}!");
-                        if symbols.is_some() {
-                            let mut values: Vec<String> = vec![];
-                            let bv = BitVec::<_, Lsb0>::from_element(rs.clone());
-                            for s in symbols.unwrap().iter() {
-                                if bv[s.symbol.parse::<usize>().unwrap()] {
-                                    values.push(s.id.clone());
-                                };
-                            }
-                            point.value = Some(ValueType::Array(values));
+                        });
+                        if symbol_name.len() > 0 {
+                            point.value = Some(ValueType::String(symbol_name));
                             return Ok(point);
                         } else {
-                            let err = format!("We tried to parse a bitfield but there aren't symbols for this point.");
-                            error!(err);
-                            return Err(SunSpecPointError::DoesNotExist(err));
-                        }
-                    }
-                    Err(e) => {
-                        let err = format!(
-                            "{}:{} -- {model_name}/{point_name}: {e}",
-                            self.addr,
-                            self.slave_num.unwrap_or(0)
-                        );
-                        error!(err);
-                        if let SunSpecReadError::CommError(_) = e {
-                            return Err(SunSpecPointError::CommError(err));
-                        } else {
-                            return Err(SunSpecPointError::GeneralError(err));
+                            if self.strict_symbol {
+                                return Err(SunSpecPointError::GeneralError(
+                                        format!("Enum failure: text symbol doesn't exist for point numeric value (point is {rs})"))
+                                    );
+                            } else {
+                                point.value = Some(ValueType::String(format!("ENUM32_{rs}")));
+                                return Ok(point);
+                            }
                         }
                     }
                 }
-            }
+                Err(e) => {
+                    let err = format!(
+                        "{}:{} -- {model_name}/{point_name}: {e}",
+                        self.addr,
+                        self.slave_num.unwrap_or(0)
+                    );
+                    error!(err);
+                    if let SunSpecReadError::CommError(_) = e {
+                        return Err(SunSpecPointError::CommError(err));
+                    } else {
+                        return Err(SunSpecPointError::GeneralError(err));
+                    }
+                }
+            },
+            POINT_TYPE_BITFIELD32 => match self.get_u32(2 + md.address + point.offset).await {
+                Ok(rs) => {
+                    debug!("{model_name}/{point_name} is {rs}!");
+                    if symbols.is_some() {
+                        let mut values: Vec<String> = vec![];
+                        let bv = BitVec::<_, Lsb0>::from_element(rs.clone());
+                        for s in symbols.unwrap().iter() {
+                            if bv[s.symbol.parse::<usize>().unwrap()] {
+                                values.push(s.id.clone());
+                            };
+                        }
+                        point.value = Some(ValueType::Array(values));
+                        return Ok(point);
+                    } else {
+                        return if self.strict_symbol {
+                            let err = format!("We tried to parse a bitfield but there aren't symbols for this point.");
+                            Err(SunSpecPointError::GeneralError(err))
+                        } else {
+                            point.value = Some(ValueType::String(format!("BITFIELD32_{rs}")));
+                            Ok(point)
+                        };
+                    }
+                }
+                Err(e) => {
+                    let err = format!(
+                        "{}:{} -- {model_name}/{point_name}: {e}",
+                        self.addr,
+                        self.slave_num.unwrap_or(0)
+                    );
+                    error!(err);
+                    if let SunSpecReadError::CommError(_) = e {
+                        return Err(SunSpecPointError::CommError(err));
+                    } else {
+                        return Err(SunSpecPointError::GeneralError(err));
+                    }
+                }
+            },
             POINT_TYPE_PAD => {}
             _ => {
                 let err = format!(

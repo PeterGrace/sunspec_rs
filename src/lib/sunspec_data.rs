@@ -38,10 +38,10 @@ impl SunSpecData {
                 format!("models/smdx_{:05}.xml", id)
             }
         };
-        let fd = match File::open(filename) {
+        let fd = match File::open(filename.clone()) {
             Ok(f) => f,
             Err(e) => {
-                anyhow::bail!("Error reading XML file: {e}");
+                anyhow::bail!("Error reading XML file {filename}: {e}");
             }
         };
         let ssm: SunSpecModels = match serde_xml_rs::from_reader(fd) {

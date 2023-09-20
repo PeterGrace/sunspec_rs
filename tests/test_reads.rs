@@ -12,7 +12,7 @@ pub async fn test_string() {
 
     let (ss, _) = common::setup(connection, slave).await;
     let md = ss.models.get(&modelid).unwrap().clone();
-    if let Some(pt) = ss.clone().get_point(md.clone(), field).await {
+    if let Ok(pt) = ss.clone().get_point(md.clone(), field).await {
         if let Some(val) = pt.value {
             if let ValueType::String(testval) = val {
                 assert_eq!(expected, testval);
@@ -20,7 +20,7 @@ pub async fn test_string() {
                 panic!("Inappropriate responsetype")
             }
         } else {
-            panic!("None in pt.value");
+            panic!("Err in pt.value");
         }
     } else {
         panic!("No point data returned");
@@ -37,7 +37,7 @@ pub async fn test_u16() {
 
     let (ss, _) = common::setup(connection, slave).await;
     let md = ss.models.get(&modelid).unwrap().clone();
-    if let Some(pt) = ss.clone().get_point(md.clone(), field).await {
+    if let Ok(pt) = ss.clone().get_point(md.clone(), field).await {
         if let Some(val) = pt.value {
             if let ValueType::Integer(testval) = val {
                 assert_eq!(expected, testval);
@@ -61,7 +61,7 @@ pub async fn test_u32() {
 
     let (ss, _) = common::setup(connection, slave).await;
     let md = ss.models.get(&modelid).unwrap().clone();
-    if let Some(pt) = ss.clone().get_point(md.clone(), field).await {
+    if let Ok(pt) = ss.clone().get_point(md.clone(), field).await {
         if let Some(val) = pt.value {
             if let ValueType::Integer(testval) = val {
                 assert!(expected <= testval);
@@ -85,7 +85,7 @@ pub async fn test_bitfield32() {
 
     let (ss, _) = common::setup(connection, slave).await;
     let md = ss.models.get(&modelid).unwrap().clone();
-    if let Some(pt) = ss.clone().get_point(md.clone(), field).await {
+    if let Ok(pt) = ss.clone().get_point(md.clone(), field).await {
         if let Some(val) = pt.value {
             if let ValueType::Integer(testval) = val {
                 assert!(expected <= testval);
@@ -110,7 +110,7 @@ pub async fn test_i32() {
 
     let (ss, _) = common::setup(connection, slave).await;
     let md = ss.models.get(&modelid).unwrap().clone();
-    if let Some(pt) = ss.clone().get_point(md.clone(), field).await {
+    if let Ok(pt) = ss.clone().get_point(md.clone(), field).await {
         if let Some(val) = pt.value {
             if let ValueType::Integer(testval) = val {
                 assert!(expected <= testval);

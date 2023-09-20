@@ -27,7 +27,7 @@ pub async fn main() {
 
     let ssd = SunSpecData::default();
     for i in 1..99 {
-        let mut ss = match SunSpecConnection::new(addr.clone(), Some(i)).await {
+        let mut ss = match SunSpecConnection::new(addr.clone(), Some(i), false).await {
             Ok(mb) => mb,
             Err(e) => {
                 panic!("Can't create modbus connection: {e}");

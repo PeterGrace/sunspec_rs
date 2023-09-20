@@ -16,7 +16,7 @@ pub struct CliArgs {
 
 pub async fn setup(addr: &str, slave_id: u8) -> (SunSpecConnection, SunSpecData) {
     let socket_addr = addr.parse().unwrap();
-    let mut ss = match SunSpecConnection::new(socket_addr, Some(slave_id)).await {
+    let mut ss = match SunSpecConnection::new(socket_addr, Some(slave_id), false).await {
         Ok(mb) => mb,
         Err(e) => {
             panic!("Can't create modbus connection: {e}");
