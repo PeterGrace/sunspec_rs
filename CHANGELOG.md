@@ -1,4 +1,10 @@
 
+# 2023-09-20 (v0.5.1)
+
+## Added
+
+- `strict_symbols` to `SunSpecConnection` struct, allowing `sunspec_rs` to synthesize names for enums/bitfields if the model is inaccurate
+
 # 2023-09-20 (v0.5.0)
 
 ## Changed
