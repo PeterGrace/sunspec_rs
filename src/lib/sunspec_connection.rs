@@ -112,6 +112,8 @@ pub enum SunSpecWriteError {
         "Value supplied exceeds defined point type (e.g, too long string or too large number.)"
     )]
     ValueWouldOverflow,
+    #[error("General error when writing point: {0}")]
+    General(String),
     #[error("An unspecified error occurred.")]
     #[default]
     Default,
@@ -449,7 +451,7 @@ impl SunSpecConnection {
                     models.insert(id as u16, md);
                 }
                 Err(e) => {
-                    error!("Couldn't create ModelData: {e}");
+                    warn!("Couldn't create ModelData: {e}");
                 }
             };
             address = address + length + 2;
@@ -522,8 +524,8 @@ impl SunSpecConnection {
                     {
                         Ok(_) => return Ok(()),
                         Err(e) => {
-                            error!("Failure to write point: {e}");
-                            return Err(SunSpecWriteError::Default);
+                            debug!("write error: {e}");
+                            return Err(e);
                         }
                     }
                 } else {
@@ -548,8 +550,7 @@ impl SunSpecConnection {
                     {
                         Ok(_) => return Ok(()),
                         Err(e) => {
-                            error!("Failure to write point: {e}");
-                            return Err(SunSpecWriteError::Default);
+                            return Err(e);
                         }
                     }
                 } else {
@@ -646,7 +647,7 @@ impl SunSpecConnection {
                             self.addr,
                             self.slave_num.unwrap_or(0)
                         );
-                        error!(err);
+                        debug!(err);
                         if let SunSpecReadError::CommError(_) = e {
                             return Err(SunSpecPointError::CommError(err));
                         } else {
@@ -682,7 +683,7 @@ impl SunSpecConnection {
                         self.addr,
                         self.slave_num.unwrap_or(0)
                     );
-                    error!(err);
+                    debug!(err);
                     if let SunSpecReadError::CommError(_) = e {
                         return Err(SunSpecPointError::CommError(err));
                     } else {
@@ -701,7 +702,7 @@ impl SunSpecConnection {
                             let err = format!(
                                 "Accumulator datapoint not supported by device (0 value returned)"
                             );
-                            error!(err);
+                            debug!(err);
                             return Err(SunSpecPointError::GeneralError(err));
                         }
                         if let Some(sf_name) = point.clone().scale_factor {
@@ -725,7 +726,7 @@ impl SunSpecConnection {
                             self.addr,
                             self.slave_num.unwrap_or(0)
                         );
-                        error!(err);
+                        debug!(err);
                         if let SunSpecReadError::CommError(_) = e {
                             return Err(SunSpecPointError::CommError(err));
                         } else {
@@ -768,7 +769,7 @@ impl SunSpecConnection {
                         self.addr,
                         self.slave_num.unwrap_or(0)
                     );
-                    error!(err);
+                    debug!(err);
                     if let SunSpecReadError::CommError(_) = e {
                         return Err(SunSpecPointError::CommError(err));
                     } else {
@@ -808,7 +809,7 @@ impl SunSpecConnection {
                         self.addr,
                         self.slave_num.unwrap_or(0)
                     );
-                    error!(err);
+                    debug!(err);
                     if let SunSpecReadError::CommError(_) = e {
                         return Err(SunSpecPointError::CommError(err));
                     } else {
@@ -831,7 +832,7 @@ impl SunSpecConnection {
                         self.addr,
                         self.slave_num.unwrap_or(0)
                     );
-                    error!(err);
+                    debug!(err);
                     if let SunSpecReadError::CommError(_) = e {
                         return Err(SunSpecPointError::CommError(err));
                     } else {
@@ -850,7 +851,7 @@ impl SunSpecConnection {
                             let err = format!(
                                 "Accumulator datapoint not supported by device (0 value returned)"
                             );
-                            error!(err);
+                            debug!(err);
                             return Err(SunSpecPointError::GeneralError(err));
                         }
                         if let Some(sf_name) = point.clone().scale_factor {
@@ -874,7 +875,7 @@ impl SunSpecConnection {
                             self.addr,
                             self.slave_num.unwrap_or(0)
                         );
-                        error!(err);
+                        debug!(err);
                         if let SunSpecReadError::CommError(_) = e {
                             return Err(SunSpecPointError::CommError(err));
                         } else {
@@ -910,7 +911,7 @@ impl SunSpecConnection {
                         self.addr,
                         self.slave_num.unwrap_or(0)
                     );
-                    error!(err);
+                    debug!(err);
                     if let SunSpecReadError::CommError(_) = e {
                         return Err(SunSpecPointError::CommError(err));
                     } else {
@@ -952,7 +953,7 @@ impl SunSpecConnection {
                         self.addr,
                         self.slave_num.unwrap_or(0)
                     );
-                    error!(err);
+                    debug!(err);
                     if let SunSpecReadError::CommError(_) = e {
                         return Err(SunSpecPointError::CommError(err));
                     } else {
@@ -992,7 +993,7 @@ impl SunSpecConnection {
                         self.addr,
                         self.slave_num.unwrap_or(0)
                     );
-                    error!(err);
+                    debug!(err);
                     if let SunSpecReadError::CommError(_) = e {
                         return Err(SunSpecPointError::CommError(err));
                     } else {
@@ -1006,7 +1007,7 @@ impl SunSpecConnection {
                     "{model_name}/{point_name}: unknown point type: {:#?}",
                     point.r#type.as_str()
                 );
-                error!(err);
+                debug!(err);
                 return Err(SunSpecPointError::DoesNotExist(err));
             }
         }
