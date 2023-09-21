@@ -10,7 +10,7 @@ pub struct ModelData {
     pub id: u16,
     pub len: u16,
     pub address: Address,
-    pub(crate) model: SunSpecModels,
+    pub model: SunSpecModels,
     pub scale_factors: HashMap<String, i16>,
 }
 
