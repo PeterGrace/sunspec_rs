@@ -47,8 +47,6 @@ const ERROR_INVALID_RESPONSE_HEADER: &str = "Invalid response header: expected/r
 const DEFAULT_NETWORK_TIMEOUT_MS: u64 = 10_000_u64;
 const DEFAULT_BACKOFF_BASE_MS: u64 = 100_u64;
 
-const RECONNECT_COURTESY_SLEEP_SECS: u64 = 10_u64;
-
 // Addresses are offset by 2. why?  I'd expect them to be offset in the negative per below
 // ====
 // excerpt from SunSpec Information Models v 12401
