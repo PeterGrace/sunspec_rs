@@ -29,14 +29,18 @@ impl Writer for ModbusTestHarness {
         todo!()
     }
 
-    async fn write_multiple_coils(&mut self, addr: Address, data: &'_ [Coil]) -> Result<(), Error> {
+    async fn write_multiple_coils(
+        &mut self,
+        _addr: Address,
+        _data: &'_ [Coil],
+    ) -> Result<(), Error> {
         todo!()
     }
 
     async fn write_multiple_registers(
         &mut self,
-        addr: Address,
-        data: &[Word],
+        _addr: Address,
+        _data: &[Word],
     ) -> Result<(), Error> {
         todo!()
     }
@@ -49,19 +53,19 @@ impl Writer for ModbusTestHarness {
 impl SunSpecConn for ModbusTestHarness {}
 #[async_trait]
 impl Client for ModbusTestHarness {
-    async fn call(&mut self, request: Request<'_>) -> Result<Response, Error> {
+    async fn call(&mut self, _request: Request<'_>) -> Result<Response, Error> {
         todo!()
     }
 }
 
 impl SlaveContext for ModbusTestHarness {
-    fn set_slave(&mut self, slave: Slave) {
+    fn set_slave(&mut self, _slave: Slave) {
         todo!()
     }
 }
 
 impl Debug for ModbusTestHarness {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, _f: &mut Formatter<'_>) -> std::fmt::Result {
         todo!()
     }
 }
@@ -121,10 +125,10 @@ impl Reader for ModbusTestHarness {
 
     async fn read_write_multiple_registers(
         &mut self,
-        read_addr: Address,
-        read_count: Quantity,
-        write_addr: Address,
-        write_data: &[Word],
+        _read_addr: Address,
+        _read_count: Quantity,
+        _write_addr: Address,
+        _write_data: &[Word],
     ) -> Result<Vec<Word>, Error> {
         todo!()
     }
