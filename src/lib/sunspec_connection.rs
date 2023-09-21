@@ -49,6 +49,20 @@ const DEFAULT_BACKOFF_BASE_MS: u64 = 100_u64;
 
 const RECONNECT_COURTESY_SLEEP_SECS: u64 = 10_u64;
 
+// Addresses are offset by 2. why?  I'd expect them to be offset in the negative per below
+// ====
+// excerpt from SunSpec Information Models v 12401
+// Device Modbus maps begin at one of three well-known Modbus base addresses.
+// Preferred Base Register: 40001
+// Alternate Base Register: 50001
+// Alternate Base Register: 00001
+// Base registers are actual register offsets that start at 1 – not a function code and not
+// to be confused with the Modicon convention, which would represent these as
+// 4x40001 and 4x50001.
+// To read register 40001, use the hexadecimal offset of 0x9C40 (40000) on the wire
+// ====
+const ADDR_OFFSET: u16 = 2_u16;
+
 pub type Word = u16;
 
 #[derive(Error, Debug, Default, PartialEq)]
@@ -502,7 +516,10 @@ impl SunSpecConnection {
                         return Err(SunSpecWriteError::ValueWouldOverflow);
                     }
                     match self
-                        .set_u16(2 + md.address + point.offset, val as u16)
+                        .set_u16(
+                            (ADDR_OFFSET + md.address + point.offset) as Address,
+                            val as u16,
+                        )
                         .await
                     {
                         Ok(_) => return Ok(()),
@@ -525,7 +542,10 @@ impl SunSpecConnection {
                         return Err(SunSpecWriteError::ValueWouldOverflow);
                     }
                     match self
-                        .set_u16(2 + md.address + point.offset, val as u16)
+                        .set_u16(
+                            (ADDR_OFFSET + md.address + point.offset) as Address,
+                            val as u16,
+                        )
                         .await
                     {
                         Ok(_) => return Ok(()),
@@ -601,7 +621,10 @@ impl SunSpecConnection {
         match point.r#type.as_str() {
             POINT_TYPE_STRING => {
                 match self
-                    .get_string(2 + md.address + point.offset, point.len.unwrap())
+                    .get_string(
+                        (ADDR_OFFSET + md.address + point.offset) as Address,
+                        point.len.unwrap(),
+                    )
                     .await
                 {
                     Ok(rs) => {
@@ -634,7 +657,10 @@ impl SunSpecConnection {
                     }
                 };
             }
-            POINT_TYPE_INT16 => match self.get_i16(2 + md.address + point.offset).await {
+            POINT_TYPE_INT16 => match self
+                .get_i16((ADDR_OFFSET + md.address + point.offset) as Address)
+                .await
+            {
                 Ok(rs) => {
                     debug!("{model_name}/{point_name} is {rs}!");
                     if let Some(sf_name) = point.clone().scale_factor {
@@ -667,7 +693,10 @@ impl SunSpecConnection {
                 }
             },
             POINT_TYPE_UINT16 | POINT_TYPE_ACC16 => {
-                match self.get_u16(2 + md.address + point.offset).await {
+                match self
+                    .get_u16((ADDR_OFFSET + md.address + point.offset) as Address)
+                    .await
+                {
                     Ok(rs) => {
                         debug!("{model_name}/{point_name} is {rs}!");
                         if point.r#type.as_str() == POINT_TYPE_ACC16 && rs == NOT_ACCUMULATED_16 {
@@ -707,7 +736,10 @@ impl SunSpecConnection {
                     }
                 }
             }
-            POINT_TYPE_ENUM16 => match self.get_u16(2 + md.address + point.offset).await {
+            POINT_TYPE_ENUM16 => match self
+                .get_u16((ADDR_OFFSET + md.address + point.offset) as Address)
+                .await
+            {
                 Ok(rs) => {
                     debug!("{model_name}/{point_name} is {rs}!");
                     if symbols.is_some() {
@@ -746,7 +778,10 @@ impl SunSpecConnection {
                     }
                 }
             },
-            POINT_TYPE_BITFIELD16 => match self.get_u16(2 + md.address + point.offset).await {
+            POINT_TYPE_BITFIELD16 => match self
+                .get_u16((ADDR_OFFSET + md.address + point.offset) as Address)
+                .await
+            {
                 Ok(rs) => {
                     debug!("{model_name}/{point_name} is {rs}!");
                     if symbols.is_some() {
@@ -783,7 +818,10 @@ impl SunSpecConnection {
                     }
                 }
             },
-            POINT_TYPE_SUNSSF => match self.get_i16(2 + md.address + point.offset).await {
+            POINT_TYPE_SUNSSF => match self
+                .get_i16((ADDR_OFFSET + md.address + point.offset) as Address)
+                .await
+            {
                 Ok(rs) => {
                     debug!("{model_name}/{point_name} is {rs}!");
                     point.value = Some(ValueType::Integer(rs as i32));
@@ -804,7 +842,10 @@ impl SunSpecConnection {
                 }
             },
             POINT_TYPE_UINT32 | POINT_TYPE_ACC32 => {
-                match self.get_u32(2 + md.address + point.offset).await {
+                match self
+                    .get_u32((ADDR_OFFSET + md.address + point.offset) as Address)
+                    .await
+                {
                     Ok(rs) => {
                         debug!("{model_name}/{point_name} is {rs}!");
                         if point.r#type.as_str() == POINT_TYPE_ACC32 && rs == NOT_ACCUMULATED_32 {
@@ -844,7 +885,10 @@ impl SunSpecConnection {
                     }
                 }
             }
-            POINT_TYPE_INT32 => match self.get_i32(2 + md.address + point.offset).await {
+            POINT_TYPE_INT32 => match self
+                .get_i32((ADDR_OFFSET + md.address + point.offset) as Address)
+                .await
+            {
                 Ok(rs) => {
                     debug!("{model_name}/{point_name} is {rs}!");
                     if let Some(sf_name) = point.clone().scale_factor {
@@ -876,7 +920,10 @@ impl SunSpecConnection {
                     }
                 }
             },
-            POINT_TYPE_ENUM32 => match self.get_u32(2 + md.address + point.offset).await {
+            POINT_TYPE_ENUM32 => match self
+                .get_u32((ADDR_OFFSET + md.address + point.offset) as Address)
+                .await
+            {
                 Ok(rs) => {
                     debug!("{model_name}/{point_name} is {rs}!");
                     if symbols.is_some() {
@@ -915,7 +962,10 @@ impl SunSpecConnection {
                     }
                 }
             },
-            POINT_TYPE_BITFIELD32 => match self.get_u32(2 + md.address + point.offset).await {
+            POINT_TYPE_BITFIELD32 => match self
+                .get_u32((ADDR_OFFSET + md.address + point.offset) as Address)
+                .await
+            {
                 Ok(rs) => {
                     debug!("{model_name}/{point_name} is {rs}!");
                     if symbols.is_some() {
