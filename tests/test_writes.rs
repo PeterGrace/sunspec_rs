@@ -11,7 +11,8 @@ pub async fn test_write_string_not_exist() {
     let slave: u8 = 9_u8;
     let value = ValueType::String(String::from("woohoo"));
 
-    let (ss, _) = common::setup(connection, slave).await;
+    let buf: Vec<u16> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let (ss, _) = common::setup(buf).await;
     let md = ss.models.get(&modelid).unwrap().clone();
     match ss.clone().set_point(md.clone(), field, value).await {
         Ok(_) => {}
@@ -29,7 +30,8 @@ pub async fn test_write_string_read_only() {
     let slave: u8 = 9_u8;
     let value = ValueType::String(String::from("woohoo"));
 
-    let (ss, _) = common::setup(connection, slave).await;
+    let buf: Vec<u16> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let (ss, _) = common::setup(buf).await;
     let md = ss.models.get(&modelid).unwrap().clone();
     match ss.clone().set_point(md.clone(), field, value).await {
         Ok(_) => {}
@@ -46,7 +48,8 @@ pub async fn test_write_string_wrong_type() {
     let slave: u8 = 9_u8;
     let value = ValueType::String(String::from("woohoo"));
 
-    let (ss, _) = common::setup(connection, slave).await;
+    let buf: Vec<u16> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let (ss, _) = common::setup(buf).await;
     let md = ss.models.get(&modelid).unwrap().clone();
     match ss.clone().set_point(md.clone(), field, value).await {
         Ok(_) => {}
@@ -63,7 +66,8 @@ pub async fn test_write_enum32_value_too_big() {
     let slave: u8 = 9_u8;
     let value = ValueType::Integer(77777_i32);
 
-    let (ss, _) = common::setup(connection, slave).await;
+    let buf: Vec<u16> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let (ss, _) = common::setup(buf).await;
     let md = ss.models.get(&modelid).unwrap().clone();
     match ss.clone().set_point(md.clone(), field, value).await {
         Ok(_) => {}

@@ -1,3 +1,4 @@
+use crate::modbus_test_harness::ModbusTestHarness;
 use crate::model_data::ModelData;
 use crate::sunspec_data::SunSpecData;
 use crate::sunspec_models::{Access, LiteralType, Point, Symbol, ValueType};
@@ -5,14 +6,13 @@ use async_recursion::async_recursion;
 use bitvec::macros::internal::funty::Fundamental;
 use bitvec::prelude::*;
 use std::collections::HashMap;
-use std::mem::replace;
 use std::net::SocketAddr;
 use std::string::ToString;
 use std::sync::Arc;
 use std::time::Duration;
 use thiserror::Error;
 use tokio::sync::Mutex;
-use tokio::time::{sleep, timeout};
+use tokio::time::timeout;
 use tokio_modbus::client::{tcp, Context, Reader, Writer};
 use tokio_modbus::{Address, Quantity, Slave};
 use tokio_retry::strategy::{jitter, ExponentialBackoff};
@@ -105,6 +105,8 @@ pub enum SunSpecWriteError {
     Default,
 }
 
+pub trait SunSpecConn: Reader + Writer {}
+impl SunSpecConn for Context {}
 /// A SunSpecConnection holds the address and slave id for the modbus connection, as well as the
 /// actual connection object itself as well as the modeldata for all of the exposed models on
 /// that connection.
@@ -115,7 +117,7 @@ pub struct SunSpecConnection {
     /// an optional number for modbus slave address
     slave_num: Option<u8>,
     /// the tokio-modbus Context object that is used for communication
-    pub(crate) ctx: Arc<Mutex<Context>>,
+    pub(crate) ctx: Arc<Mutex<Box<dyn SunSpecConn>>>,
     /// a map of the model definitions related to this connection (populated via populate_models)
     pub models: HashMap<u16, ModelData>,
     /// boolean value that causes get_point to force an error if a symbol doesn't exist.  A false
@@ -124,45 +126,6 @@ pub struct SunSpecConnection {
 }
 
 impl SunSpecConnection {
-    //region connection restart
-    pub async fn restart_connection(mut self) {
-        let mut ctx = self.ctx.lock().await;
-        if let Err(e) = ctx.disconnect().await {
-            error!("Couldn't disconnect from modbus: {e}");
-        }
-        sleep(Duration::from_secs(RECONNECT_COURTESY_SLEEP_SECS)).await;
-
-        let newctx: Context;
-        if self.slave_num.is_some() {
-            let slid = self.slave_num.unwrap();
-            newctx = match tcp::connect_slave(self.addr, Slave(slid)).await {
-                Ok(ctx) => {
-                    info!("Reconnected to modbus client at {}/{}", self.addr, slid);
-                    ctx
-                }
-                Err(e) => {
-                    panic!("Can't reconnect to slave: {e}");
-                }
-            };
-        } else {
-            newctx = match tcp::connect(self.addr).await {
-                Ok(ctx) => {
-                    info!("Reconnected to modbus client at {}", self.addr);
-                    ctx
-                }
-                Err(e) => {
-                    panic!("Can't reconnect: {e}");
-                }
-            };
-        }
-
-        let arc_ctx = Arc::new(Mutex::new(newctx));
-        drop(ctx);
-        let oldctx = replace(&mut self.ctx, arc_ctx);
-        drop(oldctx);
-    }
-    //endregion
-
     /// Return a new sunspec connection which is ready to communicate with the modbus host.
     ///
     /// # Arguments
@@ -200,11 +163,21 @@ impl SunSpecConnection {
             };
         }
 
-        let arc_ctx = Arc::new(Mutex::new(ctx));
+        //let arc_ctx = Arc::new(Mutex::new(ctx));
         Ok(SunSpecConnection {
             addr: socket_addr,
             slave_num,
-            ctx: arc_ctx,
+            ctx: Arc::new(Mutex::new(Box::new(ctx))),
+            models: HashMap::new(),
+            strict_symbol,
+        })
+    }
+
+    pub async fn test_new(testbuf: ModbusTestHarness, strict_symbol: bool) -> anyhow::Result<Self> {
+        Ok(SunSpecConnection {
+            addr: "127.0.0.1:5083".parse()?,
+            slave_num: Some(0_u8),
+            ctx: Arc::new(Mutex::new(Box::new(testbuf))),
             models: HashMap::new(),
             strict_symbol,
         })
@@ -378,7 +351,6 @@ impl SunSpecConnection {
         {
             Ok(_) => Ok(()),
             Err(e) => {
-                //self.restart_connection().await;
                 return Err(e);
             }
         }
@@ -408,7 +380,6 @@ impl SunSpecConnection {
         {
             Ok(e) => Ok(e),
             Err(e) => {
-                //self.restart_connection().await;
                 return Err(e);
             }
         }
@@ -999,7 +970,7 @@ impl SunSpecConnection {
 
 //region actual code that reads holding registers (for retry logic)
 pub(crate) async fn action_read_holding_registers(
-    actx: &Arc<Mutex<Context>>,
+    actx: &Arc<Mutex<Box<dyn SunSpecConn>>>,
     addr: Address,
     q: Quantity,
 ) -> Result<Vec<Word>, SunSpecCommError> {
@@ -1053,7 +1024,7 @@ pub(crate) async fn action_read_holding_registers(
 
 //region actual code that writes a single register
 pub(crate) async fn action_write_register(
-    actx: &Arc<Mutex<Context>>,
+    actx: &Arc<Mutex<Box<dyn SunSpecConn>>>,
     addr: Address,
     data: Word,
 ) -> Result<(), SunSpecCommError> {

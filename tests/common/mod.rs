@@ -1,9 +1,16 @@
+use sunspec_rs::modbus_test_harness::ModbusTestHarness;
+use sunspec_rs::model_data::ModelData;
 use sunspec_rs::sunspec_connection::SunSpecConnection;
 use sunspec_rs::sunspec_data::SunSpecData;
 
-pub async fn setup(addr: &str, slave_id: u8) -> (SunSpecConnection, SunSpecData) {
-    let socket_addr = addr.parse().unwrap();
-    let mut ss = match SunSpecConnection::new(socket_addr, Some(slave_id), false).await {
+pub async fn setup(
+    modelid: u16,
+    model_field: String,
+    manufacturer: String,
+    buf_contents: Vec<u16>,
+) -> (SunSpecConnection, SunSpecData, ModelData) {
+    let meh = ModbusTestHarness { buf: buf_contents };
+    let mut ss = match SunSpecConnection::test_new(meh, false).await {
         Ok(mb) => mb,
         Err(e) => {
             panic!("Can't create modbus connection: {e}");
@@ -17,6 +24,13 @@ pub async fn setup(addr: &str, slave_id: u8) -> (SunSpecConnection, SunSpecData)
             panic!("Can't populate models: {e}")
         }
     };
-
-    return (ss, ssd);
+    let model = ssd.clone().get_model(modelid, Some(manufacturer)).unwrap();
+    let md = ModelData {
+        id: modelid,
+        len: model.model.len,
+        address: model.model.id,
+        model: model.clone(),
+        scale_factors: Default::default(),
+    };
+    (ss, ssd, md)
 }
