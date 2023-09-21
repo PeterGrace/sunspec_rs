@@ -1,4 +1,14 @@
 
+# 2023-09-21 (v0.5.2)
+
+## Added
+
+- Added ability to do integration tests without requiring an actual sunspec device - data is mocked as a Vec<u16> buffer.
+
+## Changed
+
+- ModelData.model was private, now made public to facilitate usage in test harness
+
 # 2023-09-20 (v0.5.1)
 
 ## Added
