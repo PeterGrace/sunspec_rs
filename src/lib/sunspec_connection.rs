@@ -1,3 +1,4 @@
+use crate::metrics::{MODBUS_GET, MODBUS_SET};
 use crate::modbus_test_harness::ModbusTestHarness;
 use crate::model_data::ModelData;
 use crate::sunspec_data::SunSpecData;
@@ -149,6 +150,7 @@ impl SunSpecConnection {
     /// * `strict_symbol` - whether to use strict symbol lookup or allow synthesized
     ///                     names based on point
     //region new sunspec connection
+
     pub async fn new(
         socket_addr: String,
         slave_num: Option<u8>,
@@ -205,11 +207,13 @@ impl SunSpecConnection {
     ///
     /// * `addr` - A memory offset address to read, e.g. 40002
     /// * `quantity` - The number of 16-bit values to read from the bus
+
     pub async fn get_string(
         &mut self,
         addr: Address,
         quantity: Quantity,
     ) -> Result<String, SunSpecReadError> {
+        let _ = MODBUS_GET.with_label_values(&["string"]).start_timer();
         let data = match self
             .clone()
             .retry_read_holding_registers(addr, quantity)
@@ -237,7 +241,9 @@ impl SunSpecConnection {
     /// # Arguments
     ///
     /// * `addr` - A memory offset address to read, e.g. 40002
+
     pub async fn get_i16(&mut self, addr: Address) -> Result<i16, SunSpecReadError> {
+        let _ = MODBUS_GET.with_label_values(&["i16"]).start_timer();
         let data = match self.clone().retry_read_holding_registers(addr, 1).await {
             Ok(data) => {
                 if data[0] == NOT_IMPLEMENTED_I16 {
@@ -255,6 +261,7 @@ impl SunSpecConnection {
     ///
     /// * `addr` - A memory offset address to read, e.g. 40002
     pub async fn get_u16(&mut self, addr: Address) -> Result<u16, SunSpecReadError> {
+        let _ = MODBUS_GET.with_label_values(&["u16"]).start_timer();
         let data = match self.clone().retry_read_holding_registers(addr, 1).await {
             Ok(data) => {
                 if data[0] == NOT_IMPLEMENTED_U16 {
@@ -272,7 +279,9 @@ impl SunSpecConnection {
     /// # Arguments
     ///
     /// * `addr` - A memory offset address to read, e.g. 40002
+
     async fn get_u16_no_check(&mut self, addr: Address) -> Result<u16, SunSpecReadError> {
+        let _ = MODBUS_GET.with_label_values(&["u16_nocheck"]).start_timer();
         let data = match self.clone().retry_read_holding_registers(addr, 1).await {
             Ok(data) => data[0],
 
@@ -287,6 +296,7 @@ impl SunSpecConnection {
     /// * `addr` - A memory offset address to read, e.g. 40002
     /// * `data` - A single 16 bit unsigned integer.
     pub async fn set_u16(&mut self, addr: Address, data: u16) -> Result<(), SunSpecWriteError> {
+        let _ = MODBUS_SET.with_label_values(&["u16"]).start_timer();
         let word: Word = data;
         match self.clone().retry_write_register(addr, word).await {
             Ok(_) => {}
@@ -303,7 +313,9 @@ impl SunSpecConnection {
     /// # Arguments
     ///
     /// * `addr` - A memory offset address to read, e.g. 40002
+
     pub async fn get_i32(&mut self, addr: Address) -> Result<i32, SunSpecReadError> {
+        let _ = MODBUS_GET.with_label_values(&["i32"]).start_timer();
         match self.clone().retry_read_holding_registers(addr, 2).await {
             // because holding_registers works in 16 bit "words", we need to combine two words into
             // one word here to get a 32 bit number.
@@ -327,7 +339,9 @@ impl SunSpecConnection {
     /// # Arguments
     ///
     /// * `addr` - A memory offset address to read, e.g. 40002
+
     pub async fn get_u32(&mut self, addr: Address) -> Result<u32, SunSpecReadError> {
+        let _ = MODBUS_GET.with_label_values(&["u32"]).start_timer();
         match self.clone().retry_read_holding_registers(addr, 2).await {
             // because holding_registers works in 16 bit "words", we need to combine two words into
             // one word here to get a 32 bit number.
@@ -346,6 +360,7 @@ impl SunSpecConnection {
     }
     //endregion
     //region inner writing register retry logic
+
     pub(crate) async fn retry_write_register(
         self,
         addr: Address,
@@ -372,6 +387,7 @@ impl SunSpecConnection {
     //endregion
 
     //region inner holding registers retry logic
+
     pub(crate) async fn retry_read_holding_registers(
         self,
         addr: Address,
@@ -401,6 +417,7 @@ impl SunSpecConnection {
     //endregion
 
     //region gather models from the device and store them
+
     pub async fn populate_models(
         mut self,
         data: &SunSpecData,
@@ -474,6 +491,7 @@ impl SunSpecConnection {
     /// # Response
     /// Returns a SunSpecWriteError if setting point fails, otherwise returns nothing.
     #[async_recursion]
+
     pub async fn set_point(
         mut self,
         md: ModelData,
@@ -577,6 +595,7 @@ impl SunSpecConnection {
     /// * `name` - The name of the point you're querying, e.g. "PhVPhA" -- you can find these
     ///            values specified in the sunspec model files.
     #[async_recursion]
+
     pub async fn get_point(
         mut self,
         mut md: ModelData,
@@ -601,7 +620,7 @@ impl SunSpecConnection {
             let err = format!(
                 "You asked for point {model_name}/{point_name} but it doesn't exist in the model."
             );
-            warn!(err);
+            warn!("{err}");
             return Err(SunSpecPointError::DoesNotExist(err));
         }
         //region if there's literals for this point, populate them
@@ -1018,6 +1037,7 @@ impl SunSpecConnection {
 }
 
 //region actual code that reads holding registers (for retry logic)
+
 pub(crate) async fn action_read_holding_registers(
     actx: &Arc<Mutex<Box<dyn SunSpecConn>>>,
     addr: Address,
@@ -1072,6 +1092,7 @@ pub(crate) async fn action_read_holding_registers(
 //endregion
 
 //region actual code that writes a single register
+
 pub(crate) async fn action_write_register(
     actx: &Arc<Mutex<Box<dyn SunSpecConn>>>,
     addr: Address,
