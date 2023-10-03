@@ -15,7 +15,7 @@ pub async fn test_string() {
     let buf: Vec<u16> = string_to_vec_word(String::from(expected));
     let (ss, ssd, md) =
         common::setup(modelid, String::from(field), String::from("Test"), buf).await;
-    if let Ok(pt) = ss.clone().get_point(md.clone(), field).await {
+    if let Ok(pt) = ss.clone().get_point(md.clone(), field, None).await {
         if let Some(val) = pt.value {
             if let ValueType::String(testval) = val {
                 assert_eq!(expected, testval);
@@ -41,7 +41,7 @@ pub async fn test_u16() {
     let buf: Vec<u16> = vec![expected as u16];
     let (ss, ssd, md) =
         common::setup(modelid, String::from(field), String::from("Pika"), buf).await;
-    if let Ok(pt) = ss.clone().get_point(md.clone(), field).await {
+    if let Ok(pt) = ss.clone().get_point(md.clone(), field, None).await {
         if let Some(val) = pt.value {
             if let ValueType::Integer(testval) = val {
                 assert_eq!(expected, testval);
@@ -64,10 +64,10 @@ pub async fn test_u32() {
     let slave: u8 = 3_u8;
     let expected: i32 = 6;
 
-    let buf: Vec<u16> = vec![expected as u16];
+    let buf: Vec<u16> = vec![0b0, 0b110];
     let (ss, ssd, md) =
         common::setup(modelid, String::from(field), String::from("Generac"), buf).await;
-    if let Ok(pt) = ss.clone().get_point(md.clone(), field).await {
+    if let Ok(pt) = ss.clone().get_point(md.clone(), field, None).await {
         if let Some(val) = pt.value {
             if let ValueType::Integer(testval) = val {
                 assert!(expected <= testval);
@@ -96,7 +96,7 @@ pub async fn test_bitfield16() {
     let (ss, ssd, md) =
         common::setup(modelid, String::from(field), String::from("Generac"), buf).await;
 
-    if let Ok(pt) = ss.clone().get_point(md.clone(), field).await {
+    if let Ok(pt) = ss.clone().get_point(md.clone(), field, None).await {
         if let Some(val) = pt.value {
             if let ValueType::Array(testval) = val {
                 assert_eq!(testval, expected_strings);
@@ -122,7 +122,7 @@ pub async fn test_i32() {
     let (ss, ssd, md) =
         common::setup(modelid, String::from(field), String::from("Generac"), buf).await;
 
-    if let Ok(pt) = ss.clone().get_point(md.clone(), field).await {
+    if let Ok(pt) = ss.clone().get_point(md.clone(), field, None).await {
         if let Some(val) = pt.value {
             if let ValueType::Integer(testval) = val {
                 assert_eq!(expected, testval);

@@ -12,8 +12,8 @@ pub async fn test_write_string_not_exist() {
     let value = ValueType::String(String::from("woohoo"));
 
     let buf: Vec<u16> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    let (ss, _) = common::setup(buf).await;
-    let md = ss.models.get(&modelid).unwrap().clone();
+    let (ss, _ssd, md) =
+        common::setup(modelid, String::from(field), String::from("Generac"), buf).await;
     match ss.clone().set_point(md.clone(), field, value).await {
         Ok(_) => {}
         Err(e) => {
@@ -31,8 +31,8 @@ pub async fn test_write_string_read_only() {
     let value = ValueType::String(String::from("woohoo"));
 
     let buf: Vec<u16> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    let (ss, _) = common::setup(buf).await;
-    let md = ss.models.get(&modelid).unwrap().clone();
+    let (ss, _ssd, md) =
+        common::setup(modelid, String::from(field), String::from("Generac"), buf).await;
     match ss.clone().set_point(md.clone(), field, value).await {
         Ok(_) => {}
         Err(e) => {
@@ -49,8 +49,8 @@ pub async fn test_write_string_wrong_type() {
     let value = ValueType::String(String::from("woohoo"));
 
     let buf: Vec<u16> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    let (ss, _) = common::setup(buf).await;
-    let md = ss.models.get(&modelid).unwrap().clone();
+    let (ss, _ssd, md) =
+        common::setup(modelid, String::from(field), String::from("Generac"), buf).await;
     match ss.clone().set_point(md.clone(), field, value).await {
         Ok(_) => {}
         Err(e) => {
@@ -67,8 +67,8 @@ pub async fn test_write_enum32_value_too_big() {
     let value = ValueType::Integer(77777_i32);
 
     let buf: Vec<u16> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    let (ss, _) = common::setup(buf).await;
-    let md = ss.models.get(&modelid).unwrap().clone();
+    let (ss, _ssd, md) =
+        common::setup(modelid, String::from(field), String::from("Generac"), buf).await;
     match ss.clone().set_point(md.clone(), field, value).await {
         Ok(_) => {}
         Err(e) => {
