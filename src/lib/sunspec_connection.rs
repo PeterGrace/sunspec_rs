@@ -6,6 +6,7 @@ use crate::sunspec_models::{Access, LiteralType, Point, Symbol, ValueType};
 use async_recursion::async_recursion;
 use bitvec::macros::internal::funty::Fundamental;
 use bitvec::prelude::*;
+use num_traits::pow::Pow;
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::string::ToString;
@@ -18,7 +19,6 @@ use tokio_modbus::client::{tcp, Context, Reader, Writer};
 use tokio_modbus::{Address, Quantity, Slave};
 use tokio_retry::strategy::{jitter, ExponentialBackoff};
 use tokio_retry::RetryIf;
-use num_traits::pow::Pow;
 
 const SUNSPEC_END_MODEL_ID: u16 = 65535;
 const POINT_TYPE_STRING: &str = "string";
@@ -61,6 +61,8 @@ const DEFAULT_BACKOFF_BASE_MS: u64 = 100_u64;
 // 4x40001 and 4x50001.
 // To read register 40001, use the hexadecimal offset of 0x9C40 (40000) on the wire
 // ====
+// 2023-10-03: I think I know why and it's pretty obvious when I think about it.  Model Id and
+// Model Length are each u16 values.  Maybe?
 const ADDR_OFFSET: u16 = 2_u16;
 
 pub type Word = u16;
@@ -472,7 +474,7 @@ impl SunSpecConnection {
                     warn!("Couldn't create ModelData: {e}");
                 }
             };
-            address = address + length + 2;
+            address = address + length + ADDR_OFFSET;
         }
         Ok(models)
     }
@@ -601,7 +603,7 @@ impl SunSpecConnection {
         mut self,
         mut md: ModelData,
         point_name: &str,
-        which_block: Option<u16>
+        which_block: Option<u16>,
     ) -> Result<Point, SunSpecPointError> {
         let mut point = Point::default();
         let mut symbols: Option<Vec<Symbol>> = None;
@@ -655,15 +657,22 @@ impl SunSpecConnection {
             }
 
             // user is requesting data from a repeating block
-            let first_block_type = model.block[0].r#type.clone().unwrap_or(String::from("none"));
+            let first_block_type = model.block[0]
+                .r#type
+                .clone()
+                .unwrap_or(String::from("none"));
             let mut fixed_block_len: u16 = 0;
 
             if first_block_type != "repeating" {
                 if model.block.len() == 1 {
-                    return Err(SunSpecPointError::GeneralError(format!("Requested a repeating block but none exist on this model.")));
+                    return Err(SunSpecPointError::GeneralError(format!(
+                        "Requested a repeating block but none exist on this model."
+                    )));
                 }
                 if block_id == 0 {
-                    return Err(SunSpecPointError::GeneralError(format!("Requested repeating block at index 0 but index 0 contains a fixed block.")));
+                    return Err(SunSpecPointError::GeneralError(format!(
+                        "Requested repeating block at index 0 but index 0 contains a fixed block."
+                    )));
                 }
             }
 
@@ -764,7 +773,9 @@ impl SunSpecConnection {
                             return Err(SunSpecPointError::GeneralError(err));
                         }
                         if let Some(sf_name) = point.clone().scale_factor {
-                            if let Some(sf) = md.get_scale_factor(&sf_name, self.clone(), None).await {
+                            if let Some(sf) =
+                                md.get_scale_factor(&sf_name, self.clone(), None).await
+                            {
                                 let mut _adj: f32 = 0.0;
                                 if sf >= 0 {
                                     _adj = (rs as f32 * f32::pow(10.0, sf.abs() as f32)).into();
@@ -913,7 +924,9 @@ impl SunSpecConnection {
                             return Err(SunSpecPointError::GeneralError(err));
                         }
                         if let Some(sf_name) = point.clone().scale_factor {
-                            if let Some(sf) = md.get_scale_factor(&sf_name, self.clone(), None).await {
+                            if let Some(sf) =
+                                md.get_scale_factor(&sf_name, self.clone(), None).await
+                            {
                                 let mut _adj: f32 = 0.0;
                                 if sf >= 0 {
                                     _adj = rs.as_f32() * (10_f32 * sf.abs() as f32);
@@ -1059,7 +1072,10 @@ impl SunSpecConnection {
                     }
                 }
             },
-            POINT_TYPE_PAD => {}
+            POINT_TYPE_PAD => {
+                point.value = Some(ValueType::Pad);
+                return Ok(point);
+            }
             _ => {
                 let err = format!(
                     "{model_name}/{point_name}: unknown point type: {:#?}",
@@ -1090,7 +1106,10 @@ pub(crate) async fn action_read_holding_registers(
     .await
     {
         Ok(future) => match future {
-            Ok(data) => Ok(data),
+            Ok(data) => {
+                trace!("{:#x?}", data);
+                Ok(data)
+            }
             Err(e) => match e.raw_os_error() {
                 None => match e.to_string().as_str() {
                     ERROR_ILLEGAL_DATA_VALUE => {

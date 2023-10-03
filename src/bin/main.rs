@@ -66,11 +66,11 @@ pub async fn main() {
         let block_count = md.clone().get_block_count().unwrap();
         info!("{:#?}", block_count);
         for f in _fields {
-            for b in 1..block_count+1 {
+            for b in 1..block_count + 1 {
                 match ss.clone().get_point(md.clone(), f, Some(b)).await {
                     Ok(pt) => {
                         debug!("{:#?}", pt.value);
-                    },
+                    }
                     Err(e) => {
                         error!("Error received: {e}");
                     }

@@ -1,8 +1,5 @@
 use lazy_static::lazy_static;
-use prometheus::{
-    histogram_opts, register_histogram_vec,
-    HistogramVec,
-};
+use prometheus::{histogram_opts, register_histogram_vec, HistogramVec};
 const PROM_NAMESPACE: &str = "sunspec_rs";
 
 macro_rules! app_histogram_opts {

@@ -21,9 +21,8 @@ pub enum SunSpecModelDataError {
     Remainder,
     #[error("Default error")]
     #[default]
-    Error
+    Error,
 }
-
 
 impl ModelData {
     /// create new modeldata object
@@ -56,7 +55,10 @@ impl ModelData {
     /// Returns the number of blocks for this model
     pub fn get_block_count(self) -> Result<u16, SunSpecModelDataError> {
         let model = self.model.model.clone();
-        let first_block_type = model.block[0].r#type.clone().unwrap_or(String::from("none"));
+        let first_block_type = model.block[0]
+            .r#type
+            .clone()
+            .unwrap_or(String::from("none"));
         let model_len = self.len; // the length of the actual model
 
         if first_block_type == "repeating" {
@@ -68,7 +70,8 @@ impl ModelData {
             }
             let num_blocks = (model_len - fixed_block_len) / repeat_block_len;
             Ok(num_blocks)
-        } else if self.model.model.block.len() > 1 { // the length of the array of read-in blocks
+        } else if self.model.model.block.len() > 1 {
+            // the length of the array of read-in blocks
             let fixed_block_len = model.block[0].len; // the length of the fixed block
             let repeat_block_len = model.block[1].len; // the length of the repeating block
             if (model_len - fixed_block_len) % repeat_block_len != 0 {
@@ -89,7 +92,12 @@ impl ModelData {
     ///
     /// * `name` - The name of the point inside our model to query
     /// * `conn` - The SunSpecConnection we have open already (so that we can query the proper connection)
-    pub async fn get_scale_factor(&mut self, name: &str, conn: SunSpecConnection, block: Option<u16>) -> Option<i16> {
+    pub async fn get_scale_factor(
+        &mut self,
+        name: &str,
+        conn: SunSpecConnection,
+        block: Option<u16>,
+    ) -> Option<i16> {
         if let Some(value) = self.scale_factors.get(name) {
             return Some(*value);
         } else {
