@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::sunspec_models::{Model, SunSpecModels};
+use crate::sunspec_models::{Model, SunSpecModels, Symbol};
 use std::fs::File;
 
 #[derive(Default, Debug)]
@@ -78,5 +78,21 @@ impl SunSpecData {
         } else {
             Some(lookup.unwrap().clone())
         }
+    }
+    pub fn get_symbols_for_point(
+        self,
+        id: u16,
+        point_name: String,
+        mn: Option<String>,
+    ) -> Option<Vec<Symbol>> {
+        if let Some(model) = self.get_model(id, mn) {
+            let points = &model.model.block[0].point;
+            for point in points.iter() {
+                if point.id == point_name {
+                    return point.symbol.clone();
+                }
+            }
+        }
+        None
     }
 }

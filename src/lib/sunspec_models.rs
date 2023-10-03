@@ -81,9 +81,9 @@ pub struct Point {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Symbol {
-    pub(crate) id: String,
+    pub id: String,
     #[serde(rename = "$value")]
-    pub(crate) symbol: String,
+    pub symbol: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
