@@ -18,6 +18,7 @@ use tokio_modbus::client::{tcp, Context, Reader, Writer};
 use tokio_modbus::{Address, Quantity, Slave};
 use tokio_retry::strategy::{jitter, ExponentialBackoff};
 use tokio_retry::RetryIf;
+use num_traits::pow::Pow;
 
 const SUNSPEC_END_MODEL_ID: u16 = 65535;
 const POINT_TYPE_STRING: &str = "string";
@@ -723,9 +724,9 @@ impl SunSpecConnection {
                         if let Some(sf) = md.get_scale_factor(&sf_name, self.clone(), None).await {
                             let mut _adj: f32 = 0.0;
                             if sf >= 0 {
-                                _adj = (rs * (10 * sf.abs())).into();
+                                _adj = (rs as f32 * f32::pow(10.0, sf.abs() as f32)).into();
                             } else {
-                                _adj = (rs / (10 * sf.abs())).into();
+                                _adj = (rs as f32 / f32::pow(10.0, sf.abs() as f32)).into();
                             }
                             point.value = Some(ValueType::Float(_adj));
                             return Ok(point);
@@ -766,9 +767,9 @@ impl SunSpecConnection {
                             if let Some(sf) = md.get_scale_factor(&sf_name, self.clone(), None).await {
                                 let mut _adj: f32 = 0.0;
                                 if sf >= 0 {
-                                    _adj = rs.as_f32() * (10_f32 * sf.abs() as f32);
+                                    _adj = (rs as f32 * f32::pow(10.0, sf.abs() as f32)).into();
                                 } else {
-                                    _adj = rs.as_f32() / (10_f32 * sf.abs() as f32);
+                                    _adj = (rs as f32 / f32::pow(10.0, sf.abs() as f32)).into();
                                 }
                                 point.value = Some(ValueType::Float(_adj));
                                 return Ok(point);
