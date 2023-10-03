@@ -6,6 +6,7 @@ use crate::sunspec_models::{Access, LiteralType, Point, Symbol, ValueType};
 use async_recursion::async_recursion;
 use bitvec::macros::internal::funty::Fundamental;
 use bitvec::prelude::*;
+use num_traits::pow::Pow;
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::string::ToString;
@@ -60,6 +61,8 @@ const DEFAULT_BACKOFF_BASE_MS: u64 = 100_u64;
 // 4x40001 and 4x50001.
 // To read register 40001, use the hexadecimal offset of 0x9C40 (40000) on the wire
 // ====
+// 2023-10-03: I think I know why and it's pretty obvious when I think about it.  Model Id and
+// Model Length are each u16 values.  Maybe?
 const ADDR_OFFSET: u16 = 2_u16;
 
 pub type Word = u16;
@@ -471,7 +474,7 @@ impl SunSpecConnection {
                     warn!("Couldn't create ModelData: {e}");
                 }
             };
-            address = address + length + 2;
+            address = address + length + ADDR_OFFSET;
         }
         Ok(models)
     }
@@ -600,27 +603,36 @@ impl SunSpecConnection {
         mut self,
         mut md: ModelData,
         point_name: &str,
+        which_block: Option<u16>,
     ) -> Result<Point, SunSpecPointError> {
         let mut point = Point::default();
         let mut symbols: Option<Vec<Symbol>> = None;
         let model = md.model.model.clone();
         let model_name = model.name;
-        model.block.iter().for_each(|b| {
+
+        model.block.iter().enumerate().for_each(|(idx, b)| {
             b.point.iter().for_each(|p| {
                 if p.id == point_name {
+                    if let Some(requested_block) = which_block {
+                        if requested_block != idx as u16 {
+                            error!("Requested point {point_name} found in block {idx}, not {requested_block}.");
+                            return
+                        }
+                    }
                     point = p.clone();
                     // if this point also has associated symbols (enum/bitfield), copy them in too
                     if p.symbol.is_some() {
                         symbols = p.symbol.clone();
                     }
+                    return
                 }
             })
         });
         if point.id.len() == 0 {
             let err = format!(
-                "You asked for point {model_name}/{point_name} but it doesn't exist in the model."
+                "You asked for point {model_name}/{point_name} but it doesn't exist in the specified block."
             );
-            warn!("{err}");
+            error!("{err}");
             return Err(SunSpecPointError::DoesNotExist(err));
         }
         //region if there's literals for this point, populate them
@@ -633,14 +645,50 @@ impl SunSpecConnection {
                 }
             }
         }
-
         //endregion
+        let mut block_offset: u16 = 0_u16;
+        if which_block.is_some() {
+            let block_id = which_block.unwrap();
+            let mut block_location: u16 = 0;
+            if block_id > 0 {
+                block_location = block_id - 1;
+            } else {
+                block_location = 0;
+            }
+
+            // user is requesting data from a repeating block
+            let first_block_type = model.block[0]
+                .r#type
+                .clone()
+                .unwrap_or(String::from("none"));
+            let mut fixed_block_len: u16 = 0;
+
+            if first_block_type != "repeating" {
+                if model.block.len() == 1 {
+                    return Err(SunSpecPointError::GeneralError(format!(
+                        "Requested a repeating block but none exist on this model."
+                    )));
+                }
+                if block_id == 0 {
+                    return Err(SunSpecPointError::GeneralError(format!(
+                        "Requested repeating block at index 0 but index 0 contains a fixed block."
+                    )));
+                }
+            }
+
+            if first_block_type == "repeating" {
+                fixed_block_len = 0;
+            } else {
+                fixed_block_len = model.block[0].len;
+            }
+            block_offset = fixed_block_len + (block_location * model.block[1].len);
+        }
 
         match point.r#type.as_str() {
             POINT_TYPE_STRING => {
                 match self
                     .get_string(
-                        (ADDR_OFFSET + md.address + point.offset) as Address,
+                        (ADDR_OFFSET + md.address + point.offset + block_offset) as Address,
                         point.len.unwrap(),
                     )
                     .await
@@ -676,18 +724,18 @@ impl SunSpecConnection {
                 };
             }
             POINT_TYPE_INT16 => match self
-                .get_i16((ADDR_OFFSET + md.address + point.offset) as Address)
+                .get_i16((ADDR_OFFSET + md.address + point.offset + block_offset) as Address)
                 .await
             {
                 Ok(rs) => {
                     debug!("{model_name}/{point_name} is {rs}!");
                     if let Some(sf_name) = point.clone().scale_factor {
-                        if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
+                        if let Some(sf) = md.get_scale_factor(&sf_name, self.clone(), None).await {
                             let mut _adj: f32 = 0.0;
                             if sf >= 0 {
-                                _adj = (rs * (10 * sf.abs())).into();
+                                _adj = (rs as f32 * f32::pow(10.0, sf.abs() as f32)).into();
                             } else {
-                                _adj = (rs / (10 * sf.abs())).into();
+                                _adj = (rs as f32 / f32::pow(10.0, sf.abs() as f32)).into();
                             }
                             point.value = Some(ValueType::Float(_adj));
                             return Ok(point);
@@ -712,7 +760,7 @@ impl SunSpecConnection {
             },
             POINT_TYPE_UINT16 | POINT_TYPE_ACC16 => {
                 match self
-                    .get_u16((ADDR_OFFSET + md.address + point.offset) as Address)
+                    .get_u16((ADDR_OFFSET + md.address + point.offset + block_offset) as Address)
                     .await
                 {
                     Ok(rs) => {
@@ -725,12 +773,14 @@ impl SunSpecConnection {
                             return Err(SunSpecPointError::GeneralError(err));
                         }
                         if let Some(sf_name) = point.clone().scale_factor {
-                            if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
+                            if let Some(sf) =
+                                md.get_scale_factor(&sf_name, self.clone(), None).await
+                            {
                                 let mut _adj: f32 = 0.0;
                                 if sf >= 0 {
-                                    _adj = rs.as_f32() * (10_f32 * sf.abs() as f32);
+                                    _adj = (rs as f32 * f32::pow(10.0, sf.abs() as f32)).into();
                                 } else {
-                                    _adj = rs.as_f32() / (10_f32 * sf.abs() as f32);
+                                    _adj = (rs as f32 / f32::pow(10.0, sf.abs() as f32)).into();
                                 }
                                 point.value = Some(ValueType::Float(_adj));
                                 return Ok(point);
@@ -755,7 +805,7 @@ impl SunSpecConnection {
                 }
             }
             POINT_TYPE_ENUM16 => match self
-                .get_u16((ADDR_OFFSET + md.address + point.offset) as Address)
+                .get_u16((ADDR_OFFSET + md.address + point.offset + block_offset) as Address)
                 .await
             {
                 Ok(rs) => {
@@ -797,7 +847,7 @@ impl SunSpecConnection {
                 }
             },
             POINT_TYPE_BITFIELD16 => match self
-                .get_u16((ADDR_OFFSET + md.address + point.offset) as Address)
+                .get_u16((ADDR_OFFSET + md.address + point.offset + block_offset) as Address)
                 .await
             {
                 Ok(rs) => {
@@ -837,7 +887,7 @@ impl SunSpecConnection {
                 }
             },
             POINT_TYPE_SUNSSF => match self
-                .get_i16((ADDR_OFFSET + md.address + point.offset) as Address)
+                .get_i16((ADDR_OFFSET + md.address + point.offset + block_offset) as Address)
                 .await
             {
                 Ok(rs) => {
@@ -861,7 +911,7 @@ impl SunSpecConnection {
             },
             POINT_TYPE_UINT32 | POINT_TYPE_ACC32 => {
                 match self
-                    .get_u32((ADDR_OFFSET + md.address + point.offset) as Address)
+                    .get_u32((ADDR_OFFSET + md.address + point.offset + block_offset) as Address)
                     .await
                 {
                     Ok(rs) => {
@@ -874,7 +924,9 @@ impl SunSpecConnection {
                             return Err(SunSpecPointError::GeneralError(err));
                         }
                         if let Some(sf_name) = point.clone().scale_factor {
-                            if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
+                            if let Some(sf) =
+                                md.get_scale_factor(&sf_name, self.clone(), None).await
+                            {
                                 let mut _adj: f32 = 0.0;
                                 if sf >= 0 {
                                     _adj = rs.as_f32() * (10_f32 * sf.abs() as f32);
@@ -904,13 +956,13 @@ impl SunSpecConnection {
                 }
             }
             POINT_TYPE_INT32 => match self
-                .get_i32((ADDR_OFFSET + md.address + point.offset) as Address)
+                .get_i32((ADDR_OFFSET + md.address + point.offset + block_offset) as Address)
                 .await
             {
                 Ok(rs) => {
                     debug!("{model_name}/{point_name} is {rs}!");
                     if let Some(sf_name) = point.clone().scale_factor {
-                        if let Some(sf) = md.get_scale_factor(&sf_name, self.clone()).await {
+                        if let Some(sf) = md.get_scale_factor(&sf_name, self.clone(), None).await {
                             let mut _adj: f32 = 0.0;
                             if sf >= 0 {
                                 _adj = rs.as_f32() * (10_f32 * sf.abs() as f32);
@@ -939,7 +991,7 @@ impl SunSpecConnection {
                 }
             },
             POINT_TYPE_ENUM32 => match self
-                .get_u32((ADDR_OFFSET + md.address + point.offset) as Address)
+                .get_u32((ADDR_OFFSET + md.address + point.offset + block_offset) as Address)
                 .await
             {
                 Ok(rs) => {
@@ -981,7 +1033,7 @@ impl SunSpecConnection {
                 }
             },
             POINT_TYPE_BITFIELD32 => match self
-                .get_u32((ADDR_OFFSET + md.address + point.offset) as Address)
+                .get_u32((ADDR_OFFSET + md.address + point.offset + block_offset) as Address)
                 .await
             {
                 Ok(rs) => {
@@ -1020,7 +1072,10 @@ impl SunSpecConnection {
                     }
                 }
             },
-            POINT_TYPE_PAD => {}
+            POINT_TYPE_PAD => {
+                point.value = Some(ValueType::Pad);
+                return Ok(point);
+            }
             _ => {
                 let err = format!(
                     "{model_name}/{point_name}: unknown point type: {:#?}",
@@ -1029,7 +1084,7 @@ impl SunSpecConnection {
                 debug!(err);
                 return Err(SunSpecPointError::DoesNotExist(err));
             }
-        }
+        };
 
         Err(SunSpecPointError::UndefinedError)
     }
@@ -1051,7 +1106,10 @@ pub(crate) async fn action_read_holding_registers(
     .await
     {
         Ok(future) => match future {
-            Ok(data) => Ok(data),
+            Ok(data) => {
+                trace!("{:#x?}", data);
+                Ok(data)
+            }
             Err(e) => match e.raw_os_error() {
                 None => match e.to_string().as_str() {
                     ERROR_ILLEGAL_DATA_VALUE => {

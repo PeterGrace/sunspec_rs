@@ -1,15 +1,7 @@
 use lazy_static::lazy_static;
-use prometheus::{
-    histogram_opts, opts, register_counter_vec, register_gauge_vec, register_histogram_vec,
-    CounterVec, GaugeVec, HistogramOpts, HistogramVec,
-};
+use prometheus::{histogram_opts, register_histogram_vec, HistogramVec};
 const PROM_NAMESPACE: &str = "sunspec_rs";
 
-macro_rules! app_opts {
-    ($a:expr, $b:expr) => {
-        opts!($a, $b).namespace(PROM_NAMESPACE)
-    };
-}
 macro_rules! app_histogram_opts {
     ($a:expr, $b:expr, $c:expr) => {
         histogram_opts!($a, $b, $c).namespace(PROM_NAMESPACE)

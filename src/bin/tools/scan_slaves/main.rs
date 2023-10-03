@@ -41,7 +41,7 @@ pub async fn main() {
         };
 
         let md = ss.models.get(&1).unwrap().clone();
-        match ss.clone().get_point(md.clone(), "SN").await {
+        match ss.clone().get_point(md.clone(), "SN", None).await {
             Ok(p) => {
                 if let Some(st) = p.value {
                     if let ValueType::String(s) = st {

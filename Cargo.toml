@@ -1,6 +1,6 @@
 [package]
 name = "sunspec_rs"
-version = "0.5.2"
+version = "0.6.0"
 edition = "2021"
 authors = ["Peter Grace"]
 license = "MIT"
@@ -43,3 +43,4 @@ async-recursion = "1.0.4"
 thiserror = "1.0.48"
 async-trait = "0.1.73"
 prometheus = "0.13.3"
+num-traits = "0.2.16"

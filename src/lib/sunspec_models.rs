@@ -7,6 +7,7 @@ pub enum ValueType {
     Float(f32),
     Boolean(bool),
     Array(Vec<String>),
+    Pad,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -58,8 +59,9 @@ pub struct Model {
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct Block {
-    len: u16,
-    r#type: Option<String>,
+    pub(crate) len: u16,
+    pub(crate) r#type: Option<String>,
+    pub(crate) name: Option<String>,
     pub(crate) point: Vec<Point>,
 }
 
@@ -77,6 +79,7 @@ pub struct Point {
     pub scale_factor: Option<String>,
     pub value: Option<ValueType>,
     pub literal: Option<PointLiteral>,
+    pub block_id: Option<u16>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

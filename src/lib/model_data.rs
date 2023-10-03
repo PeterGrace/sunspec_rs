@@ -3,6 +3,7 @@ use crate::sunspec_data::{ResolvedModel, SunSpecData};
 use crate::sunspec_models::{LiteralType, SunSpecModels, ValueType};
 use std::collections::HashMap;
 use std::string::ToString;
+use thiserror::Error;
 use tokio_modbus::Address;
 
 #[derive(Default, Debug, Clone)]
@@ -12,6 +13,15 @@ pub struct ModelData {
     pub address: Address,
     pub model: SunSpecModels,
     pub scale_factors: HashMap<String, i16>,
+}
+
+#[derive(Error, Debug, Default)]
+pub enum SunSpecModelDataError {
+    #[error("While calculating repeating block size, division had a remainder.")]
+    Remainder,
+    #[error("Default error")]
+    #[default]
+    Error,
 }
 
 impl ModelData {
@@ -42,6 +52,39 @@ impl ModelData {
             scale_factors: HashMap::default(),
         })
     }
+    /// Returns the number of blocks for this model
+    pub fn get_block_count(self) -> Result<u16, SunSpecModelDataError> {
+        let model = self.model.model.clone();
+        let first_block_type = model.block[0]
+            .r#type
+            .clone()
+            .unwrap_or(String::from("none"));
+        let model_len = self.len; // the length of the actual model
+
+        if first_block_type == "repeating" {
+            // if the first block is a 'repeating' block, per the standard, there are no fixed blocks.
+            let fixed_block_len = 0_u16;
+            let repeat_block_len = model.block[0].len; // the length of the repeating block
+            if (model_len - fixed_block_len) % repeat_block_len != 0 {
+                return Err(SunSpecModelDataError::Remainder);
+            }
+            let num_blocks = (model_len - fixed_block_len) / repeat_block_len;
+            Ok(num_blocks)
+        } else if self.model.model.block.len() > 1 {
+            // the length of the array of read-in blocks
+            let fixed_block_len = model.block[0].len; // the length of the fixed block
+            let repeat_block_len = model.block[1].len; // the length of the repeating block
+            if (model_len - fixed_block_len) % repeat_block_len != 0 {
+                return Err(SunSpecModelDataError::Remainder);
+            }
+            let num_blocks = (model_len - fixed_block_len) / repeat_block_len;
+            Ok(num_blocks)
+        } else {
+            // this should always be 1
+            assert_eq!(model.block.len(), 1);
+            Ok(model.block.len() as u16)
+        }
+    }
 
     /// For a given model point, retrieve its scale factor and store it for later re-use.
     ///
@@ -49,11 +92,16 @@ impl ModelData {
     ///
     /// * `name` - The name of the point inside our model to query
     /// * `conn` - The SunSpecConnection we have open already (so that we can query the proper connection)
-    pub async fn get_scale_factor(&mut self, name: &str, conn: SunSpecConnection) -> Option<i16> {
+    pub async fn get_scale_factor(
+        &mut self,
+        name: &str,
+        conn: SunSpecConnection,
+        block: Option<u16>,
+    ) -> Option<i16> {
         if let Some(value) = self.scale_factors.get(name) {
             return Some(*value);
         } else {
-            if let Ok(point) = conn.clone().get_point(self.clone(), name).await {
+            if let Ok(point) = conn.clone().get_point(self.clone(), name, block).await {
                 if let Some(ValueType::Integer(val)) = point.value {
                     self.scale_factors.insert(name.to_string(), val as i16);
                     return Some(val as i16);
