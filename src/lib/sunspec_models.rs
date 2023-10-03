@@ -77,6 +77,7 @@ pub struct Point {
     pub scale_factor: Option<String>,
     pub value: Option<ValueType>,
     pub literal: Option<PointLiteral>,
+    pub block_id: Option<u16>
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -132,3 +133,4 @@ pub struct SunSpecModels {
     pub model: Model,
     pub strings: Vec<Strings>,
 }
+

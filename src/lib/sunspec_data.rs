@@ -86,10 +86,20 @@ impl SunSpecData {
         mn: Option<String>,
     ) -> Option<Vec<Symbol>> {
         if let Some(model) = self.get_model(id, mn) {
+            // block[0] is always the fixed block, and block[1] will always be
+            // the first repeating block, if exists.
             let points = &model.model.block[0].point;
             for point in points.iter() {
                 if point.id == point_name {
                     return point.symbol.clone();
+                }
+            }
+            if &model.model.block.len() > &1_usize {
+                let points = &model.model.block[1].point;
+                for point in points.iter() {
+                    if point.id == point_name {
+                        return point.symbol.clone();
+                    }
                 }
             }
         }

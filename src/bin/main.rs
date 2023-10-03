@@ -23,7 +23,7 @@ pub async fn main() {
         .init();
 
     let socket_addr = "127.0.0.1:5083".parse().unwrap();
-    let mut ss = match SunSpecConnection::new(socket_addr, Some(11), false).await {
+    let mut ss = match SunSpecConnection::new(socket_addr, Some(5), false).await {
         Ok(mb) => mb,
         Err(e) => {
             error!("Can't create modbus connection: {e}");
@@ -39,13 +39,12 @@ pub async fn main() {
         }
     };
 
-    let _model: u16 = 64207_u16;
-    let _field: &str = "St";
-    let _fields: Vec<&str> = vec!["St"];
     let write = false;
 
     if write {
         // write value
+        let _model: u16 = 64207_u16;
+        let _field: &str = "St";
         let md = ss.models.get(&_model).unwrap().clone();
         match ss
             .clone()
@@ -61,10 +60,21 @@ pub async fn main() {
         }
     } else {
         // read fields
-        let md = ss.models.get(&64207).unwrap().clone();
+        let _model: u16 = 804_u16;
+        let _fields: Vec<&str> = vec!["SoH"];
+        let md = ss.models.get(&_model).unwrap().clone();
+        let block_count = md.clone().get_block_count().unwrap();
+        info!("{:#?}", block_count);
         for f in _fields {
-            if let Ok(pt) = ss.clone().get_point(md.clone(), f).await {
-                debug!("{:#?}", pt.value);
+            for b in 1..block_count+1 {
+                match ss.clone().get_point(md.clone(), f, Some(b)).await {
+                    Ok(pt) => {
+                        debug!("{:#?}", pt.value);
+                    },
+                    Err(e) => {
+                        error!("Error received: {e}");
+                    }
+                }
             }
         }
     }
