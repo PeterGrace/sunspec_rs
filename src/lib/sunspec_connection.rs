@@ -649,7 +649,7 @@ impl SunSpecConnection {
         let mut block_offset: u16 = 0_u16;
         if which_block.is_some() {
             let block_id = which_block.unwrap();
-            let mut block_location: u16 = 0;
+            let block_location: u16;
             if block_id > 0 {
                 block_location = block_id - 1;
             } else {
@@ -661,7 +661,6 @@ impl SunSpecConnection {
                 .r#type
                 .clone()
                 .unwrap_or(String::from("none"));
-            let mut fixed_block_len: u16 = 0;
 
             if first_block_type != "repeating" {
                 if model.block.len() == 1 {
@@ -675,7 +674,7 @@ impl SunSpecConnection {
                     )));
                 }
             }
-
+            let fixed_block_len: u16;
             if first_block_type == "repeating" {
                 fixed_block_len = 0;
             } else {
