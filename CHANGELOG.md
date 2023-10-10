@@ -1,4 +1,11 @@
 
+# 2023-10-10 (v0.6.1)
+
+## Fixed
+
+- Adjusted code to remove compiler warning about variables never being read
+- Also adjusted same code to remove unnecessary mutability
+
 # 2023-10-03 (v0.6.0)
 
 ## Added
