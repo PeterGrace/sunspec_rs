@@ -13,10 +13,33 @@
         <symbol id="RULE_14H_2">2</symbol>
         <symbol id="RULE_21">3</symbol>
         <symbol id="RULE_PREPA">4</symbol>
-        <symbol id="ISONE">5</symbol>
+        <symbol id="RULE_ISONE">5</symbol>
         <symbol id="RULE_LADWP">6</symbol>
         <symbol id="RULE_PECO">7</symbol>
         <symbol id="RULE_MISO">8</symbol>
+        <symbol id="LPEA">9</symbol>
+        <symbol id="RULE_KIUC">10</symbol>
+        <symbol id="RULE_PECO_v2">11</symbol>
+        <symbol id="RULE_21_v2">12</symbol>
+        <symbol id="RULE_MISO_1547_2018">13</symbol>
+        <symbol id="IEEE_1547_2018">14</symbol>
+        <symbol id="HECO_V2.0">15</symbol>
+        <symbol id="PREPA_2023">16</symbol>
+        <symbol id="AmerenIL_Std_2018">17</symbol>
+        <symbol id="AmerenIL_Rebate_2018">18</symbol>
+        <symbol id="BC_HYDRO_2014">19</symbol>
+        <symbol id="ISO_NE_V2.0">20</symbol>
+        <symbol id="RULE_21_2023">21</symbol>
+        <symbol id="National_Grid_NY_2023">22</symbol>
+        <symbol id="NYSEG_RGE_2023">23</symbol>
+        <symbol id="PSEG_LI_2023">24</symbol>
+        <symbol id="ORU_2023">25</symbol>
+        <symbol id="CHGE_2023">26</symbol>
+        <symbol id="IEEE_1547a_2014">27</symbol>
+        <symbol id="IEEE_1547_2003_ReConnV_7_5">28</symbol>
+        <symbol id="IEEE_1547_2003_ReConnV_10">29</symbol>
+        <symbol id="MWEC_2023">30</symbol>
+        <symbol id="LADWP_2023">31</symbol>
       </point>
       <point id="Def" offset="6" type="enum16" mandatory="true">
         <symbol id="NOT_DEFAULTED">0</symbol>
@@ -88,8 +111,9 @@
       <point id="SS_Src" offset="16" access="rw" type="uint16" units="W" mandatory="true"/>
       <point id="SS_Sink" offset="17" access="rw" type="uint16" units="W" mandatory="true"/>
       <point id="XFREna" offset="18" access="rw" type="enum16" mandatory="true">
-        <symbol id="DISABLED">0</symbol>
-        <symbol id="ENABLED">1</symbol>
+        <symbol id="NO_TRANSFER_SWITCH">0</symbol>
+        <symbol id="ONE_TRANSFER_SWITCH">1</symbol>
+        <symbol id="TWO_TRANSFER_SWITCHES">2</symbol>
       </point>
       <point id="XFRV_sf" offset="19" type="sunssf" mandatory="true"/>
       <point id="XFRV" offset="20" access="rw" type="uint16" units="V" sf="XFRV_sf" mandatory="true"/>
@@ -105,14 +129,28 @@
         <symbol id="ENABLED">1</symbol>
         <symbol id="N/A">32768</symbol>
       </point>
-      <point id="Pad3" offset="25" type="pad" mandatory="true"/>
-      <point id="Pad4" offset="26" type="pad" mandatory="true"/>
-      <point id="Pad5" offset="27" type="pad" mandatory="true"/>
-      <point id="Pad6" offset="28" type="pad" mandatory="true"/>
-      <point id="Pad7" offset="29" type="pad" mandatory="true"/>
-      <point id="Pad8" offset="30" type="pad" mandatory="true"/>
-      <point id="Pad9" offset="31" type="pad" mandatory="true"/>
-      <point id="Pad10" offset="32" type="pad" mandatory="true"/>
+      <point id="ACPVPowerRating" offset="25" access="rw" type="int16" sf="SF_X10" units="kW" mandatory="true" />
+      <point id="SF_X10" offset="26" type="sunssf" />
+      <point id="LoadShedEnable" offset="27" type="enum16" access="rw" mandatory="true">
+        <symbol id="LOAD_SHED_DISABLED">0</symbol>
+        <symbol id="LOAD_SHED_SMM_ONLY">1</symbol>
+        <symbol id="LOAD_SHED_ATS_AND_SMM">2</symbol>
+        <symbol id="N/A">32768</symbol>
+      </point>
+      <point id="GridParallelInverters" offset="28" type="int16" access="rw" mandatory="true" />
+      <point id="CTTurnsRatio" offset="29" type="int16" access="rw" mandatory="true" />
+      <point id="GeneratorPower" offset="30" type="int16" units="kW" access="rw" mandatory="true" />
+      <point id="GeneratorControlMode" offset="31" type="enum16" access="rw" mandatory="true">
+        <symbol id="SINGLE_TRANSFER">0</symbol>
+        <symbol id="SOURCE_CYCLING">1</symbol>
+        <symbol id="ALWAYS_ON">2</symbol>
+        <symbol id="N/A">32768</symbol>
+      </point>
+      <point id="ImportOverride" offset="32" access="rw" type="enum16" mandatory="true">
+        <symbol id="DISABLED">0</symbol>
+        <symbol id="ENABLED">1</symbol>
+        <symbol id="N/A">32768</symbol>
+      </point>
       <point id="Pad11" offset="33" type="pad" mandatory="true"/>
       <point id="Pad12" offset="34" type="pad" mandatory="true"/>
       <point id="Pad13" offset="35" type="pad" mandatory="true"/>
@@ -148,52 +186,167 @@
       <label>Compliance selection</label>
       <description>Select which utility your inverter is being installed under.</description>
       <notes>Inverter must be disabled for this selection to take effect. Different utilities require different inverter settings. This selection will define which utility settings the inverter will use. The selections will be listed with utility names and geographical locations.</notes>
-    </point>
-    <symbol id="IEEE_1547">
-      <label>IEEE 1547 (default)</label>
-      <description>'IEEE 1547' is the most common inverter compliance setting.</description>
-      <notes></notes>
-    </symbol>
-    <symbol id="RULE_14H_1">
-      <label>Hawai'i Rule 14H #1</label>
-      <description>Configure for HI Rule 14H Islands of O'ahu, Maui, Hawai'i (Big Island). If your installation is not on one of these islands, do not use this selection. </description>
-      <notes>For other islands contact Generac for information.</notes>
-    </symbol>
-    <symbol id="RULE_14H_2">
-      <label>Hawai'i Rule 14H #2</label>
-      <description>Configure for HI Rule 14H (Lana'i, Moloka'i)</description>
-      <notes>For other islands contact Generac for information.</notes>
-    </symbol>
-    <symbol id="RULE_21">
-      <label>California Rule 21</label>
-      <description>Configure for California Rule 21 settings.</description>
-      <notes></notes>
-    </symbol>
-    <symbol id="RULE_PREPA">
-      <label>Puerto Rico PREPA</label>
-      <description>Configure for Puerto Rico (PREPA) settings. </description>
-      <notes></notes>
-    </symbol>
-    <symbol id="ISONE">
-      <label>ISO New England</label>
-      <description>Configure ISO New England settings.</description>
-      <notes></notes>
-    </symbol>
-    <symbol id="RULE_LADWP">
-      <label>LADWP</label>
-      <description>Configure City of Los Angeles settings.</description>
-      <notes></notes>
-    </symbol>
-    <symbol id="RULE_PECO">
-      <label>PECO</label>
-      <description>Configure PECO settings.</description>
-      <notes></notes>
-    </symbol>
-    <symbol id="RULE_MISO">
-      <label>MISO</label>
-      <description>Configure MISO settings.</description>
-      <notes></notes>
-    </symbol>
+      <symbol id="IEEE_1547">
+        <label>IEEE 1547-2003 (default)</label>
+        <description>'IEEE 1547' is the most common inverter compliance setting.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_14H_1">
+        <label>HECO SRD V1.1</label>
+        <description>Configure for HI Rule 14H Islands of O'ahu, Maui, Hawai'i (Big Island). If your installation is not on one of these islands, do not use this selection. </description>
+        <notes>For other islands contact Generac for information.</notes>
+      </symbol>
+      <symbol id="RULE_14H_2">
+        <label>HECO SRD V1.1 [L+M]</label>
+        <description>Configure for HI Rule 14H (Lana'i, Moloka'i)</description>
+        <notes>For other islands contact Generac for information.</notes>
+      </symbol>
+      <symbol id="RULE_21">
+        <label>Rule 21 2017</label>
+        <description>Configure for California Rule 21 settings.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_PREPA">
+        <label>PREPA 2017</label>
+        <description>Configure for Puerto Rico (PREPA) settings.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_ISONE">
+        <label>ISO-NE (1547a-2014)</label>
+        <description>Configure ISO New England settings.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_LADWP">
+        <label>LADWP 2019</label>
+        <description>Configure City of Los Angeles settings.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_PECO">
+        <label>PECO (deprecated)</label>
+        <description>Configure PECO settings.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_MISO">
+        <label>MISO (deprecated)</label>
+        <description>Configure MISO settings.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LPEA">
+        <label>LPEA 2019</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_KIUC">
+        <label>KIUC 2021</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_PECO_v2">
+        <label>PECO 2021</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_21_v2">
+        <label>RULE 21 2019</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_MISO_1547_2018">
+        <label>MISO 1547-2018</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="IEEE_1547_2018">
+        <label>IEEE 1547-2018</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="HECO_V2.0">
+        <label>HECO SRD V2.0</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="PREPA_2023">
+        <label>PREPA 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="AmerenIL_Std_2018">
+        <label>AmerenIL Std 2018</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="AmerenIL_Rebate_2018">
+        <label>AmerenIL Rebate 2018</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BC_HYDRO_2014">
+        <label>BC Hydro 2014</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ISO_NE_V2.0">
+        <label>ISO-NE 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_21_2023">
+        <label>Rule 21 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="National_Grid_NY_2023">
+        <label>National Grid NY 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="NYSEG_RGE_2023">
+        <label>NYSEG + RG&amp;E 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="PSEG_LI_2023">
+        <label>PSEG-LI 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ORU_2023">
+        <label>ORU 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CHGE_2023">
+        <label>CHG&amp;E 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="IEEE_1547a_2014">
+        <label>IEEE 1547a-2014</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="IEEE_1547_2003_ReConnV_7_5">
+        <label>IEEE 1547-2003 (ReConnV 7.5%)</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="IEEE_1547_2003_ReConnV_10">
+        <label>IEEE 1547-2003 (ReConnV 10%)</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="MWEC_2023">
+        <label>MWEC 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LADWP_2023">
+        <label>LADWP 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+  </point>
     <point id="Def">
       <label>Compliance settings defaulted</label>
       <description>Indicates whether or not the default settings from the Compliance Selection field have been applied.</description>
@@ -255,8 +408,8 @@
       <notes></notes>
     </point>
     <point id="XFREna">
-      <label>Enable External Transfer</label>
-      <description>Enable the use of an external transfer switch</description>
+      <label>Number of Transfer Switches</label>
+      <description>Defines the number of external automatic transfer switches installed and enables transfer switch controls. For AC Coupled PV, this must be 1. For AC Generator Integration, this must be 1 in the Flexible Coverage configuration or 2 in the Whole Home Backup configuration.</description>
       <notes></notes>
     </point>
     <point id="XFRV">
@@ -279,21 +432,58 @@
       <description>
         The limit, in watts, that the inverter is allowed to push onto the grid. This setting will only take effect if Export Limiting (above) is ENABLED.
         NOTE: This value can only be lowered. This feature is only available for inverter firmware version &gt;13200. For older firmware versions, the value 32768 may appear, and it can be ignored. To reset this limit or request a firmware update, please contact Generac.
-        NOTE: This feature requires CTs to be properly installed and calibrated prior to use. For more information on CT calibration, see the PWRcell Inverter Installation and Owner’s Manual.
+        NOTE: This feature requires CTs to be properly installed and calibrated prior to use. For more information on CT calibration, see the PWRcell Inverter Installation and Owners Manual.
       </description>
       <notes></notes>
     </point>
     <point id="ExpOverride">
       <label>Export Override</label>
       <description>Formerly called Zero Export, this setting will inhibit the PWRcell system from exporting power to the grid.
-        NOTE: This feature requires CTs to be properly installed and calibrated prior to use. For more information on CT calibration, see the PWRcell Inverter Installation and Owner’s Manual.
+        NOTE: This feature requires CTs to be properly installed and calibrated prior to use. For more information on CT calibration, see the PWRcell Inverter Installation and Owners Manual.
       </description>
       <notes></notes>
     </point>
-    <point id="Pad3">
+    <point id="ACPVPowerRating">
+      <label>AC-coupled PV Power Rating</label>
+      <description>Power rating of the attached AC Coupled PV array. Set this value to the cumulative power rating of AC Coupled PV connected to this inverter.</description>
+      <notes>This value must reflect what is coupled. An incorrect higher value will result in insufficient charging of the batteries; an incorrect lower value will result in the possibility of an over-voltage event.</notes>
+    </point>
+    <point id="LoadShedEnable">
+      <label>Enable Load Shedding</label>
+      <description>Select 1 if using PWRmanager and / or SMM devices to manage loads. Select 2 if using the PWRcell ATS Controller to manage loads (with or without SMMs). Do not use PWRmanager and PWRcell ATS Controller together for load management.</description>
+      <notes></notes>
+    </point>
+    <point id="GridParallelInverters">
+      <label>Grid Parallel Inverters</label>
+      <description>This setting allows for two inverters to share one set of CTs. Set to 2 if daisy chaining CTs between two inverters.</description>
+      <notes></notes>
+    </point>
+    <point id="CTTurnsRatio">
+      <label>CT Turns Ratio</label>
+      <description>Allows setting a non-default turns ratio for the grid CTs. The default value is 1500</description>
+      <notes></notes>
+    </point>
+    <point id="GeneratorPower">
+      <label>AC Generator Power Rating</label>
+      <description>Nameplate power rating of the AC coupled integrated generator. If no generator is integrated, leave at 0.</description>
+      <notes></notes>
+    </point>
+    <point id="GeneratorControlMode">
+      <label>AC Generator Control Mode</label>
+      <description>Set AC Generator Control Mode for Single Transfer, Source Cycling, or Always On.</description>
+      <notes></notes>
+    </point>
+    <point id="ImportOverride">
+      <label>Import Override</label>
+      <description>This setting will inhibit the PWRcell system from importing power from the grid to charge batteries.
+        NOTE: This feature requires CTs to be properly installed and calibrated prior to use. For more information on CT calibration, see the PWRcell Inverter Installation and Owners Manual.
+      </description>
+      <notes>Unlike Zero Import, this setting can be turned on/off repeatedly. Therefore, Import Override may not be accepted by utilities requiring that the batteries never be charged from the grid. For that purpose, Zero Import (the set-once attribute) should be used instead.</notes>
+    </point>
+    <point id="Pad11">
       <label>Pad</label>
       <description>Large pad for future model expansion</description>
       <notes></notes>
-    </point>    
+    </point>
   </strings>
 </sunSpecModels>

@@ -1,6 +1,6 @@
 <sunSpecModels v="1">
-    <model id="10020" len="9" name="dc_generator_status">
-        <block len="9">
+    <model id="10020" len="11" name="dc_generator_status">
+        <block len="11">
             <point id="Health"              type="enum16"                               offset="0">
                 <symbol id="HEALTH_UNKNOWN">0</symbol>
                 <symbol id="ALARM">1</symbol>
@@ -16,6 +16,14 @@
                 <symbol id="AUTO_STATE_UNKNOWN">0</symbol>
                 <symbol id="IN_AUTO">1</symbol>
                 <symbol id="NOT_IN_AUTO">2</symbol>
+            </point>
+            <point id="ProducingPower"              type="enum16"                       offset="9">
+                <symbol id="NO">0</symbol>
+                <symbol id="YES">1</symbol>
+            </point>
+            <point id="DC_Generator_Inhibit_State"  type="enum16"                       offset="10">
+                <symbol id="NOT_INHIBITED">0</symbol>
+                <symbol id="INHIBITED">1</symbol>
             </point>
         </block>
     </model>
@@ -62,7 +70,7 @@
             <label>Energy Out</label>
             <description>Contains the lifetime total amount of energy produced by the generator, in watt-hours.</description>
         </point>
-         <point id="AutoStartState">
+        <point id="AutoStartState">
             <label>Generator Start/Stop Mode</label>
             <description>The generator is designed to start automatically most of the time.  This field reports if the generator is in auto mode or not.</description>
             <symbol id="AUTO_STATE_UNKNOWN">
@@ -76,6 +84,31 @@
             <symbol id="NOT_IN_AUTO">
                 <label>Generator NOT_IN_AUTO start/stop mode</label>
                 <description>The generator will not start on its own when the ESS battery is in need of charging</description>
+            </symbol>
+        </point>
+        <point id="Producing Power">
+            <label>Power Generation Status</label>
+            <description>Indicates whether the DC generator is currently producing power on REbus</description>
+            <notes>Used by inverter to gate connection to the grid</notes>
+            <symbol id="NO">
+                <label>DC Generator Is Not Producing Power</label>
+                <description>The DC generator is not producing power on REbus.</description>
+            </symbol>
+            <symbol id="YES">
+                <label>DC Generator Is Producing Power</label>
+                <description>The DC generator is producing power on REbus.</description>
+            </symbol>
+        </point>
+        <point id="DC_Generator_Inhibit_State">
+            <label>DC Generator Inhibit State</label>
+            <description>Reports the current DC Gen inhibit state</description>
+            <symbol id="NOT_INHIBITED">
+                <label>DC Generator Not Inhibited</label>
+                <description>The DC generator is permitted to run and produce power on REbus</description>
+            </symbol>
+            <symbol id="INHIBITED">
+                <label>DC Generator Inhibited</label>
+                <description>The DC generator is NOT permitted to run and produce power on REbus</description>
             </symbol>
         </point>
     </strings>

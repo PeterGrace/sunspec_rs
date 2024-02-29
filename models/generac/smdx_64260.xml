@@ -1,5 +1,5 @@
 <sunSpecModels v="1">
-  <!-- 1: timezone config -->
+  <!-- 64260: timezone config -->
   <model id="64260" len="24" name="tz_config">
     <block len="48">
       <point id="Tz"   offset="0"  type="string" len="24" mandatory="true" access="rw" />
@@ -18,7 +18,7 @@
       <point id="Pad8" offset="47" type="pad" mandatory="true" />
     </block>
   </model>
-  <strings id="1" locale="en">
+  <strings id="64260" locale="en">
     <model>
       <label>Time zone configuration</label>
       <description>Set/get device's local time zone</description>

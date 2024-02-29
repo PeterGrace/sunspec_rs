@@ -1,0 +1,29 @@
+<sunSpecModels v="1">
+    <model id="10040" len="1" name="inverter_status">
+        <block len="1">
+            <point id="DC_Generator_Inhibit"              type="enum16"                      offset="0">
+                <symbol id="NOT_INHIBIT">0</symbol>
+                <symbol id="INHIBIT">1</symbol>
+            </point>
+        </block>
+    </model>
+    <strings id="10040" locale="en">
+        <model>
+            <label>Inverter Status</label>
+            <description>Communicates details about the current behavior of a PWRcell inverter as part of an ESS</description>
+            <notes>Length of this model will be used as crude versioning technique for expected future additions</notes>
+        </model>
+        <point id="DC_Generator_Inhibit">
+            <label>DC Generator Inhibit</label>
+            <description>Allows a DC generator to be inhibited from producing power</description>
+            <symbol id="NOT_INHIBIT">
+                <label>DC Generator Not Inhibit</label>
+                <description>The DC generator is permitted to run and produce power on REbus</description>
+            </symbol>
+            <symbol id="INHIBIT">
+                <label>DC Generator Inhibit</label>
+                <description>The DC generator is NOT permitted to run and produce power on REbus</description>
+            </symbol>
+        </point>
+    </strings>
+</sunSpecModels>

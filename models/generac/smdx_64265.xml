@@ -1,0 +1,79 @@
+<sunSpecModels v="1">
+    <model id="64265" len="13" name="balanced_input_telemetry">
+        <block len="13">
+            <point id="LastUpdatedUTCTimestamp" type="uint32" offset="0" />
+            <point id="BalancedInputSelfTestResults" type="enum16" offset="2">
+                <symbol id="BALANCED_INPUT_SUCCESS">0</symbol>
+                <symbol id="PV_POS_TOO_LARGE">1</symbol>
+                <symbol id="PV_NEG_TOO_LARGE">2</symbol>
+            </point>
+            <point id="TimesTestResultWasConsecutiveFail" type="uint16" offset="3" />
+            <point id="FullInputVoltage" type="uint16" units="V" sf="X10_SF" offset="4" />
+            <point id="NegativeInputVoltage" type="uint16" units="V" sf="X10_SF" offset="5" />
+            <point id="MaxNegativeInputVoltage" type="uint16" units="V" sf="X10_SF" offset="6" />
+            <point id="MinNegativeInputVoltage" type="uint16" units="V" sf="X10_SF" offset="7" />
+            <point id="InputVoltageRatio" type="uint16" units="% * 8192" offset="8" />
+            <point id="LargestRecordedVoltageRatio" type="uint16" units="% * 8192"  offset="9" />
+            <point id="SmallestRecordedVoltageRatio" type="uint16" units="% * 8192" offset="10" />
+            <point id="X10_SF" access="r" type="sunssf" offset="11" />
+            <point id="Pad0" type="pad" offset="12" />
+        </block>
+    </model>
+    <strings id="64265" locale="en">
+        <model>
+            <label>Balanced Input Telemetry</label>
+            <description></description>
+            <notes></notes>
+        </model>
+        <point id="LastUpdatedUTCTimestamp">
+            <label>Last Updated UTC Timestamp</label>
+            <description>Unix timestamp of when this model data was collected (seconds since 1970-01-01)</description>
+            <notes></notes>
+        </point>
+        <point id="SelfTestResults">
+            <label>Self Test Results</label>
+            <description>The results of the last self test</description>
+            <notes></notes>
+        </point>
+        <point id="TimesTestResultWasConsecutiveFail">
+            <label>Times Test Result Was Consecutive Fail</label>
+            <description>The number of failed balanced input startup tests attempts in a row</description>
+            <notes></notes>
+        </point>
+        <point id="FullInputVoltage">
+            <label>Full Input Voltage</label>
+            <description>Full real input voltage when performing the balanced input test</description>
+            <notes></notes>
+        </point>
+        <point id="NegativeInputVoltage">
+            <label>Negative Input Voltage</label>
+            <description>Negative real input voltage when performing the balanced input test</description>
+            <notes></notes>
+        </point>
+        <point id="MaxNegativeInputVoltage">
+            <label>Maximum Negative Input Voltage</label>
+            <description>Maximum negative input voltage value that would still pass the balanced input test</description>
+            <notes></notes>
+        </point>
+        <point id="MinNegativeInputVoltage">
+            <label>Minimum Negative Input Voltage</label>
+            <description>Minimum negative input voltage value that would still pass the balanced input test</description>
+            <notes></notes>
+        </point>
+        <point id="InputVoltageRatio">
+            <label>Input Voltage Ratio</label>
+            <description>Negative Input Voltage divided by Full Input Voltage X 8192</description>
+            <notes></notes>
+        </point>
+        <point id="LargestRecordedVoltageRatio">
+            <label>Largest Recorded Voltage Ratio</label>
+            <description>Largest negative input voltage divided by the total input voltage recorded since last success X 8192</description>
+            <notes></notes>
+        </point>
+        <point id="SmallestRecordedVoltageRatio">
+            <label>Smallest Recorded Voltage Ratio</label>
+            <description>Smallest negative input voltage divided by the total input voltage recorded since last success X 8192</description>
+            <notes></notes>
+        </point>
+    </strings>
+</sunSpecModels>

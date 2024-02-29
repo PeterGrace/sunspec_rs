@@ -12,13 +12,7 @@
             <point id="DisplayCtrlSWVer" offset="5" type="uint16" sf="Version_SF" mandatory="true"/>
             <point id="DisplayCtrlBuild" offset="6" type="uint16" mandatory="true"/>
             <point id="Version_SF" offset="7" type="sunssf" mandatory="true"/>
-            <point id="Pad7" offset="8" type="pad" mandatory="true"/>
-            <point id="Pad8" offset="9" type="pad" mandatory="true"/>
-            <point id="Pad9" offset="10" type="pad" mandatory="true"/>
-            <point id="Pad10" offset="11" type="pad" mandatory="true"/>
-            <point id="Pad11" offset="12" type="pad" mandatory="true"/>
-            <point id="Pad12" offset="13" type="pad" mandatory="true"/>
-            <point id="Pad13" offset="14" type="pad" mandatory="true"/>
+            <point id="EngineCtrlUnitSWVer" offset="8" type="string" len="7"  mandatory="true"/>
             <point id="Pad14" offset="15" type="pad" mandatory="true"/>
             <point id="Pad15" offset="16" type="pad" mandatory="true"/>
             <point id="Pad16" offset="17" type="pad" mandatory="true"/>
@@ -97,6 +91,11 @@
         </point>
         <point id="DisplayCtrlBuild">
             <label>Display Controller Jenkins Build Number</label>
+            <description/>
+            <notes/>
+        </point>
+        <point id="EngineCtrlUnitSWVer">
+            <label>Engine Control Unit Software Version</label>
             <description/>
             <notes/>
         </point>

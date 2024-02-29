@@ -27,6 +27,7 @@ pub async fn main() {
 
     let ssd = SunSpecData::default();
     for i in 1..99 {
+        info!("Testing slave {i}");
         let mut ss = match SunSpecConnection::new(addr.clone(), Some(i), false).await {
             Ok(mb) => mb,
             Err(e) => {

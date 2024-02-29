@@ -22,7 +22,8 @@
       <point id="OutPFSet_RmpTms" offset="11" access="rw" type="uint16" len="1" mandatory="false" units="Secs" />
       <point id="OutPFSet_Ena" offset="12" access="rw" type="enum16" len="1" mandatory="true">
         <symbol id="DISABLED">0</symbol>
-        <symbol id="ENABLED">1</symbol>
+        <symbol id="ENABLED_REAL_POWER_PRIORITY">1</symbol>
+        <symbol id="ENABLED_REACTIVE_POWER_PRIORITY">2</symbol>
       </point>
       <point id="VArWMaxPct" offset="13" access="rw" type="int16" len="1" mandatory="false" units="%WMax" sf="VArPct_SF"/>
       <point id="VArMaxPct" offset="14" access="rw" type="int16" len="1" mandatory="false" units="%VArMax" sf="VArPct_SF"/>
@@ -123,7 +124,7 @@
     </point>
     <point id="OutPFSet_Ena">
       <label>OutPFSet_Ena</label>
-      <description>Enumerated valued.  Fixed power factor enable/disable control.</description>
+      <description>Enumerated value. Fixed power factor enable/disable control.</description>
       <notes> </notes>
     </point>
     <point id="VArPct_Mod">

@@ -23,7 +23,7 @@ pub async fn main() {
         .init();
 
     let socket_addr = "127.0.0.1:5083".parse().unwrap();
-    let mut ss = match SunSpecConnection::new(socket_addr, Some(5), false).await {
+    let mut ss = match SunSpecConnection::new(socket_addr, Some(3), false).await {
         Ok(mb) => mb,
         Err(e) => {
             error!("Can't create modbus connection: {e}");
@@ -43,7 +43,7 @@ pub async fn main() {
 
     if write {
         // write value
-        let _model: u16 = 64207_u16;
+        let _model: u16 = 64206_u16;
         let _field: &str = "St";
         let md = ss.models.get(&_model).unwrap().clone();
         match ss
@@ -60,8 +60,8 @@ pub async fn main() {
         }
     } else {
         // read fields
-        let _model: u16 = 804_u16;
-        let _fields: Vec<&str> = vec!["SoH"];
+        let _model: u16 = 64206_u16;
+        let _fields: Vec<&str> = vec!["XFRV", "XFRTms"];
         let md = ss.models.get(&_model).unwrap().clone();
         let block_count = md.clone().get_block_count().unwrap();
         info!("{:#?}", block_count);

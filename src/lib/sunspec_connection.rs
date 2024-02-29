@@ -436,7 +436,11 @@ impl SunSpecConnection {
                 }
             },
             Err(e) => {
-                warn!("Can't get manufacturer of this unit: {e}");
+                warn!(
+                    "[{}:{}] Can't get manufacturer of this unit: {e}",
+                    self.addr,
+                    self.slave_num.unwrap()
+                );
                 None
             }
         };

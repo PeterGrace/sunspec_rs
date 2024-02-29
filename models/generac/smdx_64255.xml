@@ -26,11 +26,13 @@
             <point id="Tms2" offset="5" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
             <point id="V2" offset="7" access="rw" type="uint16" len="1" mandatory="false" units="%VRef" sf="V_SF"/>
             <point id="Fn2" offset="8" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
                 <symbol id="CEASE_TO_ENERGIZE">1</symbol>
             </point>
             <point id="Tms3" offset="9" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>
             <point id="V3" offset="11" access="rw" type="uint16" len="1" mandatory="false" units="%VRef" sf="V_SF"/>
             <point id="Fn3" offset="12" access="rw" type="enum16" len="1" mandatory="false">
+                <symbol id="MANDATORY_OPERATION">0</symbol>
                 <symbol id="CEASE_TO_ENERGIZE">1</symbol>
             </point>
             <point id="Tms4" offset="13" access="rw" type="uint32" len="2" mandatory="false" units="Secs" sf="Tms_SF"/>

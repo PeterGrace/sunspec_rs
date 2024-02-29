@@ -1,5 +1,11 @@
 <sunSpecModels v="1">
-  <!-- 64205: load SA Defaults -->
+  <!--
+    64205: load SA Defaults
+
+    This model was created for the "Utility Compliance Configuration" page in the installer tool.
+    The "SRD" point is a read/write version of the same point in Model 64206, which is read-only.
+    The "Def" point remains read-only.
+  -->
   <model id="64205" len="2" name="SA_defaults">
     <block len="2">
       <point id="SRD" offset="0" access="rw" type="enum16" mandatory="true">
@@ -8,10 +14,33 @@
         <symbol id="RULE_14H_2">2</symbol>
         <symbol id="RULE_21">3</symbol>
         <symbol id="RULE_PREPA">4</symbol>
-        <symbol id="ISONE">5</symbol>
+        <symbol id="RULE_ISONE">5</symbol>
         <symbol id="RULE_LADWP">6</symbol>
         <symbol id="RULE_PECO">7</symbol>
         <symbol id="RULE_MISO">8</symbol>
+        <symbol id="LPEA">9</symbol>
+        <symbol id="RULE_KIUC">10</symbol>
+        <symbol id="RULE_PECO_v2">11</symbol>
+        <symbol id="RULE_21_v2">12</symbol>
+        <symbol id="RULE_MISO_1547_2018">13</symbol>
+        <symbol id="IEEE_1547_2018">14</symbol>
+        <symbol id="HECO_V2.0">15</symbol>
+        <symbol id="PREPA_2023">16</symbol>
+        <symbol id="AmerenIL_Std_2018">17</symbol>
+        <symbol id="AmerenIL_Rebate_2018">18</symbol>
+        <symbol id="BC_HYDRO_2014">19</symbol>
+        <symbol id="ISO_NE_V2.0">20</symbol>
+        <symbol id="RULE_21_2023">21</symbol>
+        <symbol id="National_Grid_NY_2023">22</symbol>
+        <symbol id="NYSEG_RGE_2023">23</symbol>
+        <symbol id="PSEG_LI_2023">24</symbol>
+        <symbol id="ORU_2023">25</symbol>
+        <symbol id="CHGE_2023">26</symbol>
+        <symbol id="IEEE_1547a_2014">27</symbol>
+        <symbol id="IEEE_1547_2003_ReConnV_7_5">28</symbol>
+        <symbol id="IEEE_1547_2003_ReConnV_10">29</symbol>
+        <symbol id="MWEC_2023">30</symbol>
+        <symbol id="LADWP_2023">31</symbol>
       </point>
       <point id="Def" offset="1" type="enum16" mandatory="true">
         <symbol id="NOT_DEFAULTED">0</symbol>
@@ -30,52 +59,167 @@
       <label>Compliance selection</label>
       <description>Select which utility your inverter is being installed under.</description>
       <notes>Inverter must be disabled for this selection to take effect. Different utilities require different inverter settings. This selection will define which utility settings the inverter will use. The selections will be listed with utility names and geographical locations.</notes>
-    </point>
-    <symbol id="IEEE_1547">
-      <label>IEEE 1547 (default)</label>
-      <description>'IEEE 1547' is the most common inverter compliance setting.</description>
-      <notes></notes>
-    </symbol>
-    <symbol id="RULE_14H_1">
-      <label>Hawai'i Rule 14H #1</label>
-      <description>Configure for HI Rule 14H Islands of O'ahu, Maui, Hawai'i (Big Island). If your installation is not on one of these islands, do not use this selection. </description>
-      <notes>For other islands contact Generac for information.</notes>
-    </symbol>
-    <symbol id="RULE_14H_2">
-      <label>Hawai'i Rule 14H #2</label>
-      <description>Configure for HI Rule 14H (Lana'i, Moloka'i)</description>
-      <notes>For other islands contact Generac for information.</notes>
-    </symbol>
-    <symbol id="RULE_21">
-      <label>California Rule 21</label>
-      <description>Configure for California Rule 21 settings.</description>
-      <notes></notes>
-    </symbol>
-    <symbol id="RULE_PREPA">
-      <label>Puerto Rico PREPA</label>
-      <description>Configure for Puerto Rico (PREPA) settings.</description>
-      <notes></notes>
-    </symbol>
-    <symbol id="ISONE">
-      <label>ISO New England</label>
-      <description>Configure ISO New England settings.</description>
-      <notes></notes>
-    </symbol>
-    <symbol id="RULE_LADWP">
-      <label>LADWP</label>
-      <description>Configure City of Los Angeles settings.</description>
-      <notes></notes>
-    </symbol>
-    <symbol id="RULE_PECO">
-      <label>PECO</label>
-      <description>Configure PECO settings.</description>
-      <notes></notes>
-    </symbol>
-    <symbol id="RULE_MISO">
-      <label>MISO</label>
-      <description>Configure MISO settings.</description>
-      <notes></notes>
-    </symbol>
+      <symbol id="IEEE_1547">
+        <label>IEEE 1547-2003 (default)</label>
+        <description>'IEEE 1547' is the most common inverter compliance setting.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_14H_1">
+        <label>HECO SRD V1.1</label>
+        <description>Configure for HI Rule 14H Islands of O'ahu, Maui, Hawai'i (Big Island). If your installation is not on one of these islands, do not use this selection. </description>
+        <notes>For other islands contact Generac for information.</notes>
+      </symbol>
+      <symbol id="RULE_14H_2">
+        <label>HECO SRD V1.1 [L+M]</label>
+        <description>Configure for HI Rule 14H (Lana'i, Moloka'i)</description>
+        <notes>For other islands contact Generac for information.</notes>
+      </symbol>
+      <symbol id="RULE_21">
+        <label>Rule 21 2017</label>
+        <description>Configure for California Rule 21 settings.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_PREPA">
+        <label>PREPA 2017</label>
+        <description>Configure for Puerto Rico (PREPA) settings.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_ISONE">
+        <label>ISO-NE (1547a-2014)</label>
+        <description>Configure ISO New England settings.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_LADWP">
+        <label>LADWP 2019</label>
+        <description>Configure City of Los Angeles settings.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_PECO">
+        <label>PECO (deprecated)</label>
+        <description>Configure PECO settings.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_MISO">
+        <label>MISO (deprecated)</label>
+        <description>Configure MISO settings.</description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LPEA">
+        <label>LPEA 2019</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_KIUC">
+        <label>KIUC 2021</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_PECO_v2">
+        <label>PECO 2021</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_21_v2">
+        <label>RULE 21 2019</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_MISO_1547_2018">
+        <label>MISO 1547-2018</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="IEEE_1547_2018">
+        <label>IEEE 1547-2018</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="HECO_V2.0">
+        <label>HECO SRD V2.0</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="PREPA_2023">
+        <label>PREPA 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="AmerenIL_Std_2018">
+        <label>AmerenIL Std 2018</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="AmerenIL_Rebate_2018">
+        <label>AmerenIL Rebate 2018</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BC_HYDRO_2014">
+        <label>BC Hydro 2014</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ISO_NE_V2.0">
+        <label>ISO-NE 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="RULE_21_2023">
+        <label>Rule 21 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="National_Grid_NY_2023">
+        <label>National Grid NY 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="NYSEG_RGE_2023">
+        <label>NYSEG + RG&amp;E 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="PSEG_LI_2023">
+        <label>PSEG-LI 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="ORU_2023">
+        <label>ORU 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="CHGE_2023">
+        <label>CHG&amp;E 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="IEEE_1547a_2014">
+        <label>IEEE 1547a-2014</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="IEEE_1547_2003_ReConnV_7_5">
+        <label>IEEE 1547-2003 (ReConnV 7.5%)</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="IEEE_1547_2003_ReConnV_10">
+        <label>IEEE 1547-2003 (ReConnV 10%)</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="MWEC_2023">
+        <label>MWEC 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="LADWP_2023">
+        <label>LADWP 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+  </point>
     <point id="Def">
       <label>Defaulted</label>
       <description>Indicates whether or not the default settings from the Compliance Selection field have been applied.</description>
