@@ -44,11 +44,11 @@ pub async fn main() {
     if write {
         // write value
         let _model: u16 = 64206_u16;
-        let _field: &str = "St";
+        let _field: &str = "XFRTms";
         let md = ss.models.get(&_model).unwrap().clone();
         match ss
             .clone()
-            .set_point(md.clone(), _field, ValueType::Integer(1))
+            .set_point(md.clone(), _field, ValueType::Integer(300))
             .await
         {
             Ok(_) => {
@@ -66,14 +66,12 @@ pub async fn main() {
         let block_count = md.clone().get_block_count().unwrap();
         info!("{:#?}", block_count);
         for f in _fields {
-            for b in 1..block_count + 1 {
-                match ss.clone().get_point(md.clone(), f, Some(b)).await {
-                    Ok(pt) => {
-                        debug!("{:#?}", pt.value);
-                    }
-                    Err(e) => {
-                        error!("Error received: {e}");
-                    }
+            match ss.clone().get_point(md.clone(), f, None).await {
+                Ok(pt) => {
+                    debug!("{:#?}", pt.value);
+                }
+                Err(e) => {
+                    error!("Error received: {e}");
                 }
             }
         }
