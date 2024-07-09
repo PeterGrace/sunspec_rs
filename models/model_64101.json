@@ -1,0 +1,64 @@
+{
+  "group": {
+    "name": "model_64101",
+    "type": "group",
+    "label": "Eltek Inverter Extension",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64101
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Eltek_Country_Code",
+        "type": "uint16",
+        "size": 1
+      },
+      {
+        "name": "Eltek_Feeding_Phase",
+        "type": "uint16",
+        "size": 1
+      },
+      {
+        "name": "Eltek_APD_Method",
+        "type": "uint16",
+        "size": 1
+      },
+      {
+        "name": "Eltek_APD_Power_Ref",
+        "type": "uint16",
+        "size": 1
+      },
+      {
+        "name": "Eltek_RPS_Method",
+        "type": "uint16",
+        "size": 1
+      },
+      {
+        "name": "Eltek_RPS_Q_Ref",
+        "type": "uint16",
+        "size": 1
+      },
+      {
+        "name": "Eltek_RPS_CosPhi_Ref",
+        "type": "int16",
+        "size": 1
+      }
+    ]
+  },
+  "id": 64101
+}

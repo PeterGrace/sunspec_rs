@@ -1,0 +1,132 @@
+{
+  "group": {
+    "name": "balanced_input_telemetry",
+    "type": "group",
+    "label": "Balanced Input Telemetry",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64265
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "LastUpdatedUTCTimestamp",
+        "type": "uint32",
+        "size": 2,
+        "label": "Last Updated UTC Timestamp",
+        "desc": "Unix timestamp of when this model data was collected (seconds since 1970-01-01)"
+      },
+      {
+        "name": "BalancedInputSelfTestResults",
+        "type": "enum16",
+        "size": 1,
+        "symbols": [
+          {
+            "name": "BALANCED_INPUT_SUCCESS",
+            "value": 0
+          },
+          {
+            "name": "PV_POS_TOO_LARGE",
+            "value": 1
+          },
+          {
+            "name": "PV_NEG_TOO_LARGE",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "name": "TimesTestResultWasConsecutiveFail",
+        "type": "uint16",
+        "size": 1,
+        "label": "Times Test Result Was Consecutive Fail",
+        "desc": "The number of failed balanced input startup tests attempts in a row"
+      },
+      {
+        "name": "FullInputVoltage",
+        "type": "uint16",
+        "size": 1,
+        "sf": "X10_SF",
+        "units": "V",
+        "label": "Full Input Voltage",
+        "desc": "Full real input voltage when performing the balanced input test"
+      },
+      {
+        "name": "NegativeInputVoltage",
+        "type": "uint16",
+        "size": 1,
+        "sf": "X10_SF",
+        "units": "V",
+        "label": "Negative Input Voltage",
+        "desc": "Negative real input voltage when performing the balanced input test"
+      },
+      {
+        "name": "MaxNegativeInputVoltage",
+        "type": "uint16",
+        "size": 1,
+        "sf": "X10_SF",
+        "units": "V",
+        "label": "Maximum Negative Input Voltage",
+        "desc": "Maximum negative input voltage value that would still pass the balanced input test"
+      },
+      {
+        "name": "MinNegativeInputVoltage",
+        "type": "uint16",
+        "size": 1,
+        "sf": "X10_SF",
+        "units": "V",
+        "label": "Minimum Negative Input Voltage",
+        "desc": "Minimum negative input voltage value that would still pass the balanced input test"
+      },
+      {
+        "name": "InputVoltageRatio",
+        "type": "uint16",
+        "size": 1,
+        "units": "% * 8192",
+        "label": "Input Voltage Ratio",
+        "desc": "Negative Input Voltage divided by Full Input Voltage X 8192"
+      },
+      {
+        "name": "LargestRecordedVoltageRatio",
+        "type": "uint16",
+        "size": 1,
+        "units": "% * 8192",
+        "label": "Largest Recorded Voltage Ratio",
+        "desc": "Largest negative input voltage divided by the total input voltage recorded since last success X 8192"
+      },
+      {
+        "name": "SmallestRecordedVoltageRatio",
+        "type": "uint16",
+        "size": 1,
+        "units": "% * 8192",
+        "label": "Smallest Recorded Voltage Ratio",
+        "desc": "Smallest negative input voltage divided by the total input voltage recorded since last success X 8192"
+      },
+      {
+        "name": "X10_SF",
+        "type": "sunssf",
+        "size": 1
+      },
+      {
+        "name": "Pad0",
+        "type": "pad",
+        "size": 1
+      }
+    ]
+  },
+  "id": 64265
+}

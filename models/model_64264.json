@@ -1,0 +1,228 @@
+{
+  "group": {
+    "name": "pvrss_telemetry",
+    "type": "group",
+    "label": "PVRSS Telemetry",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64264
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "LastUpdatedUTCTimestamp",
+        "type": "uint32",
+        "size": 2,
+        "label": "Last Updated UTC Timestamp",
+        "desc": "Unix timestamp of when this model data was collected (seconds since 1970-01-01)"
+      },
+      {
+        "name": "Status",
+        "type": "bitfield16",
+        "size": 1,
+        "label": "Status",
+        "desc": "The state of PVRSS",
+        "symbols": [
+          {
+            "name": "INSTALLED_COUNT_IS_LOCKED",
+            "value": 0
+          },
+          {
+            "name": "LOCKOUT_ERROR",
+            "value": 1
+          },
+          {
+            "name": "AUTOCONFIG_ACTIVE",
+            "value": 2
+          },
+          {
+            "name": "MANUAL_TEST_ACTIVE",
+            "value": 3
+          },
+          {
+            "name": "VLOW_HIGH_RANGE",
+            "value": 4
+          },
+          {
+            "name": "VOC_HIGH_RANGE",
+            "value": 5
+          }
+        ]
+      },
+      {
+        "name": "SelfTestResults",
+        "type": "enum16",
+        "size": 1,
+        "label": "Self Test Results",
+        "desc": "The results of the last self test",
+        "symbols": [
+          {
+            "name": "SUCCESS",
+            "value": 0
+          },
+          {
+            "name": "VOC_LOW",
+            "value": 1
+          },
+          {
+            "name": "NONE",
+            "value": 2
+          },
+          {
+            "name": "VLOW_HIGH",
+            "value": 3
+          },
+          {
+            "name": "COUNT_MISMATCH",
+            "value": 4
+          },
+          {
+            "name": "VLOW_TIMEOUT",
+            "value": 5
+          },
+          {
+            "name": "NOT_CONFIGURED",
+            "value": 6
+          },
+          {
+            "name": "COUNT_OUT_OF_RANGE",
+            "value": 7
+          },
+          {
+            "name": "VLOW_LOW",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "name": "TimesCountResultWasSuccess",
+        "type": "uint16",
+        "size": 1,
+        "label": "Times Count Result Was Success",
+        "desc": "The total number of successful counting attempts since the PV Link last powered up"
+      },
+      {
+        "name": "TimesCountResultWasLowSun",
+        "type": "uint16",
+        "size": 1,
+        "label": "Times Count Result Was LowSun",
+        "desc": "The total number of counting attempts that resulted in low sun since the PV Link last powered up"
+      },
+      {
+        "name": "TimesCountResultWasFail",
+        "type": "uint16",
+        "size": 1,
+        "label": "Times Count Result Was Fail",
+        "desc": "The total number of failed counting attempts since the PV Link last powered up"
+      },
+      {
+        "name": "TimesCountResultWasConsecutiveFail",
+        "type": "uint16",
+        "size": 1,
+        "label": "Times Count Result Was Consecutive Fail",
+        "desc": "The number of failed counting attempts in a row"
+      },
+      {
+        "name": "WaitTimeBeforeCountingAgain",
+        "type": "uint16",
+        "size": 1,
+        "label": "Wait Time Before Counting Again"
+      },
+      {
+        "name": "NumStrings",
+        "type": "uint16",
+        "size": 1,
+        "label": "Number of PV Strings"
+      },
+      {
+        "name": "InstalledCount",
+        "type": "uint16",
+        "size": 1,
+        "units": "Num SnapRS",
+        "label": "SnapRS Installed Count"
+      },
+      {
+        "name": "DetectedCount",
+        "type": "uint16",
+        "size": 1,
+        "units": "Num SnapRS",
+        "label": "SnapRS Detected Count"
+      },
+      {
+        "name": "CalculatedOffset",
+        "type": "int16",
+        "size": 1,
+        "label": "Calculated SnapRS Offset",
+        "desc": "Error in the calculation"
+      },
+      {
+        "name": "VWhenSnapRSOff",
+        "type": "uint16",
+        "size": 1,
+        "sf": "X100_SF",
+        "units": "V",
+        "label": "Voltage When SnapRS Off"
+      },
+      {
+        "name": "VWhenSnapRSOn",
+        "type": "uint16",
+        "size": 1,
+        "sf": "X10_SF",
+        "units": "V",
+        "label": "Voltage When SnapRS On"
+      },
+      {
+        "name": "Vlow",
+        "type": "uint16",
+        "size": 1,
+        "label": "Raw Voltage When SnapRS Off"
+      },
+      {
+        "name": "VocCompensated",
+        "type": "uint32",
+        "size": 2,
+        "label": "Raw Voltage When SnapRS On",
+        "desc": "Adjusted to have same range/units as Vlow"
+      },
+      {
+        "name": "CalculatedCountNumerator",
+        "type": "uint32",
+        "size": 2,
+        "label": "Calculated Count Numerator",
+        "desc": "Numerator used to calculate detected count"
+      },
+      {
+        "name": "CalculatedCountDenominator",
+        "type": "uint32",
+        "size": 2,
+        "label": "Calculated Count Denominator",
+        "desc": "Denominator used to calculate detected count"
+      },
+      {
+        "name": "X10_SF",
+        "type": "sunssf",
+        "size": 1
+      },
+      {
+        "name": "X100_SF",
+        "type": "sunssf",
+        "size": 1
+      }
+    ]
+  },
+  "id": 64264
+}

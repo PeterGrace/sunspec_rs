@@ -1,0 +1,851 @@
+{
+  "group": {
+    "name": "flash_reader",
+    "type": "group",
+    "label": "Flash memory reader",
+    "desc": "Read contents of Flash",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64258
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "addr",
+        "type": "uint32",
+        "size": 2,
+        "access": "RW",
+        "mandatory": "M"
+      },
+      {
+        "name": "cmd",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "symbols": [
+          {
+            "name": "IDLE",
+            "value": 0
+          },
+          {
+            "name": "READ",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "err",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "symbols": [
+          {
+            "name": "NO_ERROR",
+            "value": 0
+          },
+          {
+            "name": "BAD_ADDRESS",
+            "value": 1
+          },
+          {
+            "name": "FLASH_FAULT",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "groups": [
+      {
+        "name": "sector",
+        "type": "group",
+        "count": 0,
+        "points": [
+          {
+            "name": "w0",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w1",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w2",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w3",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w4",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w5",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w6",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w7",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w8",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w9",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w10",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w11",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w12",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w13",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w14",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w15",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w16",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w17",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w18",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w19",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w20",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w21",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w22",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w23",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w24",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w25",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w26",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w27",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w28",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w29",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w30",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w31",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w32",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w33",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w34",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w35",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w36",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w37",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w38",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w39",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w40",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w41",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w42",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w43",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w44",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w45",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w46",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w47",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w48",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w49",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w50",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w51",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w52",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w53",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w54",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w55",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w56",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w57",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w58",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w59",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w60",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w61",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w62",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w63",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w64",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w65",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w66",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w67",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w68",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w69",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w70",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w71",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w72",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w73",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w74",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w75",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w76",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w77",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w78",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w79",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w80",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w81",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w82",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w83",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w84",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w85",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w86",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w87",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w88",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w89",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w90",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w91",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w92",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w93",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w94",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w95",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w96",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w97",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w98",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w99",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w100",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w101",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w102",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w103",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w104",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w105",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w106",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w107",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w108",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w109",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w110",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w111",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w112",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w113",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w114",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w115",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w116",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w117",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w118",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w119",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w120",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w121",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w122",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w123",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w124",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w125",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w126",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          },
+          {
+            "name": "w127",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M"
+          }
+        ]
+      }
+    ]
+  },
+  "id": 64258
+}

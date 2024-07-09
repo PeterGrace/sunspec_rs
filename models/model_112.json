@@ -1,0 +1,414 @@
+{
+  "group": {
+    "name": "inverter",
+    "type": "group",
+    "label": "Inverter (Split Phase) FLOAT",
+    "desc": "Include this model for split phase inverter monitoring using float values",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 112
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "A",
+        "type": "float32",
+        "size": 2,
+        "units": "A",
+        "mandatory": "M",
+        "label": "Amps",
+        "desc": "AC Current"
+      },
+      {
+        "name": "AphA",
+        "type": "float32",
+        "size": 2,
+        "units": "A",
+        "mandatory": "M",
+        "label": "Amps PhaseA",
+        "desc": "Phase A Current"
+      },
+      {
+        "name": "AphB",
+        "type": "float32",
+        "size": 2,
+        "units": "A",
+        "mandatory": "M",
+        "label": "Amps PhaseB",
+        "desc": "Phase B Current"
+      },
+      {
+        "name": "AphC",
+        "type": "float32",
+        "size": 2,
+        "units": "A",
+        "label": "Amps PhaseC",
+        "desc": "Phase C Current"
+      },
+      {
+        "name": "PPVphAB",
+        "type": "float32",
+        "size": 2,
+        "units": "V",
+        "label": "Phase Voltage AB",
+        "desc": "Phase Voltage AB"
+      },
+      {
+        "name": "PPVphBC",
+        "type": "float32",
+        "size": 2,
+        "units": "V",
+        "label": "Phase Voltage BC",
+        "desc": "Phase Voltage BC"
+      },
+      {
+        "name": "PPVphCA",
+        "type": "float32",
+        "size": 2,
+        "units": "V",
+        "label": "Phase Voltage CA",
+        "desc": "Phase Voltage CA"
+      },
+      {
+        "name": "PhVphA",
+        "type": "float32",
+        "size": 2,
+        "units": "V",
+        "mandatory": "M",
+        "label": "Phase Voltage AN",
+        "desc": "Phase Voltage AN"
+      },
+      {
+        "name": "PhVphB",
+        "type": "float32",
+        "size": 2,
+        "units": "V",
+        "mandatory": "M",
+        "label": "Phase Voltage BN",
+        "desc": "Phase Voltage BN"
+      },
+      {
+        "name": "PhVphC",
+        "type": "float32",
+        "size": 2,
+        "units": "V",
+        "label": "Phase Voltage CN",
+        "desc": "Phase Voltage CN"
+      },
+      {
+        "name": "W",
+        "type": "float32",
+        "size": 2,
+        "units": "W",
+        "mandatory": "M",
+        "label": "Watts",
+        "desc": "AC Power"
+      },
+      {
+        "name": "Hz",
+        "type": "float32",
+        "size": 2,
+        "units": "Hz",
+        "mandatory": "M",
+        "label": "Hz",
+        "desc": "Line Frequency"
+      },
+      {
+        "name": "VA",
+        "type": "float32",
+        "size": 2,
+        "units": "VA",
+        "label": "VA",
+        "desc": "AC Apparent Power"
+      },
+      {
+        "name": "VAr",
+        "type": "float32",
+        "size": 2,
+        "units": "var",
+        "label": "VAr",
+        "desc": "AC Reactive Power"
+      },
+      {
+        "name": "PF",
+        "type": "float32",
+        "size": 2,
+        "units": "Pct",
+        "label": "PF",
+        "desc": "AC Power Factor"
+      },
+      {
+        "name": "WH",
+        "type": "float32",
+        "size": 2,
+        "units": "Wh",
+        "mandatory": "M",
+        "label": "WattHours",
+        "desc": "AC Energy"
+      },
+      {
+        "name": "DCA",
+        "type": "float32",
+        "size": 2,
+        "units": "A",
+        "label": "DC Amps",
+        "desc": "DC Current"
+      },
+      {
+        "name": "DCV",
+        "type": "float32",
+        "size": 2,
+        "units": "V",
+        "label": "DC Voltage",
+        "desc": "DC Voltage"
+      },
+      {
+        "name": "DCW",
+        "type": "float32",
+        "size": 2,
+        "units": "W",
+        "label": "DC Watts",
+        "desc": "DC Power"
+      },
+      {
+        "name": "TmpCab",
+        "type": "float32",
+        "size": 2,
+        "units": "C",
+        "mandatory": "M",
+        "label": "Cabinet Temperature",
+        "desc": "Cabinet Temperature"
+      },
+      {
+        "name": "TmpSnk",
+        "type": "float32",
+        "size": 2,
+        "units": "C",
+        "label": "Heat Sink Temperature",
+        "desc": "Heat Sink Temperature"
+      },
+      {
+        "name": "TmpTrns",
+        "type": "float32",
+        "size": 2,
+        "units": "C",
+        "label": "Transformer Temperature",
+        "desc": "Transformer Temperature"
+      },
+      {
+        "name": "TmpOt",
+        "type": "float32",
+        "size": 2,
+        "units": "C",
+        "label": "Other Temperature",
+        "desc": "Other Temperature"
+      },
+      {
+        "name": "St",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Operating State",
+        "desc": "Enumerated value.  Operating state",
+        "symbols": [
+          {
+            "name": "OFF",
+            "value": 1,
+            "label": "Off",
+            "desc": "Device is not operating"
+          },
+          {
+            "name": "SLEEPING",
+            "value": 2,
+            "label": "Sleeping",
+            "desc": "Device is sleeping / auto-shutdown"
+          },
+          {
+            "name": "STARTING",
+            "value": 3,
+            "label": "Starting",
+            "desc": "Device is staring up"
+          },
+          {
+            "name": "MPPT",
+            "value": 4,
+            "label": "MPPT",
+            "desc": "Device is auto tracking maximum power point"
+          },
+          {
+            "name": "THROTTLED",
+            "value": 5,
+            "label": "Throttled",
+            "desc": "Device is operating at reduced power output"
+          },
+          {
+            "name": "SHUTTING_DOWN",
+            "value": 6,
+            "label": "Shutting down",
+            "desc": "Device is shutting down"
+          },
+          {
+            "name": "FAULT",
+            "value": 7,
+            "label": "Fault",
+            "desc": "One or more faults exist"
+          },
+          {
+            "name": "STANDBY",
+            "value": 8,
+            "label": "Standby",
+            "desc": "Device is in standby mode"
+          }
+        ]
+      },
+      {
+        "name": "StVnd",
+        "type": "enum16",
+        "size": 1,
+        "label": "Vendor Operating State",
+        "desc": "Vendor specific operating state code"
+      },
+      {
+        "name": "Evt1",
+        "type": "bitfield32",
+        "size": 2,
+        "mandatory": "M",
+        "label": "Event1",
+        "desc": "Bitmask value. Event fields",
+        "symbols": [
+          {
+            "name": "GROUND_FAULT",
+            "value": 0,
+            "label": "Ground fault"
+          },
+          {
+            "name": "DC_OVER_VOLT",
+            "value": 1,
+            "label": "DC over voltage"
+          },
+          {
+            "name": "AC_DISCONNECT",
+            "value": 2,
+            "label": "AC disconnect open"
+          },
+          {
+            "name": "DC_DISCONNECT",
+            "value": 3,
+            "label": "DC disconnect open"
+          },
+          {
+            "name": "GRID_DISCONNECT",
+            "value": 4,
+            "label": "Grid shutdown"
+          },
+          {
+            "name": "CABINET_OPEN",
+            "value": 5,
+            "label": "Cabinet open"
+          },
+          {
+            "name": "MANUAL_SHUTDOWN",
+            "value": 6,
+            "label": "Manual shutdown"
+          },
+          {
+            "name": "OVER_TEMP",
+            "value": 7,
+            "label": "Over temperature"
+          },
+          {
+            "name": "OVER_FREQUENCY",
+            "value": 8,
+            "label": "Frequency above limit"
+          },
+          {
+            "name": "UNDER_FREQUENCY",
+            "value": 9,
+            "label": "Frequency under limit"
+          },
+          {
+            "name": "AC_OVER_VOLT",
+            "value": 10,
+            "label": "AC Voltage above limit"
+          },
+          {
+            "name": "AC_UNDER_VOLT",
+            "value": 11,
+            "label": "AC Voltage under limit"
+          },
+          {
+            "name": "BLOWN_STRING_FUSE",
+            "value": 12,
+            "label": "Blown String fuse on input"
+          },
+          {
+            "name": "UNDER_TEMP",
+            "value": 13,
+            "label": "Under temperature"
+          },
+          {
+            "name": "MEMORY_LOSS",
+            "value": 14,
+            "label": "Generic Memory or Communication error (internal)"
+          },
+          {
+            "name": "HW_TEST_FAILURE",
+            "value": 15,
+            "label": "Hardware test failure"
+          }
+        ]
+      },
+      {
+        "name": "Evt2",
+        "type": "bitfield32",
+        "size": 2,
+        "mandatory": "M",
+        "label": "Event Bitfield 2",
+        "desc": "Reserved for future use"
+      },
+      {
+        "name": "EvtVnd1",
+        "type": "bitfield32",
+        "size": 2,
+        "label": "Vendor Event Bitfield 1",
+        "desc": "Vendor defined events"
+      },
+      {
+        "name": "EvtVnd2",
+        "type": "bitfield32",
+        "size": 2,
+        "label": "Vendor Event Bitfield 2",
+        "desc": "Vendor defined events"
+      },
+      {
+        "name": "EvtVnd3",
+        "type": "bitfield32",
+        "size": 2,
+        "label": "Vendor Event Bitfield 3",
+        "desc": "Vendor defined events"
+      },
+      {
+        "name": "EvtVnd4",
+        "type": "bitfield32",
+        "size": 2,
+        "label": "Vendor Event Bitfield 4",
+        "desc": "Vendor defined events"
+      }
+    ]
+  },
+  "id": 112
+}

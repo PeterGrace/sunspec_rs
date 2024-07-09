@@ -1,0 +1,97 @@
+{
+  "group": {
+    "name": "output_controls",
+    "type": "group",
+    "label": "Output Controls",
+    "desc": "Generac inverter output controls.",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64261
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "VarRamp",
+        "type": "uint16",
+        "size": 1,
+        "sf": "Rmp_SF",
+        "units": "Pct",
+        "access": "RW",
+        "label": "Reactive power ramp",
+        "desc": "Reactive power ramp-up rate as a percentage of max power."
+      },
+      {
+        "name": "Pad1",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad2",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad3",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad4",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad5",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad6",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad7",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad8",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad9",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad10",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Rmp_SF",
+        "type": "sunssf",
+        "size": 1,
+        "label": "Ramp Rate Scale Factor",
+        "desc": "Ramp Rate Scale Factor"
+      }
+    ]
+  },
+  "id": 64261
+}

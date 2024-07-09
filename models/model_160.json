@@ -1,0 +1,415 @@
+{
+  "group": {
+    "name": "mppt",
+    "type": "group",
+    "label": "Multiple MPPT Inverter Extension Model",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 160
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "DCA_SF",
+        "type": "sunssf",
+        "size": 1,
+        "label": "Current Scale Factor"
+      },
+      {
+        "name": "DCV_SF",
+        "type": "sunssf",
+        "size": 1,
+        "label": "Voltage Scale Factor"
+      },
+      {
+        "name": "DCW_SF",
+        "type": "sunssf",
+        "size": 1,
+        "label": "Power Scale Factor"
+      },
+      {
+        "name": "DCWH_SF",
+        "type": "sunssf",
+        "size": 1,
+        "label": "Energy Scale Factor"
+      },
+      {
+        "name": "Evt",
+        "type": "bitfield32",
+        "size": 2,
+        "label": "Global Events",
+        "symbols": [
+          {
+            "name": "GROUND_FAULT",
+            "value": 0,
+            "label": "Ground Fault"
+          },
+          {
+            "name": "INPUT_OVER_VOLTAGE",
+            "value": 1,
+            "label": "Input Over Voltage"
+          },
+          {
+            "name": "RESERVED_2",
+            "value": 2
+          },
+          {
+            "name": "DC_DISCONNECT",
+            "value": 3,
+            "label": "DC Disconnect"
+          },
+          {
+            "name": "RESERVED_4",
+            "value": 4
+          },
+          {
+            "name": "CABINET_OPEN",
+            "value": 5,
+            "label": "Cabinet Open"
+          },
+          {
+            "name": "MANUAL_SHUTDOWN",
+            "value": 6,
+            "label": "Manual Shutdown"
+          },
+          {
+            "name": "OVER_TEMP",
+            "value": 7,
+            "label": "Over Temperature"
+          },
+          {
+            "name": "RESERVED_8",
+            "value": 8
+          },
+          {
+            "name": "RESERVED_9",
+            "value": 9
+          },
+          {
+            "name": "RESERVED_10",
+            "value": 10
+          },
+          {
+            "name": "RESERVED_11",
+            "value": 11
+          },
+          {
+            "name": "BLOWN_FUSE",
+            "value": 12,
+            "label": "Blown Fuse"
+          },
+          {
+            "name": "UNDER_TEMP",
+            "value": 13,
+            "label": "Under Temperature"
+          },
+          {
+            "name": "MEMORY_LOSS",
+            "value": 14,
+            "label": "Memory Loss"
+          },
+          {
+            "name": "ARC_DETECTION",
+            "value": 15,
+            "label": "Arc Detection"
+          },
+          {
+            "name": "RESERVED_16",
+            "value": 16
+          },
+          {
+            "name": "RESERVED_17",
+            "value": 17
+          },
+          {
+            "name": "RESERVED_18",
+            "value": 18
+          },
+          {
+            "name": "RESERVED_19",
+            "value": 19
+          },
+          {
+            "name": "TEST_FAILED",
+            "value": 20,
+            "label": "Test Failed"
+          },
+          {
+            "name": "INPUT_UNDER_VOLTAGE",
+            "value": 21,
+            "label": "Under Voltage"
+          },
+          {
+            "name": "INPUT_OVER_CURRENT",
+            "value": 22,
+            "label": "Over Current"
+          }
+        ]
+      },
+      {
+        "name": "N",
+        "type": "count",
+        "size": 1,
+        "label": "Number of Modules"
+      },
+      {
+        "name": "TmsPer",
+        "type": "uint16",
+        "size": 1,
+        "label": "Timestamp Period"
+      }
+    ],
+    "groups": [
+      {
+        "name": "module",
+        "type": "group",
+        "count": 0,
+        "points": [
+          {
+            "name": "ID",
+            "type": "uint16",
+            "size": 1,
+            "label": "Input ID"
+          },
+          {
+            "name": "IDStr",
+            "type": "string",
+            "size": 8,
+            "label": "Input ID Sting"
+          },
+          {
+            "name": "DCA",
+            "type": "uint16",
+            "size": 1,
+            "sf": "DCA_SF",
+            "units": "A",
+            "label": "DC Current"
+          },
+          {
+            "name": "DCV",
+            "type": "uint16",
+            "size": 1,
+            "sf": "DCV_SF",
+            "units": "V",
+            "label": "DC Voltage"
+          },
+          {
+            "name": "DCW",
+            "type": "uint16",
+            "size": 1,
+            "sf": "DCW_SF",
+            "units": "W",
+            "label": "DC Power"
+          },
+          {
+            "name": "DCWH",
+            "type": "acc32",
+            "size": 2,
+            "sf": "DCWH_SF",
+            "units": "Wh",
+            "label": "Lifetime Energy"
+          },
+          {
+            "name": "Tms",
+            "type": "uint32",
+            "size": 2,
+            "units": "Secs",
+            "label": "Timestamp"
+          },
+          {
+            "name": "Tmp",
+            "type": "int16",
+            "size": 1,
+            "units": "C",
+            "label": "Temperature"
+          },
+          {
+            "name": "DCSt",
+            "type": "enum16",
+            "size": 1,
+            "label": "Operating State",
+            "symbols": [
+              {
+                "name": "OFF",
+                "value": 1,
+                "label": "Off"
+              },
+              {
+                "name": "SLEEPING",
+                "value": 2,
+                "label": "Sleeping"
+              },
+              {
+                "name": "STARTING",
+                "value": 3,
+                "label": "Starting"
+              },
+              {
+                "name": "MPPT",
+                "value": 4,
+                "label": "MPPT"
+              },
+              {
+                "name": "THROTTLED",
+                "value": 5,
+                "label": "Throttled"
+              },
+              {
+                "name": "SHUTTING_DOWN",
+                "value": 6,
+                "label": "Shutting Down"
+              },
+              {
+                "name": "FAULT",
+                "value": 7,
+                "label": "Fault"
+              },
+              {
+                "name": "STANDBY",
+                "value": 8,
+                "label": "Standby"
+              },
+              {
+                "name": "TEST",
+                "value": 9,
+                "label": "Test"
+              },
+              {
+                "name": "RESERVED_10",
+                "value": 10
+              }
+            ]
+          },
+          {
+            "name": "DCEvt",
+            "type": "bitfield32",
+            "size": 2,
+            "label": "Module Events",
+            "symbols": [
+              {
+                "name": "GROUND_FAULT",
+                "value": 0,
+                "label": "Ground Fault"
+              },
+              {
+                "name": "INPUT_OVER_VOLTAGE",
+                "value": 1,
+                "label": "Input Over Voltage"
+              },
+              {
+                "name": "RESERVED_2",
+                "value": 2
+              },
+              {
+                "name": "DC_DISCONNECT",
+                "value": 3,
+                "label": "DC Disconnect"
+              },
+              {
+                "name": "RESERVED_4",
+                "value": 4
+              },
+              {
+                "name": "CABINET_OPEN",
+                "value": 5,
+                "label": "Cabinet Open"
+              },
+              {
+                "name": "MANUAL_SHUTDOWN",
+                "value": 6,
+                "label": "Manual Shutdown"
+              },
+              {
+                "name": "OVER_TEMP",
+                "value": 7,
+                "label": "Over Temperature"
+              },
+              {
+                "name": "RESERVED_8",
+                "value": 8
+              },
+              {
+                "name": "RESERVED_9",
+                "value": 9
+              },
+              {
+                "name": "RESERVED_10",
+                "value": 10
+              },
+              {
+                "name": "RESERVED_11",
+                "value": 11
+              },
+              {
+                "name": "BLOWN_FUSE",
+                "value": 12,
+                "label": "Blown Fuse"
+              },
+              {
+                "name": "UNDER_TEMP",
+                "value": 13,
+                "label": "Under Temperature"
+              },
+              {
+                "name": "MEMORY_LOSS",
+                "value": 14,
+                "label": "Memory Loss"
+              },
+              {
+                "name": "ARC_DETECTION",
+                "value": 15,
+                "label": "Arc Detection"
+              },
+              {
+                "name": "RESERVED_16",
+                "value": 16
+              },
+              {
+                "name": "RESERVED_17",
+                "value": 17
+              },
+              {
+                "name": "RESERVED_18",
+                "value": 18
+              },
+              {
+                "name": "RESERVED_19",
+                "value": 19
+              },
+              {
+                "name": "TEST_FAILED",
+                "value": 20,
+                "label": "Test Failed"
+              },
+              {
+                "name": "INPUT_UNDER_VOLTAGE",
+                "value": 21,
+                "label": "Under Voltage"
+              },
+              {
+                "name": "INPUT_OVER_CURRENT",
+                "value": 22,
+                "label": "Over Current"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "id": 160
+}

@@ -7,9 +7,10 @@ mod cli_args;
 use clap::Parser;
 use cli_args::CliArgs;
 use std::process;
-use sunspec_rs::sunspec_connection::SunSpecConnection;
+use sunspec_rs::sunspec_connection::{SunSpecConnection, Word};
 use sunspec_rs::sunspec_data::SunSpecData;
 use sunspec_rs::sunspec_models::ValueType;
+use tokio_modbus::Address;
 use tracing_log::AsTrace;
 use tracing_subscriber;
 
@@ -20,6 +21,8 @@ pub async fn main() {
     // setup log level
     tracing_subscriber::fmt()
         .with_max_level(cli.verbose.log_level_filter().as_trace())
+        .with_file(true)
+        .with_line_number(true)
         .init();
 
     let socket_addr = "127.0.0.1:5083".parse().unwrap();
@@ -60,15 +63,26 @@ pub async fn main() {
         }
     } else {
         // read fields
-        let _model: u16 = 64206_u16;
-        let _fields: Vec<&str> = vec!["XFRV", "XFRTms"];
+        let _model: u16 = 64208_u16;
         let md = ss.models.get(&_model).unwrap().clone();
-        let block_count = md.clone().get_block_count().unwrap();
-        info!("{:#?}", block_count);
+        // let testing: Vec<Word> = ss.get_raw(md.address, 64).await.unwrap();
+        // info!("{:#?}", testing);
+        let _fields: Vec<&str> = vec![
+            "SysMd",
+            "CTPow",
+            "WhIn",
+            "WhOut",
+            "ErrorWord",
+            "EnableBits",
+            "RelayStatus",
+            "StatusWord",
+            "LineStatus",
+            "Pad0",
+        ];
         for f in _fields {
             match ss.clone().get_point(md.clone(), f, None).await {
                 Ok(pt) => {
-                    debug!("{:#?}", pt.value);
+                    println!("64208/{f} = {:#?}", pt.value);
                 }
                 Err(e) => {
                     error!("Error received: {e}");

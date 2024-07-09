@@ -1,0 +1,590 @@
+{
+  "group": {
+    "name": "legacy_status",
+    "type": "group",
+    "label": "RCP Legacy Status Update",
+    "desc": "Status update data",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64253
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "VT_sf",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "label": "VT_sf",
+        "desc": "Scale factor for V and T"
+      },
+      {
+        "name": "I_sf",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "label": "I_sf",
+        "desc": "Scale factor for I"
+      },
+      {
+        "name": "St",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "State",
+        "desc": "RCP state code",
+        "symbols": [
+          {
+            "name": "UNKNOWN",
+            "value": 0,
+            "label": "device offline"
+          },
+          {
+            "name": "DISABLED",
+            "value": 16,
+            "label": "disabled"
+          },
+          {
+            "name": "INITIALIZING",
+            "value": 256,
+            "label": "initializing"
+          },
+          {
+            "name": "POWERING_UP",
+            "value": 272,
+            "label": "powering up"
+          },
+          {
+            "name": "CONNECTING_BUS",
+            "value": 288,
+            "label": "connecting to REbus"
+          },
+          {
+            "name": "DISCONNECTING_BUS",
+            "value": 304,
+            "label": "disconnecting REbus"
+          },
+          {
+            "name": "TESTING_BUS",
+            "value": 320,
+            "label": "testing REbus..."
+          },
+          {
+            "name": "LOW_BUS_VOLTAGE",
+            "value": 512,
+            "label": "low REbus voltage"
+          },
+          {
+            "name": "STANDBY",
+            "value": 768,
+            "label": "standby"
+          },
+          {
+            "name": "WAITING",
+            "value": 784,
+            "label": "waiting"
+          },
+          {
+            "name": "WAITING_NO_INPUT",
+            "value": 800,
+            "label": "waiting - no input"
+          },
+          {
+            "name": "CONNECTING_GRID",
+            "value": 2048,
+            "label": "connecting grid"
+          },
+          {
+            "name": "DISCONNECTING_GRID",
+            "value": 2064,
+            "label": "disconnecting grid"
+          },
+          {
+            "name": "GRID_CONNECTED",
+            "value": 2080,
+            "label": "grid connected"
+          },
+          {
+            "name": "ISLANDED",
+            "value": 2096,
+            "label": "islanded"
+          },
+          {
+            "name": "CONNECTING_GENERATOR",
+            "value": 2112,
+            "label": "connecting generator"
+          },
+          {
+            "name": "GENERATOR_PARALLEL",
+            "value": 2128,
+            "label": "generator parallel"
+          },
+          {
+            "name": "LOW_INPUT_VOLTAGE",
+            "value": 4096,
+            "label": "low input voltage"
+          },
+          {
+            "name": "TESTING_DEVICE_INPUT",
+            "value": 4112,
+            "label": "testing input..."
+          },
+          {
+            "name": "CONNECTING_INPUT",
+            "value": 4352,
+            "label": "connecting input"
+          },
+          {
+            "name": "DISCONNECTING_INPUT",
+            "value": 4368,
+            "label": "disconnecting input"
+          },
+          {
+            "name": "CALIBRATING",
+            "value": 4608,
+            "label": "calibrating"
+          },
+          {
+            "name": "CALIBRATION_SUCCESS",
+            "value": 4624,
+            "label": "calibration success!"
+          },
+          {
+            "name": "CALIBRATION_NEEDED",
+            "value": 4640,
+            "label": "calibration required"
+          },
+          {
+            "name": "BURN_IN",
+            "value": 4656,
+            "label": "burning in"
+          },
+          {
+            "name": "BURN_IN_DONE",
+            "value": 4672,
+            "label": "burn in done"
+          },
+          {
+            "name": "SCHEDULER_OVERRIDDEN",
+            "value": 4864,
+            "label": "running, overridden"
+          },
+          {
+            "name": "SCHEDULER_DISABLED",
+            "value": 4880,
+            "label": "scheduler disabled"
+          },
+          {
+            "name": "RUNNING",
+            "value": 8192,
+            "label": "running"
+          },
+          {
+            "name": "MAKING_POWER",
+            "value": 8208,
+            "label": "making power"
+          },
+          {
+            "name": "LIMITING_POWER",
+            "value": 8224,
+            "label": "limiting power"
+          },
+          {
+            "name": "LOW_WIND",
+            "value": 12288,
+            "label": "low wind"
+          },
+          {
+            "name": "HIGH_WIND",
+            "value": 12304,
+            "label": "high wind"
+          },
+          {
+            "name": "LOW_SUN",
+            "value": 12544,
+            "label": "low sun"
+          },
+          {
+            "name": "CHARGING_BATTERY",
+            "value": 24576,
+            "label": "charging"
+          },
+          {
+            "name": "FLOAT_CHARGING_BATTERY",
+            "value": 24592,
+            "label": "float charging"
+          },
+          {
+            "name": "BULK_CHARGING_BATTERY",
+            "value": 24608,
+            "label": "bulk charging"
+          },
+          {
+            "name": "ABSORPTION_CHARGING_BATTERY",
+            "value": 24624,
+            "label": "absorption charging"
+          },
+          {
+            "name": "EQUALIZE_CHARGING_BATTERY",
+            "value": 24640,
+            "label": "equalizing"
+          },
+          {
+            "name": "DISCHARGING_BATTERY",
+            "value": 24832,
+            "label": "discharging"
+          },
+          {
+            "name": "LOW_BATTERY_VOLTAGE",
+            "value": 24848,
+            "label": "low battery voltage"
+          },
+          {
+            "name": "ERROR_GENERIC",
+            "value": 28672,
+            "label": "error"
+          },
+          {
+            "name": "OVER_VOLTAGE_INPUT",
+            "value": 28688,
+            "label": "over voltage input"
+          },
+          {
+            "name": "OVER_VOLTAGE_OUTPUT",
+            "value": 28704,
+            "label": "over voltage output"
+          },
+          {
+            "name": "OVER_CURRENT_INPUT",
+            "value": 28720,
+            "label": "over current input"
+          },
+          {
+            "name": "OVER_CURRENT_OUTPUT",
+            "value": 28736,
+            "label": "over current output"
+          },
+          {
+            "name": "ERROR_LOW_BATTERY_VOLTAGE",
+            "value": 28752,
+            "label": "error: low batt volts"
+          },
+          {
+            "name": "OVER_TEMPERATURE",
+            "value": 28928,
+            "label": "over temperature"
+          },
+          {
+            "name": "GROUND_FAULT",
+            "value": 29184,
+            "label": "err: ground fault"
+          },
+          {
+            "name": "INSULATION_FAULT",
+            "value": 29200,
+            "label": "err: insulation fault"
+          },
+          {
+            "name": "CALIBRATION_0",
+            "value": 32256,
+            "label": "calibration mode"
+          },
+          {
+            "name": "CALIBRATION_1",
+            "value": 32272,
+            "label": "calibration 1"
+          },
+          {
+            "name": "CALIBRATION_2",
+            "value": 32288,
+            "label": "calibration 2"
+          },
+          {
+            "name": "CALIBRATION_3",
+            "value": 32304,
+            "label": "calibration 3"
+          }
+        ]
+      },
+      {
+        "name": "P",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "mandatory": "M",
+        "label": "REbus Power",
+        "desc": "REbus power (positive means the device is sourcing power onto REbus, negative means the device is sinking power from REbus) "
+      },
+      {
+        "name": "E",
+        "type": "uint32",
+        "size": 2,
+        "units": "Wh",
+        "mandatory": "M",
+        "label": "Accumulated Energy",
+        "desc": "Total accumulated energy (exact definition differs by device)"
+      },
+      {
+        "name": "Rb",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "REbus Bits",
+        "desc": "Status flags",
+        "symbols": [
+          {
+            "name": "ENABLE_MASTER",
+            "value": 0
+          },
+          {
+            "name": "ENABLE_SOURCE",
+            "value": 1
+          },
+          {
+            "name": "ENABLE_SINK",
+            "value": 2
+          },
+          {
+            "name": "RESERVED3",
+            "value": 3
+          },
+          {
+            "name": "BUS_CONNECTED",
+            "value": 4
+          },
+          {
+            "name": "BUS_DISCONNECTED",
+            "value": 5
+          },
+          {
+            "name": "SOURCING",
+            "value": 6
+          },
+          {
+            "name": "SINKING",
+            "value": 7
+          },
+          {
+            "name": "BUS_VOLTAGE_LOW",
+            "value": 8
+          },
+          {
+            "name": "BUS_VOLTAGE_HIGH",
+            "value": 9
+          },
+          {
+            "name": "BUS_IMBALANCE",
+            "value": 10
+          },
+          {
+            "name": "RESERVED11",
+            "value": 11
+          },
+          {
+            "name": "PLC_GOOD",
+            "value": 12
+          },
+          {
+            "name": "HEARTBEAT_GOOD",
+            "value": 13
+          },
+          {
+            "name": "ADAPTIVE_VREBUS_ACTIVE",
+            "value": 14
+          },
+          {
+            "name": "RESERVED15",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "V",
+        "type": "int16",
+        "size": 1,
+        "sf": "VT_sf",
+        "units": "V",
+        "mandatory": "M",
+        "label": "REbus Voltage ",
+        "desc": "REbus voltage"
+      },
+      {
+        "name": "I",
+        "type": "int16",
+        "size": 1,
+        "sf": "I_sf",
+        "units": "A",
+        "mandatory": "M",
+        "label": "REbus Current",
+        "desc": "REbus current"
+      },
+      {
+        "name": "T",
+        "type": "int16",
+        "size": 1,
+        "sf": "VT_sf",
+        "units": "C",
+        "mandatory": "M",
+        "label": "Device Temperature",
+        "desc": "Device temperature"
+      },
+      {
+        "name": "O0",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata 0",
+        "desc": "Otherdata 0"
+      },
+      {
+        "name": "O1",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata 1",
+        "desc": "Otherdata 1"
+      },
+      {
+        "name": "O2",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata 2",
+        "desc": "Otherdata 2"
+      },
+      {
+        "name": "O3",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata 3",
+        "desc": "Otherdata 3"
+      },
+      {
+        "name": "O4",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata 4",
+        "desc": "Otherdata 4"
+      },
+      {
+        "name": "O5",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata 5",
+        "desc": "Otherdata 5"
+      },
+      {
+        "name": "O6",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata 6",
+        "desc": "Otherdata 6"
+      },
+      {
+        "name": "O7",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata 7",
+        "desc": "Otherdata 7"
+      },
+      {
+        "name": "O8",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata 8",
+        "desc": "Otherdata 8"
+      },
+      {
+        "name": "O9",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata 9",
+        "desc": "Otherdata 9"
+      },
+      {
+        "name": "OA",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata A",
+        "desc": "Otherdata 10"
+      },
+      {
+        "name": "OB",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata B",
+        "desc": "Otherdata 11"
+      },
+      {
+        "name": "OC",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata C",
+        "desc": "Otherdata 12"
+      },
+      {
+        "name": "OD",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata D",
+        "desc": "Otherdata 13"
+      },
+      {
+        "name": "OE",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata E",
+        "desc": "Otherdata 14"
+      },
+      {
+        "name": "OF",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata F",
+        "desc": "Otherdata 15"
+      },
+      {
+        "name": "OG",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Otherdata G",
+        "desc": "Otherdata 16"
+      },
+      {
+        "name": "Pad",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      }
+    ]
+  },
+  "id": 64253
+}

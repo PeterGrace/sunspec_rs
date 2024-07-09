@@ -1,0 +1,470 @@
+{
+  "group": {
+    "name": "site_energy",
+    "type": "group",
+    "label": "Site Energy Metrics",
+    "desc": "Lifetime accumulated site-wide energy metrics",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64259
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "time",
+        "type": "uint32",
+        "size": 2,
+        "units": "Unix seconds",
+        "mandatory": "M",
+        "label": "Timestamp",
+        "desc": "Unix epoch time when update was created"
+      },
+      {
+        "name": "sysmode",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Sysmode",
+        "desc": "System operating mode",
+        "symbols": [
+          {
+            "name": "SAFETY_SHUTDOWN",
+            "value": 0
+          },
+          {
+            "name": "GRID_TIE",
+            "value": 1
+          },
+          {
+            "name": "SELF_SUPPLY",
+            "value": 2
+          },
+          {
+            "name": "CLEAN_BACKUP",
+            "value": 3
+          },
+          {
+            "name": "PRIORITY_BACKUP",
+            "value": 4
+          },
+          {
+            "name": "REMOTE_ARBITRAGE",
+            "value": 5
+          },
+          {
+            "name": "SELL",
+            "value": 6
+          }
+        ]
+      },
+      {
+        "name": "alarms",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Alarms",
+        "desc": "Bitfield of device types reporting errors",
+        "symbols": [
+          {
+            "name": "UNKNOWN_ERROR",
+            "value": 0
+          },
+          {
+            "name": "PVLINK_ERROR",
+            "value": 1
+          },
+          {
+            "name": "INVERTER_ERROR",
+            "value": 2
+          },
+          {
+            "name": "BATTERY_ERROR",
+            "value": 3
+          },
+          {
+            "name": "DC_GENERATOR_ERROR",
+            "value": 4
+          }
+        ]
+      },
+      {
+        "name": "bat_soc",
+        "type": "uint16",
+        "size": 1,
+        "sf": "sf_10",
+        "units": "%SoC",
+        "mandatory": "M",
+        "label": "Battery SoC",
+        "desc": "Weighted average state of charge of all connected batteries"
+      },
+      {
+        "name": "sf_10",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "inv_state",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Inverter State",
+        "desc": "State of the inverter",
+        "symbols": [
+          {
+            "name": "UNKNOWN",
+            "value": 0,
+            "label": "unknown"
+          },
+          {
+            "name": "DISABLED",
+            "value": 16,
+            "label": "disabled"
+          },
+          {
+            "name": "INITIALIZING",
+            "value": 256,
+            "label": "initializing"
+          },
+          {
+            "name": "POWERING_UP",
+            "value": 272,
+            "label": "powering up"
+          },
+          {
+            "name": "CONNECTING_BUS",
+            "value": 288,
+            "label": "connecting to REbus"
+          },
+          {
+            "name": "TESTING_BUS",
+            "value": 320,
+            "label": "testing REbus"
+          },
+          {
+            "name": "LOW_BUS_VOLTAGE",
+            "value": 512,
+            "label": "low REbus voltage"
+          },
+          {
+            "name": "WAITING",
+            "value": 784,
+            "label": "waiting"
+          },
+          {
+            "name": "CONNECTING_GRID",
+            "value": 2048,
+            "label": "connecting grid"
+          },
+          {
+            "name": "DISCONNECTING_GRID",
+            "value": 2064,
+            "label": "disconnecting grid"
+          },
+          {
+            "name": "GRID_CONNECTED",
+            "value": 2080,
+            "label": "grid connected"
+          },
+          {
+            "name": "ISLANDED",
+            "value": 2096,
+            "label": "islanded"
+          },
+          {
+            "name": "GENERATOR_PARALLEL",
+            "value": 2112,
+            "label": "generator parallel"
+          },
+          {
+            "name": "ERROR_GENERIC",
+            "value": 28672,
+            "label": "error"
+          },
+          {
+            "name": "ERROR_REBUS_FAULT",
+            "value": 29968,
+            "label": "error: REbus fault"
+          },
+          {
+            "name": "ERROR_INTERNAL_BUS_FAULT",
+            "value": 29984,
+            "label": "internal bus fault"
+          },
+          {
+            "name": "CONFIGURATION_ERROR",
+            "value": 30464,
+            "label": "configuration error"
+          },
+          {
+            "name": "BAD_RESET_ERROR",
+            "value": 30480,
+            "label": "bad reset error"
+          },
+          {
+            "name": "GROUND_FAULT",
+            "value": 49152,
+            "label": "ground fault"
+          }
+        ]
+      },
+      {
+        "name": "dcgenerator_power",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "mandatory": "M",
+        "label": "DC Generator Power",
+        "desc": "Instantaneous DC generator power measurement"
+      },
+      {
+        "name": "generation",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Generation Energy",
+        "desc": "Total energy of connected solar generation devices"
+      },
+      {
+        "name": "consumption",
+        "type": "int64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Consumption Energy",
+        "desc": "Energy consumption of local AC loads"
+      },
+      {
+        "name": "bat_out",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Battery Discharge Energy",
+        "desc": "DC energy discharged from battery"
+      },
+      {
+        "name": "bat_in",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Battery Charge Energy",
+        "desc": "DC energy into battery (charging)"
+      },
+      {
+        "name": "net_out",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Net Exported Energy",
+        "desc": "Total AC energy exported from the site"
+      },
+      {
+        "name": "net_in",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Net Imported Energy",
+        "desc": "Total AC energy imported from the site"
+      },
+      {
+        "name": "inv_out",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Inverter Exported energy",
+        "desc": "AC energy exported to the DC bus through the inverter"
+      },
+      {
+        "name": "inv_in",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Inverter Imported Energy",
+        "desc": "AC energy imported to the DC bus through the inverter"
+      },
+      {
+        "name": "dcgenerator_out",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "DC Generator Exported Energy",
+        "desc": "DC energy exported from the DC generator"
+      },
+      {
+        "name": "dcgenerator_in",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "DC Generator Imported Energy",
+        "desc": "DC energy imported from the DC generator"
+      },
+      {
+        "name": "net_out_var",
+        "type": "uint64",
+        "size": 4,
+        "units": "VAR-seconds",
+        "mandatory": "M",
+        "label": "Net Reactive Energy Injected",
+        "desc": "Total reactive energy injected by site, VAR"
+      },
+      {
+        "name": "net_in_var",
+        "type": "uint64",
+        "size": 4,
+        "units": "VAR-seconds",
+        "mandatory": "M",
+        "label": "Net Reactive Energy Absorbed",
+        "desc": "Total reactive energy absorbed by site"
+      },
+      {
+        "name": "gen_power",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "mandatory": "M",
+        "label": "Generation Power",
+        "desc": "Instantaneous power measurement from solar generation sources"
+      },
+      {
+        "name": "inv_power",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "mandatory": "M",
+        "label": "Inverter Power",
+        "desc": "Instantaneous power measurement of inverter AC output"
+      },
+      {
+        "name": "net_power",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "mandatory": "M",
+        "label": "Net Power",
+        "desc": "Instantaneous AC power measurement from site"
+      },
+      {
+        "name": "bat_power",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "mandatory": "M",
+        "label": "Battery Power",
+        "desc": "Instantaneous battery power measurement"
+      },
+      {
+        "name": "max_sink_power",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "mandatory": "M",
+        "label": "Max Sink Power",
+        "desc": "Estimated maximum amount of power the site is capable of sinking at present"
+      },
+      {
+        "name": "max_source_power",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "mandatory": "M",
+        "label": "Max Source Power",
+        "desc": "Estimated maximum amount of power the site is capable of sourcing at present"
+      },
+      {
+        "name": "previous_time",
+        "type": "uint32",
+        "size": 2,
+        "units": "Unix seconds",
+        "mandatory": "M"
+      },
+      {
+        "name": "generation_delta",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Delta Generation Energy"
+      },
+      {
+        "name": "consumption_delta",
+        "type": "int64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Delta Consumption Energy"
+      },
+      {
+        "name": "bat_out_delta",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Delta Battery Discharge Energy"
+      },
+      {
+        "name": "bat_in_delta",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Delta Battery Charge Energy"
+      },
+      {
+        "name": "net_out_delta",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Delta Net Exported Energy"
+      },
+      {
+        "name": "net_in_delta",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Delta Net Imported Energy"
+      },
+      {
+        "name": "inv_out_delta",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Delta Inverter Exported energy"
+      },
+      {
+        "name": "inv_in_delta",
+        "type": "uint64",
+        "size": 4,
+        "units": "Ws",
+        "mandatory": "M",
+        "label": "Delta Inverter Imported Energy"
+      }
+    ]
+  },
+  "id": 64259
+}

@@ -1,0 +1,49 @@
+{
+  "group": {
+    "name": "bom_temp",
+    "type": "group",
+    "label": "Back of Module Temperature Model",
+    "desc": "Include to support variable number of  back of module temperature measurements",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 303
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      }
+    ],
+    "groups": [
+      {
+        "name": "temp",
+        "type": "group",
+        "count": 0,
+        "points": [
+          {
+            "name": "TmpBOM",
+            "type": "int16",
+            "size": 1,
+            "sf": -1,
+            "units": "C",
+            "mandatory": "M",
+            "label": "Temp",
+            "desc": "Back of module temperature measurement"
+          }
+        ]
+      }
+    ]
+  },
+  "id": 303
+}

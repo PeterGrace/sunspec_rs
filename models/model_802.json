@@ -1,0 +1,886 @@
+{
+  "group": {
+    "name": "battery",
+    "type": "group",
+    "label": "Battery Base Model",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 802
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "AHRtg",
+        "type": "uint16",
+        "size": 1,
+        "sf": "AHRtg_SF",
+        "units": "Ah",
+        "mandatory": "M",
+        "label": "Nameplate Charge Capacity",
+        "desc": "Nameplate charge capacity in amp-hours."
+      },
+      {
+        "name": "WHRtg",
+        "type": "uint16",
+        "size": 1,
+        "sf": "WHRtg_SF",
+        "units": "Wh",
+        "mandatory": "M",
+        "label": "Nameplate Energy Capacity",
+        "desc": "Nameplate energy capacity in DC watt-hours."
+      },
+      {
+        "name": "WChaRteMax",
+        "type": "uint16",
+        "size": 1,
+        "sf": "WChaDisChaMax_SF",
+        "units": "W",
+        "mandatory": "M",
+        "label": "Nameplate Max Charge Rate",
+        "desc": "Maximum rate of energy transfer into the storage device in DC watts."
+      },
+      {
+        "name": "WDisChaRteMax",
+        "type": "uint16",
+        "size": 1,
+        "sf": "WChaDisChaMax_SF",
+        "units": "W",
+        "mandatory": "M",
+        "label": "Nameplate Max Discharge Rate",
+        "desc": "Maximum rate of energy transfer out of the storage device in DC watts."
+      },
+      {
+        "name": "DisChaRte",
+        "type": "uint16",
+        "size": 1,
+        "sf": "DisChaRte_SF",
+        "units": "%WHRtg",
+        "label": "Self Discharge Rate",
+        "desc": "Self discharge rate.  Percentage of capacity (WHRtg) discharged per day."
+      },
+      {
+        "name": "SoCMax",
+        "type": "uint16",
+        "size": 1,
+        "sf": "SoC_SF",
+        "units": "%WHRtg",
+        "access": "RW",
+        "label": "Nameplate Max SoC",
+        "desc": "Manufacturer maximum state of charge, expressed as a percentage."
+      },
+      {
+        "name": "SoCMin",
+        "type": "uint16",
+        "size": 1,
+        "sf": "SoC_SF",
+        "units": "%WHRtg",
+        "access": "RW",
+        "label": "Nameplate Min SoC",
+        "desc": "Manufacturer minimum state of charge, expressed as a percentage."
+      },
+      {
+        "name": "SoCRsvMax",
+        "type": "uint16",
+        "size": 1,
+        "sf": "SoC_SF",
+        "units": "%WHRtg",
+        "access": "RW",
+        "label": "Max Reserve Percent",
+        "desc": "Setpoint for maximum reserve for storage as a percentage of the nominal maximum storage."
+      },
+      {
+        "name": "SoCRsvMin",
+        "type": "uint16",
+        "size": 1,
+        "sf": "SoC_SF",
+        "units": "%WHRtg",
+        "access": "RW",
+        "label": "Min Reserve Percent",
+        "desc": "Setpoint for minimum reserve for storage as a percentage of the nominal maximum storage."
+      },
+      {
+        "name": "SoC",
+        "type": "uint16",
+        "size": 1,
+        "sf": "SoC_SF",
+        "units": "%WHRtg",
+        "mandatory": "M",
+        "label": "State of Charge",
+        "desc": "State of charge, expressed as a percentage."
+      },
+      {
+        "name": "DoD",
+        "type": "uint16",
+        "size": 1,
+        "sf": "DoD_SF",
+        "units": "%",
+        "label": "Depth of Discharge",
+        "desc": "Depth of discharge, expressed as a percentage."
+      },
+      {
+        "name": "SoH",
+        "type": "uint16",
+        "size": 1,
+        "sf": "SoH_SF",
+        "units": "%",
+        "label": "State of Health",
+        "desc": "Percentage of battery life remaining."
+      },
+      {
+        "name": "NCyc",
+        "type": "uint32",
+        "size": 2,
+        "label": "Cycle Count",
+        "desc": "Number of cycles executed in the battery."
+      },
+      {
+        "name": "ChaSt",
+        "type": "enum16",
+        "size": 1,
+        "label": "Charge Status",
+        "desc": "Charge status of storage device. Enumeration.",
+        "symbols": [
+          {
+            "name": "OFF",
+            "value": 1
+          },
+          {
+            "name": "EMPTY",
+            "value": 2
+          },
+          {
+            "name": "DISCHARGING",
+            "value": 3
+          },
+          {
+            "name": "CHARGING",
+            "value": 4
+          },
+          {
+            "name": "FULL",
+            "value": 5
+          },
+          {
+            "name": "HOLDING",
+            "value": 6
+          },
+          {
+            "name": "TESTING",
+            "value": 7
+          }
+        ]
+      },
+      {
+        "name": "LocRemCtl",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Control Mode",
+        "desc": "Battery control mode. Enumeration.",
+        "symbols": [
+          {
+            "name": "REMOTE",
+            "value": 0,
+            "label": "Remote Control",
+            "desc": "Battery is controlled remotely (e.g. by the site controller)."
+          },
+          {
+            "name": "LOCAL",
+            "value": 1,
+            "label": "Local Control",
+            "desc": "Battery is controlled by a local operator (e.g. through battery HMI)."
+          }
+        ]
+      },
+      {
+        "name": "Hb",
+        "type": "uint16",
+        "size": 1,
+        "label": "Battery Heartbeat",
+        "desc": "Value is incremented every second with periodic resets to zero."
+      },
+      {
+        "name": "CtrlHb",
+        "type": "uint16",
+        "size": 1,
+        "access": "RW",
+        "label": "Controller Heartbeat",
+        "desc": "Value is incremented every second with periodic resets to zero."
+      },
+      {
+        "name": "AlmRst",
+        "type": "uint16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Alarm Reset",
+        "desc": "Used to reset any latched alarms.  1 = Reset."
+      },
+      {
+        "name": "Typ",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Battery Type",
+        "desc": "Type of battery. Enumeration.",
+        "symbols": [
+          {
+            "name": "NOT APPLICABLE_UNKNOWN",
+            "value": 0,
+            "label": "Not Applicable or Unknown",
+            "desc": "Battery type is not applicable or unknown."
+          },
+          {
+            "name": "LEAD_ACID",
+            "value": 1,
+            "label": "Lead-Acid",
+            "desc": "Lead-acid battery type."
+          },
+          {
+            "name": "NICKEL_METAL_HYDRATE",
+            "value": 2,
+            "label": "Nickel-Metal Hydrate",
+            "desc": "Nickel-metal hydrate battery type."
+          },
+          {
+            "name": "NICKEL_CADMIUM",
+            "value": 3,
+            "label": "Nickel-Cadmium",
+            "desc": "Nickel-cadmium battery type."
+          },
+          {
+            "name": "LITHIUM_ION",
+            "value": 4,
+            "label": "Lithium-Ion",
+            "desc": "Lithium-ion battery type."
+          },
+          {
+            "name": "CARBON_ZINC",
+            "value": 5,
+            "label": "Carbon-Zinc",
+            "desc": "Carbon-zinc battery type."
+          },
+          {
+            "name": "ZINC_CHLORIDE",
+            "value": 6,
+            "label": "Zinc Chloride",
+            "desc": "Zinc chloride battery type."
+          },
+          {
+            "name": "ALKALINE",
+            "value": 7,
+            "label": "Alkaline",
+            "desc": "Alkaline battery type."
+          },
+          {
+            "name": "RECHARGEABLE_ALKALINE",
+            "value": 8,
+            "label": "Rechargeable Alkaline",
+            "desc": "Rechargeable alkaline battery type."
+          },
+          {
+            "name": "SODIUM_SULFUR",
+            "value": 9,
+            "label": "Sodium-Sulfur",
+            "desc": "Sodium-sulfur battery type."
+          },
+          {
+            "name": "FLOW",
+            "value": 10,
+            "label": "Flow",
+            "desc": "Flow battery type."
+          },
+          {
+            "name": "OTHER",
+            "value": 99,
+            "label": "Other",
+            "desc": "Other battery type."
+          }
+        ]
+      },
+      {
+        "name": "State",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "State of the Battery Bank",
+        "desc": "State of the battery bank.  Enumeration.",
+        "symbols": [
+          {
+            "name": "DISCONNECTED",
+            "value": 1,
+            "label": "Disconnected",
+            "desc": "Battery bank is disconnected. All contactors are open."
+          },
+          {
+            "name": "INITIALIZING",
+            "value": 2,
+            "label": "Initializing",
+            "desc": "Battery bank is initializing but not ready for operating. String balancing may occur."
+          },
+          {
+            "name": "CONNECTED",
+            "value": 3,
+            "label": "Connected",
+            "desc": "Battery bank is ready for operation. All enabled contactors are closed."
+          },
+          {
+            "name": "STANDBY",
+            "value": 4,
+            "label": "Standby",
+            "desc": "Battery bank is connected and in standby/power saving mode."
+          },
+          {
+            "name": "SOC PROTECTION",
+            "value": 5,
+            "label": "SoC Protection",
+            "desc": "Battery bank is connected but SoC is too low. Battery should be considered \"offline\"."
+          },
+          {
+            "name": "SUSPENDING",
+            "value": 6,
+            "label": "Suspending",
+            "desc": "Battery bank is suspending operation and will disconnect."
+          },
+          {
+            "name": "FAULT",
+            "value": 99,
+            "label": "Fault",
+            "desc": "The battery has experienced a critical failure and may not be operated."
+          }
+        ]
+      },
+      {
+        "name": "StateVnd",
+        "type": "enum16",
+        "size": 1,
+        "label": "Vendor Battery Bank State",
+        "desc": "Vendor specific battery bank state.  Enumeration."
+      },
+      {
+        "name": "WarrDt",
+        "type": "uint32",
+        "size": 2,
+        "label": "Warranty Date",
+        "desc": "Date the device warranty expires."
+      },
+      {
+        "name": "Evt1",
+        "type": "bitfield32",
+        "size": 2,
+        "mandatory": "M",
+        "label": "Battery Event 1 Bitfield",
+        "desc": "Alarms and warnings.  Bit flags.",
+        "symbols": [
+          {
+            "name": "COMMUNICATION_ERROR",
+            "value": 0,
+            "label": "Communication Error",
+            "desc": "Unable to communicate with BMS or BMS is unable to communicate with battery strings."
+          },
+          {
+            "name": "OVER_TEMP_ALARM",
+            "value": 1,
+            "label": "Over Temperature Alarm",
+            "desc": "Battery has exceeded maximum operating temperature"
+          },
+          {
+            "name": "OVER_TEMP_WARNING",
+            "value": 2,
+            "label": "Over Temperature  Warning",
+            "desc": "Battery is approaching maximum operating temperature."
+          },
+          {
+            "name": "UNDER_TEMP_ALARM",
+            "value": 3,
+            "label": "Under Temperature Alarm",
+            "desc": "Battery has exceeded minimum operating temperature"
+          },
+          {
+            "name": "UNDER_TEMP_WARNING",
+            "value": 4,
+            "label": "Under Temperature Warning",
+            "desc": "Battery is approaching minimum operating temperature."
+          },
+          {
+            "name": "OVER_CHARGE_CURRENT_ALARM",
+            "value": 5,
+            "label": "Over Charge Current Alarm",
+            "desc": "Battery maximum charge current has been exceeded."
+          },
+          {
+            "name": "OVER_CHARGE_CURRENT_WARNING",
+            "value": 6,
+            "label": "Over Charge Current Warning",
+            "desc": "Approaching battery maximum charge current."
+          },
+          {
+            "name": "OVER_DISCHARGE_CURRENT_ALARM",
+            "value": 7,
+            "label": "Over Discharge Current Alarm",
+            "desc": "Battery maximum discharge current has been exceeded."
+          },
+          {
+            "name": "OVER_DISCHARGE_CURRENT_WARNING",
+            "value": 8,
+            "label": "Over Discharge Current Warning",
+            "desc": "Approaching battery maximum discharge current."
+          },
+          {
+            "name": "OVER_VOLT_ALARM",
+            "value": 9,
+            "label": "Over Voltage Alarm",
+            "desc": "Battery voltage has exceeded maximum limit."
+          },
+          {
+            "name": "OVER_VOLT_WARNING",
+            "value": 10,
+            "label": "Over Voltage Warning",
+            "desc": "Battery voltage is approaching maximum limit."
+          },
+          {
+            "name": "UNDER_VOLT_ALARM",
+            "value": 11,
+            "label": "Under Voltage Alarm",
+            "desc": "Battery voltage has exceeded minimum limit."
+          },
+          {
+            "name": "UNDER_VOLT_WARNING",
+            "value": 12,
+            "label": "Under Voltage Warning",
+            "desc": "Battery voltage is approaching minimum limit."
+          },
+          {
+            "name": "UNDER_SOC_MIN_ALARM",
+            "value": 13,
+            "label": "Under State of Charge Min Alarm",
+            "desc": "Battery state of charge has reached or exceeded SoCMin"
+          },
+          {
+            "name": "UNDER_SOC_MIN_WARNING",
+            "value": 14,
+            "label": "Under State of Charge Min Warning",
+            "desc": "Battery state of charge is approaching SoCMin"
+          },
+          {
+            "name": "OVER_SOC_MAX_ALARM",
+            "value": 15,
+            "label": "Over State of Charge Max Alarm",
+            "desc": "Battery state of charge has reached or exceeded SoCMax"
+          },
+          {
+            "name": "OVER_SOC_MAX_WARNING",
+            "value": 16,
+            "label": "Over State of Charge Max Warning",
+            "desc": "Battery state of charge is approaching SoCMax"
+          },
+          {
+            "name": "VOLTAGE_IMBALANCE_WARNING",
+            "value": 17,
+            "label": "Voltage Imbalance Warning",
+            "desc": "A voltage imbalance exists between the strings in the battery bank."
+          },
+          {
+            "name": "TEMPERATURE_IMBALANCE_ALARM",
+            "value": 18,
+            "label": "Temperature Imbalance Alarm",
+            "desc": "A temperature imbalance exists between the strings in the battery bank."
+          },
+          {
+            "name": "TEMPERATURE_IMBALANCE_WARNING",
+            "value": 19,
+            "label": "Temperature Imbalance Warning",
+            "desc": "A temperature imbalance is developing between the strings in the battery bank."
+          },
+          {
+            "name": "CONTACTOR_ERROR",
+            "value": 20,
+            "label": "Contactor Error",
+            "desc": "A contactor failed to open or close as requested."
+          },
+          {
+            "name": "FAN_ERROR",
+            "value": 21,
+            "label": "Fan Error",
+            "desc": "One or more battery fans has failed."
+          },
+          {
+            "name": "GROUND_FAULT",
+            "value": 22,
+            "label": "Ground Fault Error",
+            "desc": "Ground fault detected."
+          },
+          {
+            "name": "OPEN_DOOR_ERROR",
+            "value": 23,
+            "label": "Open Door Error",
+            "desc": "One or more doors are open."
+          },
+          {
+            "name": "CURRENT_IMBALANCE_WARNING",
+            "value": 24,
+            "label": "Current Imbalance Warning",
+            "desc": "A current imbalance exists between the strings in the battery bank."
+          },
+          {
+            "name": "OTHER_ALARM",
+            "value": 25,
+            "label": "Other Battery Alarm",
+            "desc": "A vendor specific alarm has occurred."
+          },
+          {
+            "name": "OTHER_WARNING",
+            "value": 26,
+            "label": "Other Battery Warning",
+            "desc": "A vendor specific warning has occurred."
+          },
+          {
+            "name": "RESERVED_1",
+            "value": 27,
+            "label": "Reserved",
+            "desc": "Reserved bit."
+          },
+          {
+            "name": "CONFIGURATION_ALARM",
+            "value": 28,
+            "label": "Configuration Alarm",
+            "desc": "The battery bank has been configured incorrectly and will not operate."
+          },
+          {
+            "name": "CONFIGURATION_WARNING",
+            "value": 29,
+            "label": "Configuration Warning",
+            "desc": "The battery bank has been configured incorrectly and may not operated as expected."
+          }
+        ]
+      },
+      {
+        "name": "Evt2",
+        "type": "bitfield32",
+        "size": 2,
+        "mandatory": "M",
+        "label": "Battery Event 2 Bitfield",
+        "desc": "Alarms and warnings.  Bit flags."
+      },
+      {
+        "name": "EvtVnd1",
+        "type": "bitfield32",
+        "size": 2,
+        "mandatory": "M",
+        "label": "Vendor Event Bitfield 1",
+        "desc": "Vendor defined events."
+      },
+      {
+        "name": "EvtVnd2",
+        "type": "bitfield32",
+        "size": 2,
+        "mandatory": "M",
+        "label": "Vendor Event Bitfield 2",
+        "desc": "Vendor defined events."
+      },
+      {
+        "name": "V",
+        "type": "uint16",
+        "size": 1,
+        "sf": "V_SF",
+        "units": "V",
+        "mandatory": "M",
+        "label": "External Battery Voltage",
+        "desc": "DC Bus Voltage."
+      },
+      {
+        "name": "VMax",
+        "type": "uint16",
+        "size": 1,
+        "sf": "V_SF",
+        "units": "V",
+        "label": "Max Battery Voltage",
+        "desc": "Instantaneous maximum battery voltage."
+      },
+      {
+        "name": "VMin",
+        "type": "uint16",
+        "size": 1,
+        "sf": "V_SF",
+        "units": "V",
+        "label": "Min Battery Voltage",
+        "desc": "Instantaneous minimum battery voltage."
+      },
+      {
+        "name": "CellVMax",
+        "type": "uint16",
+        "size": 1,
+        "sf": "CellV_SF",
+        "units": "V",
+        "label": "Max Cell Voltage",
+        "desc": "Maximum voltage for all cells in the bank."
+      },
+      {
+        "name": "CellVMaxStr",
+        "type": "uint16",
+        "size": 1,
+        "label": "Max Cell Voltage String",
+        "desc": "String containing the cell with maximum voltage."
+      },
+      {
+        "name": "CellVMaxMod",
+        "type": "uint16",
+        "size": 1,
+        "label": "Max Cell Voltage Module",
+        "desc": "Module containing the cell with maximum voltage."
+      },
+      {
+        "name": "CellVMin",
+        "type": "uint16",
+        "size": 1,
+        "sf": "CellV_SF",
+        "units": "V",
+        "label": "Min Cell Voltage",
+        "desc": "Minimum voltage for all cells in the bank."
+      },
+      {
+        "name": "CellVMinStr",
+        "type": "uint16",
+        "size": 1,
+        "label": "Min Cell Voltage String",
+        "desc": "String containing the cell with minimum voltage."
+      },
+      {
+        "name": "CellVMinMod",
+        "type": "uint16",
+        "size": 1,
+        "label": "Min Cell Voltage Module",
+        "desc": "Module containing the cell with minimum voltage."
+      },
+      {
+        "name": "CellVAvg",
+        "type": "uint16",
+        "size": 1,
+        "sf": "CellV_SF",
+        "units": "V",
+        "label": "Average Cell Voltage",
+        "desc": "Average cell voltage for all cells in the bank."
+      },
+      {
+        "name": "A",
+        "type": "int16",
+        "size": 1,
+        "sf": "A_SF",
+        "units": "A",
+        "mandatory": "M",
+        "label": "Total DC Current",
+        "desc": "Total DC current flowing to/from the battery bank."
+      },
+      {
+        "name": "AChaMax",
+        "type": "uint16",
+        "size": 1,
+        "sf": "AMax_SF",
+        "units": "A",
+        "access": "RW",
+        "label": "Max Charge Current",
+        "desc": "Instantaneous maximum DC charge current."
+      },
+      {
+        "name": "ADisChaMax",
+        "type": "uint16",
+        "size": 1,
+        "sf": "AMax_SF",
+        "units": "A",
+        "access": "RW",
+        "label": "Max Discharge Current",
+        "desc": "Instantaneous maximum DC discharge current."
+      },
+      {
+        "name": "W",
+        "type": "int16",
+        "size": 1,
+        "sf": "W_SF",
+        "units": "W",
+        "mandatory": "M",
+        "label": "Total Power",
+        "desc": "Total power flowing to/from the battery bank."
+      },
+      {
+        "name": "ReqInvState",
+        "type": "enum16",
+        "size": 1,
+        "label": "Inverter State Request",
+        "desc": "Request from battery to start or stop the inverter.  Enumeration.",
+        "symbols": [
+          {
+            "name": "NO REQUEST",
+            "value": 0,
+            "label": "No Request",
+            "desc": "Battery has no requests of the inverter."
+          },
+          {
+            "name": "START",
+            "value": 1,
+            "label": "Start Inverter",
+            "desc": "Battery requests that the inverter be started."
+          },
+          {
+            "name": "STOP",
+            "value": 2,
+            "label": "Stop Inverter",
+            "desc": "Battery requests that the inverter be stopped."
+          }
+        ]
+      },
+      {
+        "name": "ReqW",
+        "type": "int16",
+        "size": 1,
+        "sf": "W_SF",
+        "units": "W",
+        "label": "Battery Power Request",
+        "desc": "AC Power requested by battery."
+      },
+      {
+        "name": "SetOp",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Set Operation",
+        "desc": "Instruct the battery bank to perform an operation such as connecting.  Enumeration.",
+        "symbols": [
+          {
+            "name": "CONNECT",
+            "value": 1,
+            "label": "Connect the Battery Bank",
+            "desc": "Initialize the battery bank and close contactors for all enabled strings."
+          },
+          {
+            "name": "DISCONNECT",
+            "value": 2,
+            "label": "Disconnect the Battery Bank",
+            "desc": "Open contactors for all strings."
+          }
+        ]
+      },
+      {
+        "name": "SetInvState",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Set Inverter State",
+        "desc": "Set the current state of the inverter.",
+        "symbols": [
+          {
+            "name": "INVERTER_STOPPED",
+            "value": 1,
+            "label": "Inverter is Stopped"
+          },
+          {
+            "name": "INVERTER_STANDBY",
+            "value": 2,
+            "label": "Inverter is in Standby"
+          },
+          {
+            "name": "INVERTER_STARTED",
+            "value": 3,
+            "label": "Inverter is Started"
+          }
+        ]
+      },
+      {
+        "name": "AHRtg_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "desc": "Scale factor for charge capacity."
+      },
+      {
+        "name": "WHRtg_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "desc": "Scale factor for energy capacity."
+      },
+      {
+        "name": "WChaDisChaMax_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "desc": "Scale factor for maximum charge and discharge rate."
+      },
+      {
+        "name": "DisChaRte_SF",
+        "type": "sunssf",
+        "size": 1,
+        "desc": "Scale factor for self discharge rate."
+      },
+      {
+        "name": "SoC_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "desc": "Scale factor for state of charge values."
+      },
+      {
+        "name": "DoD_SF",
+        "type": "sunssf",
+        "size": 1,
+        "desc": "Scale factor for depth of discharge."
+      },
+      {
+        "name": "SoH_SF",
+        "type": "sunssf",
+        "size": 1,
+        "desc": "Scale factor for state of health."
+      },
+      {
+        "name": "V_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "desc": "Scale factor for DC bus voltage."
+      },
+      {
+        "name": "CellV_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "desc": "Scale factor for cell voltage."
+      },
+      {
+        "name": "A_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "desc": "Scale factor for DC current."
+      },
+      {
+        "name": "AMax_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "desc": "Scale factor for instantaneous DC charge/discharge current."
+      },
+      {
+        "name": "W_SF",
+        "type": "sunssf",
+        "size": 1,
+        "desc": "Scale factor for AC power request."
+      }
+    ]
+  },
+  "id": 802
+}

@@ -1,0 +1,150 @@
+{
+  "group": {
+    "name": "owner_info",
+    "type": "group",
+    "label": "Device Registration",
+    "desc": "Owner and Installer information",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64210
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "FNm",
+        "type": "string",
+        "size": 16,
+        "access": "RW",
+        "label": "Owner's First Name",
+        "desc": "End user's first name"
+      },
+      {
+        "name": "LNm",
+        "type": "string",
+        "size": 16,
+        "access": "RW",
+        "label": "Owner's Last Name",
+        "desc": "End user's last name"
+      },
+      {
+        "name": "Em",
+        "type": "string",
+        "size": 20,
+        "access": "RW",
+        "label": "Owner's Email",
+        "desc": "End user's email address"
+      },
+      {
+        "name": "Adr1",
+        "type": "string",
+        "size": 20,
+        "access": "RW",
+        "label": "Address Line 1",
+        "desc": "Address Line 1"
+      },
+      {
+        "name": "Adr2",
+        "type": "string",
+        "size": 20,
+        "access": "RW",
+        "label": "Address Line 2",
+        "desc": "Address Line 2"
+      },
+      {
+        "name": "Cty",
+        "type": "string",
+        "size": 16,
+        "access": "RW",
+        "label": "City",
+        "desc": "City"
+      },
+      {
+        "name": "St",
+        "type": "string",
+        "size": 16,
+        "access": "RW",
+        "label": "State/Province",
+        "desc": "State/Province"
+      },
+      {
+        "name": "Zp",
+        "type": "string",
+        "size": 8,
+        "access": "RW",
+        "label": "Zip/Postal Code",
+        "desc": "Zip/Postal Code"
+      },
+      {
+        "name": "Cntr",
+        "type": "string",
+        "size": 16,
+        "access": "RW",
+        "label": "Country",
+        "desc": "Country"
+      },
+      {
+        "name": "Phn",
+        "type": "string",
+        "size": 8,
+        "access": "RW",
+        "label": "Phone",
+        "desc": "Customer's phone number"
+      },
+      {
+        "name": "IFNm",
+        "type": "string",
+        "size": 16,
+        "access": "RW",
+        "label": "Installer's first name",
+        "desc": "Installer's first name"
+      },
+      {
+        "name": "ILNm",
+        "type": "string",
+        "size": 16,
+        "access": "RW",
+        "label": "Installer's last name",
+        "desc": "Installer's last name"
+      },
+      {
+        "name": "IEm",
+        "type": "string",
+        "size": 16,
+        "access": "RW",
+        "label": "Installer's email",
+        "desc": "Installer's email address"
+      },
+      {
+        "name": "ICo",
+        "type": "string",
+        "size": 8,
+        "access": "RW",
+        "label": "Installer Company",
+        "desc": "Installer Company"
+      },
+      {
+        "name": "IPhn",
+        "type": "string",
+        "size": 8,
+        "access": "RW",
+        "label": "Installer's phone",
+        "desc": "Installer's phone"
+      }
+    ]
+  },
+  "id": 64210
+}

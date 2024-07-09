@@ -1,0 +1,295 @@
+{
+  "group": {
+    "name": "dc_generator_config",
+    "type": "group",
+    "label": "DC-Coupled Generator Configuration",
+    "desc": "Communicates activation status and other configuration parameters to/from the Endure DC generator.",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64262
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "IsActivated",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "label": "Activation status",
+        "symbols": [
+          {
+            "name": "NO",
+            "value": 0,
+            "label": "Generator is not activated",
+            "desc": "The generator cannot be put into Auto mode.  It has not yet passed the steps required by the activation procedure."
+          },
+          {
+            "name": "YES",
+            "value": 1,
+            "label": "Generator is activated",
+            "desc": "The generator may operate in Auto mode.  This value is set from the cloud after the hardware has been registered (to an ESS and in SAP).  This value may also exist after a device has been manually activated directly when in an off-grid configuration."
+          }
+        ]
+      },
+      {
+        "name": "PowerConverterSWVer",
+        "type": "uint16",
+        "size": 1,
+        "sf": "Version_SF",
+        "mandatory": "M",
+        "label": "Power Converter Software Version"
+      },
+      {
+        "name": "PowerConverterBuild",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Power Converter Jenkins Build Number"
+      },
+      {
+        "name": "GeneratorCtrlSWVer",
+        "type": "uint16",
+        "size": 1,
+        "sf": "Version_SF",
+        "mandatory": "M",
+        "label": "Generator Controller Software Version"
+      },
+      {
+        "name": "GeneratorCtrlBuild",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Generator Controller Jenkins Build Number"
+      },
+      {
+        "name": "DisplayCtrlSWVer",
+        "type": "uint16",
+        "size": 1,
+        "sf": "Version_SF",
+        "mandatory": "M",
+        "label": "Display Controller Software Version"
+      },
+      {
+        "name": "DisplayCtrlBuild",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Display Controller Jenkins Build Number"
+      },
+      {
+        "name": "Version_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "EngineCtrlUnitSWVer",
+        "type": "string",
+        "size": 7,
+        "mandatory": "M",
+        "label": "Engine Control Unit Software Version"
+      },
+      {
+        "name": "Pad14",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad15",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad16",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad17",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad18",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad19",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad20",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad21",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad22",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad23",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad24",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad25",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad26",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad27",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad28",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad29",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad30",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad31",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad32",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad33",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad34",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad35",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad36",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad37",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad38",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad39",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad40",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad41",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad42",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad43",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad44",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      }
+    ]
+  },
+  "id": 64262
+}

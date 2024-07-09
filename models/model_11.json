@@ -1,0 +1,171 @@
+{
+  "group": {
+    "name": "model_11",
+    "type": "group",
+    "label": "Ethernet Link Layer",
+    "desc": "Include to support a wired ethernet port",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 11
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Spd",
+        "type": "uint16",
+        "size": 1,
+        "units": "Mbps",
+        "mandatory": "M",
+        "label": "Ethernet Link Speed",
+        "desc": "Interface speed in Mb/s"
+      },
+      {
+        "name": "CfgSt",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Interface Status Flags",
+        "desc": "Bitmask values Interface flags.",
+        "symbols": [
+          {
+            "name": "LINK",
+            "value": 0,
+            "label": "link status",
+            "desc": "link is up"
+          },
+          {
+            "name": "FULL_DUPLEX",
+            "value": 1,
+            "label": "full duplex",
+            "desc": "link is in full duplex mode"
+          },
+          {
+            "name": "AUTO_NEG1",
+            "value": 2,
+            "label": "auto negotiation 1",
+            "desc": "Auto-negotiation bits are encoded as: 000 - in progress.  001 - speed detection has failed.  010 - negotiation has failed.  011 - negotiated speed and duplex.  100 - negotiation not attempted."
+          },
+          {
+            "name": "AUTO_NEG2",
+            "value": 3,
+            "label": "auto negotiation 2",
+            "desc": "See AUTO_NEG1"
+          },
+          {
+            "name": "AUTO_NEG3",
+            "value": 4,
+            "label": "auto negotiation 3",
+            "desc": "See AUTO_NEG1"
+          },
+          {
+            "name": "RESET_REQUIRED",
+            "value": 5,
+            "label": "reset required",
+            "desc": "Setting requires reset"
+          },
+          {
+            "name": "HW_FAULT",
+            "value": 6,
+            "label": "hw fault",
+            "desc": "Hardware fault"
+          }
+        ]
+      },
+      {
+        "name": "St",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Link State",
+        "desc": "Enumerated value. State information for this interface",
+        "symbols": [
+          {
+            "name": "UNKNOWN",
+            "value": 0,
+            "label": "unknown",
+            "desc": "Unknown state"
+          },
+          {
+            "name": "ENABLED",
+            "value": 1,
+            "label": "enabled",
+            "desc": "Link is enabled and read"
+          },
+          {
+            "name": "DISABLED",
+            "value": 2,
+            "label": "disabled",
+            "desc": "Link is disabled"
+          },
+          {
+            "name": "TESTING",
+            "value": 3,
+            "label": "testing",
+            "desc": "Link is in test"
+          }
+        ]
+      },
+      {
+        "name": "MAC",
+        "type": "eui48",
+        "size": 4,
+        "label": "MAC",
+        "desc": "IEEE MAC address of this interface"
+      },
+      {
+        "name": "Nam",
+        "type": "string",
+        "size": 4,
+        "access": "RW",
+        "label": "Name",
+        "desc": "Interface name (8 chars)"
+      },
+      {
+        "name": "Ctl",
+        "type": "bitfield16",
+        "size": 1,
+        "access": "RW",
+        "label": "Control",
+        "desc": "Control flags",
+        "symbols": [
+          {
+            "name": "AUTO",
+            "value": 0,
+            "label": "auto",
+            "desc": "Enable auto-negotiation"
+          },
+          {
+            "name": "FULL_DUPLEX",
+            "value": 1,
+            "label": "duplex",
+            "desc": "Force full duplex"
+          }
+        ]
+      },
+      {
+        "name": "FrcSpd",
+        "type": "uint16",
+        "size": 1,
+        "units": "Mbps",
+        "access": "RW",
+        "label": "Forced Speed",
+        "desc": "Forced interface speed in Mb/s when AUTO is disabled"
+      }
+    ]
+  },
+  "id": 11
+}
