@@ -50,7 +50,7 @@ pub async fn main() {
                             warn!("Slave id {i} is a clone signal.");
                             continue;
                         }
-                        info!("Slave {i} has {} models.", ss.models.len());
+                        println!("Slave {i} {s} has {} models.", ss.models.len());
                         devices.push(s)
                     }
                 }

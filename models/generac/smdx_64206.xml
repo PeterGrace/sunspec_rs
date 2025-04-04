@@ -40,6 +40,8 @@
         <symbol id="IEEE_1547_2003_ReConnV_10">29</symbol>
         <symbol id="MWEC_2023">30</symbol>
         <symbol id="LADWP_2023">31</symbol>
+        <symbol id="BED_2022">32</symbol>
+        <symbol id="PREPA_LUMA_2024">33</symbol>
       </point>
       <point id="Def" offset="6" type="enum16" mandatory="true">
         <symbol id="NOT_DEFAULTED">0</symbol>
@@ -343,6 +345,16 @@
       </symbol>
       <symbol id="LADWP_2023">
         <label>LADWP 2023</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="BED_2022">
+        <label>BED 2022</label>
+        <description></description>
+        <notes></notes>
+      </symbol>
+      <symbol id="PREPA_LUMA_2024">
+        <label>PREPA-LUMA 2024</label>
         <description></description>
         <notes></notes>
       </symbol>

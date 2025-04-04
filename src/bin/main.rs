@@ -25,8 +25,8 @@ pub async fn main() {
         .with_line_number(true)
         .init();
 
-    let socket_addr = "127.0.0.1:5083".parse().unwrap();
-    let mut ss = match SunSpecConnection::new(socket_addr, Some(3), false).await {
+    let socket_addr = "10.174.2.83:502".parse().unwrap();
+    let mut ss = match SunSpecConnection::new(socket_addr, Some(4), false).await {
         Ok(mb) => mb,
         Err(e) => {
             error!("Can't create modbus connection: {e}");
@@ -63,26 +63,18 @@ pub async fn main() {
         }
     } else {
         // read fields
-        let _model: u16 = 64208_u16;
+        let _model: u16 = 804_u16;
         let md = ss.models.get(&_model).unwrap().clone();
         // let testing: Vec<Word> = ss.get_raw(md.address, 64).await.unwrap();
         // info!("{:#?}", testing);
         let _fields: Vec<&str> = vec![
-            "SysMd",
-            "CTPow",
-            "WhIn",
-            "WhOut",
-            "ErrorWord",
-            "EnableBits",
-            "RelayStatus",
-            "StatusWord",
-            "LineStatus",
-            "Pad0",
+            "ModSoC",
+            "ModSoH"
         ];
         for f in _fields {
             match ss.clone().get_point(md.clone(), f, None).await {
                 Ok(pt) => {
-                    println!("64208/{f} = {:#?}", pt.value);
+                    println!("{_model}/{f} = {:#?}", pt.value);
                 }
                 Err(e) => {
                     error!("Error received: {e}");

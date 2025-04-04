@@ -1,7 +1,7 @@
 <sunSpecModels v="1">
   <!-- 64259: Site Energy Metrics -->
-  <model id="64259" len="64" name="site_energy">
-    <block len="64">
+  <model id="64259" len="96" name="site_energy">
+    <block len="96">
       <point id="time" offset="0" type="uint32" mandatory="true" units="Unix seconds"/>
       <point id="sysmode" offset="2" type="enum16" mandatory="true">
         <symbol id="SAFETY_SHUTDOWN">0</symbol>
@@ -61,8 +61,15 @@
       <point id="bat_power"   offset="59" type="int16" units="W" mandatory="true"/>
       <point id="max_sink_power"   offset="60" type="int16" units="W" mandatory="true"/>
       <point id="max_source_power" offset="61" type="int16" units="W" mandatory="true"/>
-      <point id="Pad5"        offset="62"  type="pad" mandatory="true"/>
-      <point id="Pad6"        offset="63"  type="pad" mandatory="true"/>
+      <point id="previous_time" offset="62" type="uint32" mandatory="true" units="Unix seconds"/>
+      <point id="generation_delta"  offset="64"  type="uint64" mandatory="true" units="Ws"/>
+      <point id="consumption_delta" offset="68" type="int64" mandatory="true" units="Ws"/>
+      <point id="bat_out_delta"     offset="72" type="uint64" mandatory="true" units="Ws"/>
+      <point id="bat_in_delta"      offset="76" type="uint64" mandatory="true" units="Ws"/>
+      <point id="net_out_delta"     offset="80" type="uint64" mandatory="true" units="Ws"/>
+      <point id="net_in_delta"      offset="84" type="uint64" mandatory="true" units="Ws"/>
+      <point id="inv_out_delta"     offset="88" type="uint64" mandatory="true" units="Ws"/>
+      <point id="inv_in_delta"      offset="92" type="uint64" mandatory="true" units="Ws"/>
     </block>
   </model>
   <strings id="64259">
@@ -284,6 +291,46 @@
     <point id="max_source_power">
       <label>Max Source Power</label>
       <description>Estimated maximum amount of power the site is capable of sourcing at present</description>
+      <notes></notes>
+    </point>
+    <point id="generation_delta">
+      <label>Delta Generation Energy</label>
+      <description></description>
+      <notes></notes>
+    </point>
+    <point id="consumption_delta">
+      <label>Delta Consumption Energy</label>
+      <description></description>
+      <notes></notes>
+    </point>
+    <point id="bat_out_delta">
+      <label>Delta Battery Discharge Energy</label>
+      <description></description>
+      <notes></notes>
+    </point>
+    <point id="bat_in_delta">
+      <label>Delta Battery Charge Energy</label>
+      <description></description>
+      <notes></notes>
+    </point>
+    <point id="net_out_delta">
+      <label>Delta Net Exported Energy</label>
+      <description></description>
+      <notes></notes>
+    </point>
+    <point id="net_in_delta">
+      <label>Delta Net Imported Energy</label>
+      <description></description>
+      <notes></notes>
+    </point>
+    <point id="inv_out_delta">
+      <label>Delta Inverter Exported energy</label>
+      <description></description>
+      <notes></notes>
+    </point>
+    <point id="inv_in_delta">
+      <label>Delta Inverter Imported Energy</label>
+      <description></description>
       <notes></notes>
     </point>
   </strings>
