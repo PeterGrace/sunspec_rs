@@ -1,0 +1,498 @@
+{
+  "group": {
+    "name": "battery_status",
+    "type": "group",
+    "label": "Generac B-Link Status",
+    "desc": "Miscellaneous battery status registers",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64209
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "WhIn",
+        "type": "uint32",
+        "size": 2,
+        "units": "Wh",
+        "mandatory": "M",
+        "label": "Total Energy In",
+        "desc": "Energy absorbed by battery"
+      },
+      {
+        "name": "WhOut",
+        "type": "uint32",
+        "size": 2,
+        "units": "Wh",
+        "mandatory": "M",
+        "label": "Total Energy Out",
+        "desc": "Energy supplied by battery"
+      },
+      {
+        "name": "ErrorWord",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Error status",
+        "desc": "Error status bitfield",
+        "symbols": [
+          {
+            "name": "CS_ZERO_ERR",
+            "value": 0
+          },
+          {
+            "name": "REF_FAIL",
+            "value": 1
+          },
+          {
+            "name": "THERM_FAIL",
+            "value": 2
+          },
+          {
+            "name": "UNUSED",
+            "value": 3
+          },
+          {
+            "name": "EEPROM_FAIL",
+            "value": 4
+          },
+          {
+            "name": "SPT_ERROR",
+            "value": 5
+          },
+          {
+            "name": "HWV_MISMATCH",
+            "value": 6
+          },
+          {
+            "name": "SPTV_MISMATCH",
+            "value": 7
+          },
+          {
+            "name": "BATT_OVERTEMP",
+            "value": 8
+          },
+          {
+            "name": "REPEAT_OVERCURRENT",
+            "value": 9
+          },
+          {
+            "name": "FAN_FAIL",
+            "value": 10
+          },
+          {
+            "name": "CURRENT_CTRL_FAIL",
+            "value": 11
+          },
+          {
+            "name": "BMS_ERROR",
+            "value": 12
+          },
+          {
+            "name": "REPEAT_CONTACT",
+            "value": 13
+          },
+          {
+            "name": "EXTERNAL_STOP",
+            "value": 14
+          },
+          {
+            "name": "GROUND_FAULT",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "EnableBits",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Enable bits",
+        "desc": "Internal status register",
+        "symbols": [
+          {
+            "name": "DEADMAN",
+            "value": 0
+          },
+          {
+            "name": "GATEDRIVE",
+            "value": 1
+          },
+          {
+            "name": "REBUS_CONNECT",
+            "value": 2
+          },
+          {
+            "name": "BATT_CONNECT",
+            "value": 3
+          },
+          {
+            "name": "INT_FAN",
+            "value": 4
+          },
+          {
+            "name": "EXT_FAN",
+            "value": 5
+          },
+          {
+            "name": "FAN_OVERRIDE",
+            "value": 6
+          },
+          {
+            "name": "BLKSTART_BATT_CHG",
+            "value": 7
+          },
+          {
+            "name": "CONV1",
+            "value": 8
+          },
+          {
+            "name": "CONV2",
+            "value": 9
+          },
+          {
+            "name": "AUTOMODE",
+            "value": 10
+          },
+          {
+            "name": "120HZ_FILTER",
+            "value": 11
+          },
+          {
+            "name": "BMS",
+            "value": 12
+          },
+          {
+            "name": "INHIBIT_CSZ",
+            "value": 13
+          },
+          {
+            "name": "CSZERO",
+            "value": 14
+          },
+          {
+            "name": "USB_RCP",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "InhibitBits",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "InhibitBits",
+        "desc": "Internal status register",
+        "symbols": [
+          {
+            "name": "PRECHARGE_FAIL",
+            "value": 0
+          },
+          {
+            "name": "IBAT_INTEGRAL",
+            "value": 1
+          },
+          {
+            "name": "NO_REBUS_ENABLES",
+            "value": 2
+          },
+          {
+            "name": "BATTERY_BMS",
+            "value": 3
+          },
+          {
+            "name": "VBUS_OV",
+            "value": 4
+          },
+          {
+            "name": "VDC_OV",
+            "value": 5
+          },
+          {
+            "name": "VBAT_OV",
+            "value": 6
+          },
+          {
+            "name": "IBAT_OV",
+            "value": 7
+          },
+          {
+            "name": "NO_INPUT",
+            "value": 8
+          },
+          {
+            "name": "BATT_VERYLOW_TIMEOUT",
+            "value": 9
+          },
+          {
+            "name": "BATT_CRIT_LOW",
+            "value": 10
+          },
+          {
+            "name": "BATT_CRIT_HIGH",
+            "value": 11
+          },
+          {
+            "name": "UNUSED12",
+            "value": 12
+          },
+          {
+            "name": "UNUSED13",
+            "value": 13
+          },
+          {
+            "name": "UNUSED14",
+            "value": 14
+          },
+          {
+            "name": "UNUSED15",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "StatusBits",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "General Status",
+        "desc": "General system status",
+        "symbols": [
+          {
+            "name": "DEADMAN_UP",
+            "value": 0
+          },
+          {
+            "name": "REBUS_PRECHARGING",
+            "value": 1
+          },
+          {
+            "name": "REBUS_CONNECTED",
+            "value": 2
+          },
+          {
+            "name": "BATT_CONNECTED",
+            "value": 3
+          },
+          {
+            "name": "CHARGING",
+            "value": 4
+          },
+          {
+            "name": "DISCHARGING",
+            "value": 5
+          },
+          {
+            "name": "COULD_CHARGE",
+            "value": 6
+          },
+          {
+            "name": "COULD_DISCHARGE",
+            "value": 7
+          },
+          {
+            "name": "UNUSED8",
+            "value": 8
+          },
+          {
+            "name": "UNUSED9",
+            "value": 9
+          },
+          {
+            "name": "UNUSED10",
+            "value": 10
+          },
+          {
+            "name": "UNUSED11",
+            "value": 11
+          },
+          {
+            "name": "GFD_READY",
+            "value": 12
+          },
+          {
+            "name": "PLM_READY",
+            "value": 13
+          },
+          {
+            "name": "UNUSED14",
+            "value": 14
+          },
+          {
+            "name": "UNUSED15",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "BMSStatus",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "BMS Status",
+        "desc": "Battery Management System flags",
+        "symbols": [
+          {
+            "name": "ENABLE_DISCHARGE",
+            "value": 0
+          },
+          {
+            "name": "LOW_SOC",
+            "value": 1
+          },
+          {
+            "name": "VERYLOW_SOC",
+            "value": 2
+          },
+          {
+            "name": "CRITLOW_SOC",
+            "value": 3
+          },
+          {
+            "name": "ENABLE_CHARGE",
+            "value": 4
+          },
+          {
+            "name": "HIGH_SOC",
+            "value": 5
+          },
+          {
+            "name": "VERYHIGH_SOC",
+            "value": 6
+          },
+          {
+            "name": "CRITHIGH_SOC",
+            "value": 7
+          },
+          {
+            "name": "BMS_UP",
+            "value": 8
+          },
+          {
+            "name": "COMM_OK",
+            "value": 9
+          },
+          {
+            "name": "BATT_READY",
+            "value": 10
+          },
+          {
+            "name": "UNUSED",
+            "value": 11
+          },
+          {
+            "name": "CHARGE_WARNING",
+            "value": 12
+          },
+          {
+            "name": "DISCHARGE_WARNING",
+            "value": 13
+          },
+          {
+            "name": "UNUSED14",
+            "value": 14
+          },
+          {
+            "name": "FLOAT",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "Pad0",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Pad",
+        "desc": "Large pad for future model expansion"
+      },
+      {
+        "name": "Pad1",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad2",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad3",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad4",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad5",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad6",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad7",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad8",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad9",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad10",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad11",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad12",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      }
+    ]
+  },
+  "id": 64209
+}

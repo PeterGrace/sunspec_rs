@@ -1,0 +1,925 @@
+{
+  "group": {
+    "name": "hfrt_pika",
+    "type": "group",
+    "label": "HFRT",
+    "desc": "High Frequency Ride-through",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64236
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "ActCrv",
+        "type": "uint16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "ActCrv",
+        "desc": "Index of active curve. 0 = no active curve"
+      },
+      {
+        "name": "ModEna",
+        "type": "bitfield16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "ModEna",
+        "desc": "HFRT control mode. Enable active curve. Bitfield value",
+        "symbols": [
+          {
+            "name": "ENABLED",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "name": "WinTms",
+        "type": "uint16",
+        "size": 1,
+        "units": "Secs",
+        "access": "RW",
+        "label": "WinTms",
+        "desc": "Time window for HFRT change"
+      },
+      {
+        "name": "RvrtTms",
+        "type": "uint16",
+        "size": 1,
+        "units": "Secs",
+        "access": "RW",
+        "label": "RvrtTms",
+        "desc": "Timeout period for HFRT curve selection"
+      },
+      {
+        "name": "RmpTms",
+        "type": "uint16",
+        "size": 1,
+        "units": "Secs",
+        "access": "RW",
+        "label": "RmpTms",
+        "desc": "Ramp time for moving from current mode to new mode"
+      },
+      {
+        "name": "NCrv",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "NCrv",
+        "desc": "Number of curves supported (recommend 4)"
+      },
+      {
+        "name": "NPt",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "NPt",
+        "desc": "Number of curve points supported (maximum of 20)"
+      },
+      {
+        "name": "Tms_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Tms_SF",
+        "desc": "Scale factor for duration"
+      },
+      {
+        "name": "Hz_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Hz_SF",
+        "desc": "Scale factor for frequency"
+      },
+      {
+        "name": "Pad",
+        "type": "pad",
+        "size": 1
+      }
+    ],
+    "groups": [
+      {
+        "name": "curve",
+        "type": "group",
+        "count": 0,
+        "points": [
+          {
+            "name": "ActPt",
+            "type": "uint16",
+            "size": 1,
+            "access": "RW",
+            "mandatory": "M",
+            "label": "ActPt",
+            "desc": "Number of active points in array"
+          },
+          {
+            "name": "Tms1",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "mandatory": "M",
+            "label": "Tms1",
+            "desc": "Point 1 must disconnect duration"
+          },
+          {
+            "name": "Hz1",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "mandatory": "M",
+            "label": "Hz1",
+            "desc": "Point 1 must disconnect frequency"
+          },
+          {
+            "name": "Fn1",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "mandatory": "M",
+            "label": "Fn1",
+            "desc": "Point 1 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms2",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms2",
+            "desc": "Point 2 must disconnect duration"
+          },
+          {
+            "name": "Hz2",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz2",
+            "desc": "Point 2 must disconnect frequency"
+          },
+          {
+            "name": "Fn2",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn2",
+            "desc": "Point 2 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms3",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms3",
+            "desc": "Point 3 must disconnect duration"
+          },
+          {
+            "name": "Hz3",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz3",
+            "desc": "Point 3 must disconnect frequency"
+          },
+          {
+            "name": "Fn3",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn3",
+            "desc": "Point 3 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms4",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms4",
+            "desc": "Point 4 must disconnect duration"
+          },
+          {
+            "name": "Hz4",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz4",
+            "desc": "Point 4 must disconnect frequency"
+          },
+          {
+            "name": "Fn4",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn4",
+            "desc": "Point 4 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms5",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms5",
+            "desc": "Point 5 must disconnect duration"
+          },
+          {
+            "name": "Hz5",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz5",
+            "desc": "Point 5 must disconnect frequency"
+          },
+          {
+            "name": "Fn5",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn5",
+            "desc": "Point 5 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms6",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms6",
+            "desc": "Point 6 must disconnect duration"
+          },
+          {
+            "name": "Hz6",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz6",
+            "desc": "Point 6 must disconnect frequency"
+          },
+          {
+            "name": "Fn6",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn6",
+            "desc": "Point 6 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms7",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms7",
+            "desc": "Point 7 must disconnect duration"
+          },
+          {
+            "name": "Hz7",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz7",
+            "desc": "Point 7 must disconnect frequency"
+          },
+          {
+            "name": "Fn7",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn7",
+            "desc": "Point 7 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms8",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms8",
+            "desc": "Point 8 must disconnect duration"
+          },
+          {
+            "name": "Hz8",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz8",
+            "desc": "Point 8 must disconnect frequency"
+          },
+          {
+            "name": "Fn8",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn8",
+            "desc": "Point 8 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms9",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms9",
+            "desc": "Point 9 must disconnect duration"
+          },
+          {
+            "name": "Hz9",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz9",
+            "desc": "Point 9 must disconnect frequency"
+          },
+          {
+            "name": "Fn9",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn9",
+            "desc": "Point 9 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms10",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms10",
+            "desc": "Point 10 must disconnect duration"
+          },
+          {
+            "name": "Hz10",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz10",
+            "desc": "Point 10 must disconnect frequency"
+          },
+          {
+            "name": "Fn10",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn10",
+            "desc": "Point 10 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms11",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms11",
+            "desc": "Point 11 must disconnect duration"
+          },
+          {
+            "name": "Hz11",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz11",
+            "desc": "Point 11 must disconnect frequency"
+          },
+          {
+            "name": "Fn11",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn11",
+            "desc": "Point 11 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms12",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms12",
+            "desc": "Point 12 must disconnect duration"
+          },
+          {
+            "name": "Hz12",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz12",
+            "desc": "Point 12 must disconnect frequency"
+          },
+          {
+            "name": "Fn12",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn12",
+            "desc": "Point 12 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms13",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms13",
+            "desc": "Point 13 must disconnect duration"
+          },
+          {
+            "name": "Hz13",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz13",
+            "desc": "Point 13 must disconnect frequency"
+          },
+          {
+            "name": "Fn13",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn13",
+            "desc": "Point 13 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms14",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms14",
+            "desc": "Point 14 must disconnect duration"
+          },
+          {
+            "name": "Hz14",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz14",
+            "desc": "Point 14 must disconnect frequency"
+          },
+          {
+            "name": "Fn14",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn14",
+            "desc": "Point 14 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms15",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms15",
+            "desc": "Point 15 must disconnect duration"
+          },
+          {
+            "name": "Hz15",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz15",
+            "desc": "Point 15 must disconnect frequency"
+          },
+          {
+            "name": "Fn15",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn15",
+            "desc": "Point 15 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms16",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms16",
+            "desc": "Point 16 must disconnect duration"
+          },
+          {
+            "name": "Hz16",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz16",
+            "desc": "Point 16 must disconnect frequency"
+          },
+          {
+            "name": "Fn16",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn16",
+            "desc": "Point 16 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms17",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms17",
+            "desc": "Point 17 must disconnect duration"
+          },
+          {
+            "name": "Hz17",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz17",
+            "desc": "Point 17 must disconnect frequency"
+          },
+          {
+            "name": "Fn17",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn17",
+            "desc": "Point 17 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms18",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms18",
+            "desc": "Point 18 must disconnect duration"
+          },
+          {
+            "name": "Hz18",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz18",
+            "desc": "Point 18 must disconnect frequency"
+          },
+          {
+            "name": "Fn18",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn18",
+            "desc": "Point 18 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms19",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms19",
+            "desc": "Point 19 must disconnect duration"
+          },
+          {
+            "name": "Hz19",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz19",
+            "desc": "Point 19 must disconnect frequency"
+          },
+          {
+            "name": "Fn19",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn19",
+            "desc": "Point 19 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Tms20",
+            "type": "uint32",
+            "size": 2,
+            "sf": "Tms_SF",
+            "units": "Secs",
+            "access": "RW",
+            "label": "Tms20",
+            "desc": "Point 20 must disconnect duration"
+          },
+          {
+            "name": "Hz20",
+            "type": "uint16",
+            "size": 1,
+            "sf": "Hz_SF",
+            "units": "Hz",
+            "access": "RW",
+            "label": "Hz20",
+            "desc": "Point 20 must disconnect frequency"
+          },
+          {
+            "name": "Fn20",
+            "type": "enum16",
+            "size": 1,
+            "access": "RW",
+            "label": "Fn20",
+            "desc": "Point 20 special behavior",
+            "symbols": [
+              {
+                "name": "MANDATORY_OPERATION",
+                "value": 0
+              },
+              {
+                "name": "CEASE_TO_ENERGIZE",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "CrvNam",
+            "type": "string",
+            "size": 8,
+            "access": "RW",
+            "label": "CrvNam",
+            "desc": "Optional description for curve"
+          },
+          {
+            "name": "ReadOnly",
+            "type": "enum16",
+            "size": 1,
+            "mandatory": "M",
+            "label": "ReadOnly",
+            "desc": "Enumerated value indicates if curve is read-only or can be modified",
+            "symbols": [
+              {
+                "name": "READWRITE",
+                "value": 0
+              },
+              {
+                "name": "READONLY",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "id": 64236
+}

@@ -1,8 +1,9 @@
+use crate::json::group::Group;
+use crate::json::misc::JSONModel;
 use std::collections::HashMap;
 
 use crate::sunspec_models::{Model, SunSpecModels, Symbol};
 use std::fs::File;
-
 #[derive(Default, Debug)]
 pub struct ResolvedModel {
     pub model: Model,
@@ -25,7 +26,7 @@ impl SunSpecData {
     ///
     /// * `id` - The model id to load from disk.
     /// * `manufacturer` - The name of the manufacturer, for models >=64200
-    fn load_model(id: u16, manufacturer: Option<String>) -> anyhow::Result<SunSpecModels> {
+    fn load_model_xml(id: u16, manufacturer: &Option<String>) -> anyhow::Result<SunSpecModels> {
         let filename = match id {
             f if f >= 64200 => {
                 if let Some(mn) = manufacturer {
@@ -52,6 +53,35 @@ impl SunSpecData {
         };
 
         Ok(ssm)
+    }
+    fn load_model_json(id: u16, manufacturer: &Option<String>) -> anyhow::Result<SunSpecModels> {
+        let filename = format!("models/model_{}.json", id);
+        let fd = match File::open(filename.clone()) {
+            Ok(f) => f,
+            Err(e) => {
+                anyhow::bail!("Error reading JSON file {filename}: {e}");
+            }
+        };
+        let jsonmodel: JSONModel = match serde_json::from_reader(fd) {
+            Ok(m) => m,
+            Err(e) => {
+                anyhow::bail!("Couldn't deserialize JSON: {e}");
+            }
+        };
+
+        let ssm = SunSpecModels::from(&jsonmodel);
+        Ok(ssm)
+    }
+    fn load_model(id: u16, manufacturer: Option<String>) -> anyhow::Result<SunSpecModels> {
+        return if let Ok(ssm) = SunSpecData::load_model_json(id, &manufacturer).map_err(|e| {
+            error!("{e}");
+            e
+        }) {
+            info!("JSON model loaded for {id}");
+            Ok(ssm)
+        } else {
+            SunSpecData::load_model_xml(id, &manufacturer)
+        };
     }
     /// retrieve a model definition from the models repository
     ///

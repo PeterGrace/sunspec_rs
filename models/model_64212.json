@@ -1,0 +1,280 @@
+{
+  "group": {
+    "name": "DCB105_warranty",
+    "type": "group",
+    "label": "Panasonic DCB105 Module Warranty Data",
+    "desc": "Data from DCB105 modules required for Panasonic warranty",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64212
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "sf_10",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "sf_100",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "sf_1000",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "NMod",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Module Count",
+        "desc": "Number of DCB modules that the system is configured for"
+      },
+      {
+        "name": "WhIn",
+        "type": "int32",
+        "size": 2,
+        "units": "Wh",
+        "mandatory": "M",
+        "label": "WhIn",
+        "desc": "Cummulative energy into battery string"
+      },
+      {
+        "name": "WhOut",
+        "type": "int32",
+        "size": 2,
+        "units": "Wh",
+        "mandatory": "M",
+        "label": "WhOut",
+        "desc": "Cummulative energy out of battery string"
+      },
+      {
+        "name": "AhIn",
+        "type": "int32",
+        "size": 2,
+        "units": "Ah",
+        "mandatory": "M",
+        "label": "AhIn",
+        "desc": "Cummulative charge into battery string"
+      },
+      {
+        "name": "AhOut",
+        "type": "int32",
+        "size": 2,
+        "units": "Ah",
+        "mandatory": "M",
+        "label": "AhOut",
+        "desc": "Cummulative charge out of battery string"
+      },
+      {
+        "name": "THSin",
+        "type": "int16",
+        "size": 1,
+        "sf": "sf_10",
+        "units": "C",
+        "mandatory": "M",
+        "label": "Heat Sink Temp",
+        "desc": "Temperature of heat sink input"
+      },
+      {
+        "name": "W",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "mandatory": "M",
+        "label": "Power",
+        "desc": "Battery power right now"
+      },
+      {
+        "name": "I",
+        "type": "int16",
+        "size": 1,
+        "sf": "sf_100",
+        "units": "A",
+        "mandatory": "M",
+        "label": "Current",
+        "desc": "Instantaneous current measurement"
+      },
+      {
+        "name": "V",
+        "type": "int16",
+        "size": 1,
+        "sf": "sf_10",
+        "units": "V",
+        "mandatory": "M",
+        "label": "String Voltage",
+        "desc": "Voltage of whole string of batteries"
+      }
+    ],
+    "groups": [
+      {
+        "name": "DCB105_module",
+        "type": "group",
+        "count": 0,
+        "points": [
+          {
+            "name": "SN",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M",
+            "label": "Serial Number",
+            "desc": "Serial Number"
+          },
+          {
+            "name": "ManDt",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M",
+            "label": "Product Date Code",
+            "desc": "Manufacture date"
+          },
+          {
+            "name": "ProgVer",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M",
+            "label": "Program Version",
+            "desc": "Program version"
+          },
+          {
+            "name": "DataVer",
+            "type": "uint16",
+            "size": 1,
+            "mandatory": "M",
+            "label": "Data Version",
+            "desc": "Data version"
+          },
+          {
+            "name": "StatusFlags",
+            "type": "bitfield16",
+            "size": 1,
+            "mandatory": "M",
+            "label": "Status Flags",
+            "desc": "Status"
+          },
+          {
+            "name": "WarningFlags",
+            "type": "bitfield16",
+            "size": 1,
+            "mandatory": "M",
+            "label": "Warning Flags",
+            "desc": "Warnings"
+          },
+          {
+            "name": "AlarmFlags",
+            "type": "bitfield16",
+            "size": 1,
+            "mandatory": "M",
+            "label": "Alarm Flags",
+            "desc": "Alarms"
+          },
+          {
+            "name": "ErrorFlags",
+            "type": "bitfield16",
+            "size": 1,
+            "mandatory": "M",
+            "label": "Error Flags",
+            "desc": "Errors"
+          },
+          {
+            "name": "ModuleIOFlags",
+            "type": "bitfield16",
+            "size": 1,
+            "mandatory": "M",
+            "label": "Module IO Flags",
+            "desc": "IO flags"
+          },
+          {
+            "name": "SOC",
+            "type": "uint16",
+            "size": 1,
+            "sf": "sf_10",
+            "mandatory": "M",
+            "label": "State of Charge",
+            "desc": "State of Charge"
+          },
+          {
+            "name": "SOH",
+            "type": "uint16",
+            "size": 1,
+            "sf": "sf_10",
+            "mandatory": "M",
+            "label": "State of Health",
+            "desc": "State of Health"
+          },
+          {
+            "name": "MaxCellV",
+            "type": "uint16",
+            "size": 1,
+            "sf": "sf_1000",
+            "units": "V",
+            "mandatory": "M",
+            "label": "MaxCellV",
+            "desc": "Maximum cell voltage"
+          },
+          {
+            "name": "MinCellV",
+            "type": "uint16",
+            "size": 1,
+            "sf": "sf_1000",
+            "units": "V",
+            "mandatory": "M",
+            "label": "MinCellV",
+            "desc": "Minimum cell voltage"
+          },
+          {
+            "name": "PackV",
+            "type": "uint16",
+            "size": 1,
+            "sf": "sf_100",
+            "units": "V",
+            "mandatory": "M",
+            "label": "PackV",
+            "desc": "Module voltage"
+          },
+          {
+            "name": "MaxCellT",
+            "type": "int16",
+            "size": 1,
+            "sf": "sf_10",
+            "units": "C",
+            "mandatory": "M",
+            "label": "MaxCellT",
+            "desc": "Maximum cell temperature"
+          },
+          {
+            "name": "MinCellT",
+            "type": "int16",
+            "size": 1,
+            "sf": "sf_10",
+            "units": "C",
+            "mandatory": "M",
+            "label": "MinCellT",
+            "desc": "Minimum cell temperature"
+          }
+        ]
+      }
+    ]
+  },
+  "id": 64212
+}

@@ -1,0 +1,163 @@
+{
+  "group": {
+    "name": "dc_generator_status",
+    "type": "group",
+    "label": "DC-Coupled Generator Status",
+    "desc": "Communicates details about the current behavior of a DC-coupled generator connected to an ESS",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 10020
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Health",
+        "type": "enum16",
+        "size": 1,
+        "label": "Generator Health",
+        "desc": "Indicates presence of any faults (alarms or warnings) that impact the generator's ability to run",
+        "symbols": [
+          {
+            "name": "HEALTH_UNKNOWN",
+            "value": 0,
+            "label": "Generator unknown/unset health state",
+            "desc": "This constant is defined to reserve the numeric default value as meaningless."
+          },
+          {
+            "name": "ALARM",
+            "value": 1,
+            "label": "Generator ALARM health state",
+            "desc": "The generator has an alarm-level fault and cannot run (red)"
+          },
+          {
+            "name": "WARNING",
+            "value": 2,
+            "label": "Generator WARNING health state",
+            "desc": "The generator has a warning-level fault but can still run (yellow)"
+          },
+          {
+            "name": "READY",
+            "value": 3,
+            "label": "Generator READY health state",
+            "desc": "The generator has no active alarms or warnings and can run (green)"
+          }
+        ]
+      },
+      {
+        "name": "RunHours",
+        "type": "uint16",
+        "size": 1,
+        "sf": "Tenth_SF",
+        "units": "h",
+        "label": "Generator Lifetime Run Hours",
+        "desc": "A running total of the number of hours for which the generator has run"
+      },
+      {
+        "name": "Tenth_SF",
+        "type": "sunssf",
+        "size": 1
+      },
+      {
+        "name": "ActiveECode",
+        "type": "uint16",
+        "size": 1,
+        "label": "Active E-Code",
+        "desc": "Contains the E-Code value for any currently-active fault (alarm or warning) on generator.  If multiple faults are active, the E-Code for the highest-priority fault is reported."
+      },
+      {
+        "name": "EnergyIn",
+        "type": "uint32",
+        "size": 2,
+        "units": "Wh",
+        "label": "Energy In",
+        "desc": "Contains the lifetime total amount of energy consumed by the generator, in watt-hours."
+      },
+      {
+        "name": "EnergyOut",
+        "type": "uint32",
+        "size": 2,
+        "units": "Wh",
+        "label": "Energy Out",
+        "desc": "Contains the lifetime total amount of energy produced by the generator, in watt-hours."
+      },
+      {
+        "name": "AutoStartState",
+        "type": "enum16",
+        "size": 1,
+        "label": "Generator Start/Stop Mode",
+        "desc": "The generator is designed to start automatically most of the time.  This field reports if the generator is in auto mode or not.",
+        "symbols": [
+          {
+            "name": "AUTO_STATE_UNKNOWN",
+            "value": 0,
+            "label": "Generator unknown/unset start/stop mode",
+            "desc": "This constant is defined to reserve the numeric default value as meaningless."
+          },
+          {
+            "name": "IN_AUTO",
+            "value": 1,
+            "label": "Generator IN_AUTO start/stop mode",
+            "desc": "The generator is ready to start if necessary to charge the ESS battery"
+          },
+          {
+            "name": "NOT_IN_AUTO",
+            "value": 2,
+            "label": "Generator NOT_IN_AUTO start/stop mode",
+            "desc": "The generator will not start on its own when the ESS battery is in need of charging"
+          }
+        ]
+      },
+      {
+        "name": "ProducingPower",
+        "type": "enum16",
+        "size": 1,
+        "symbols": [
+          {
+            "name": "NO",
+            "value": 0
+          },
+          {
+            "name": "YES",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "DC_Generator_Inhibit_State",
+        "type": "enum16",
+        "size": 1,
+        "label": "DC Generator Inhibit State",
+        "desc": "Reports the current DC Gen inhibit state",
+        "symbols": [
+          {
+            "name": "NOT_INHIBITED",
+            "value": 0,
+            "label": "DC Generator Not Inhibited",
+            "desc": "The DC generator is permitted to run and produce power on REbus"
+          },
+          {
+            "name": "INHIBITED",
+            "value": 1,
+            "label": "DC Generator Inhibited",
+            "desc": "The DC generator is NOT permitted to run and produce power on REbus"
+          }
+        ]
+      }
+    ]
+  },
+  "id": 10020
+}

@@ -1,71 +1,64 @@
 <sunSpecModels v="1">
-    <model id="64268" len="60" name="Power_Prioritization_Basic_Diagnostics">
-        <block len="60">
-            <point id="AvgGridVoltage" type="uint16" units="V" offset="0" />
-            <point id="GridFrequency" type="uint32" units="Hz" sf="Hz_SF" offset="1" /> <!-- Hz_SF = x1000 -->
-            <point id="RealPower" type="uint16" units="W" offset="3" />
-            <point id="ReactivePower" type="uint16" units="VAR" offset="4" />
-            <point id="VoltWattExportLimit" type="uint16" units="W" offset="5" />
-            <point id="FreqWattRealPowerTarget" type="uint16" units="W" offset="6" />
+    <model id="64268" len="53" name="Power_Prioritization_Basic_Diagnostics">
+        <block len="53">
+            <point id="AvgGridVoltage" type="int16" units="V" sf="V_SF" offset="0" /> <!-- V_SF = x10 -->
+            <point id="GridFrequency" type="int32" units="Hz" sf="Hz_SF" offset="1" /> <!-- Hz_SF = x1000 -->
+            <point id="RealPower" type="int16" units="W" offset="3" />
+            <point id="ReactivePower" type="int16" units="VAR" offset="4" />
+            <point id="VoltWattExportLimit" type="int16" units="W" offset="5" />
+            <point id="FreqWattRealPowerTarget" type="int16" units="W" offset="6" />
             <point id="FreqWattActiveStatus" type="enum16" offset="7">
                 <symbol id="INACTIVE">0</symbol>
                 <symbol id="ACTIVE">1</symbol>
             </point>
-            <point id="WattVarReactivePowerTarget" type="uint16" units="VAR" offset="8" />
-            <point id="VoltVarReactivePowerTarget" type="uint16" units="VAR" offset="9" />
-            <point id="VoltVarReferenceVoltage" type="uint16" units="V_Percent" sf="V_Percent_SF" offset="10" /> <!-- V_Percent_SF = x10 -->
-            <point id="ConstantPowerFactorReactivePowerTarget" type="uint16" units="VAR" offset="11" />
-            <point id="ConstantReactivePowerCommandReactivePowerTarget" type="uint16" units="VAR" offset="12" />
-            <point id="RealPowerLimit" type="uint16" units="W" offset="13" />
-            <point id="RealPowerSettingTarget" type="uint16" units="W" offset="14" />
-            <point id="GSLRealPowerCommand" type="uint16" units="W/unit" offset="15" />
-            <point id="GSLRealPowerLowLimit" type="uint16" units="W/unit" offset="16" />
-            <point id="GSLRealPowerHighLimit" type="uint16" units="W/unit" offset="17" />
+            <point id="WattVarReactivePowerTarget" type="int16" units="VAR" offset="8" />
+            <point id="VoltVarReactivePowerTarget" type="int16" units="VAR" offset="9" />
+            <point id="VoltVarReferenceVoltage" type="int16" units="V_Percent" sf="V_Percent_SF" offset="10" /> <!-- V_Percent_SF = x10 -->
+            <point id="ConstantPowerFactorReactivePowerTarget" type="int16" units="VAR" offset="11" />
+            <point id="ConstantReactivePowerCommandReactivePowerTarget" type="int16" units="VAR" offset="12" />
+            <point id="RealPowerLimit" type="int16" units="W" offset="13" />
+            <point id="RealPowerSettingTarget" type="int16" units="W" offset="14" />
+            <point id="GSLRealPowerCommand" type="int16" units="W_Percent" sf="W_Percent_SF" offset="15" /> <!-- W_Percent_SF = x10 -->
+            <point id="GSLRealPowerLowLimit" type="int16" units="W_Percent" sf="W_Percent_SF" offset="16" />
+            <point id="GSLRealPowerHighLimit" type="int16" units="W_Percent" sf="W_Percent_SF" offset="17" />
             <point id="GSLRealPowerCommandActiveStatus" type="enum16" offset="18">
                 <symbol id="INACTIVE">0</symbol>
                 <symbol id="ACTIVE">1</symbol>
             </point>
-            <point id="GSLReactivePowerCommand" type="uint16" units="VAR/unit" offset="19" />
-            <point id="MaxReactiveAmpsReference" type="uint16" units="A" offset="20" /> <!-- Raw sampled -->
-            <point id="ReactiveAmpsFromCapacitor" type="uint16" units="A" sf="A_SF" offset="21" /> <!-- A_SF = x100 -->
-            <point id="ReactiveAmpsTarget" type="uint16" units="A" sf="A_SF" offset="22" />
-            <point id="ReactiveAmpsTargetFromGSL" type="uint16" units="A" sf="A_SF" offset="23" />
-            <point id="RealPowerAmpsReferenceTotal" type="uint16" units="A" offset="24" />
-            <point id="RealPowerAmpsReference1" type="uint16" units="A" offset="25" />
-            <point id="RealPowerAmpsReference2" type="uint16" units="A" offset="26" />
-            <point id="ReactiveAmpsReference" type="uint16" units="A" offset="27" />
-            <point id="RealPowerAmpsReferenceTargetTotal" type="uint16" units="A" offset="28" />
-            <point id="RealPowerAmpsReferenceTarget1" type="uint16" units="A" offset="29" />
-            <point id="RealPowerAmpsReferenceTarget2" type="uint16" units="A" offset="30" />
-            <point id="ApparentPowerVectorAmpLimit" type="uint16" units="A" offset="31" /> <!-- NOT raw sampled -->
-            <point id="PowerAsWattsNegativeLimit1" type="uint16" units="A" sf="A_SF" offset="32" />
-            <point id="PowerAsWattsNegativeLimit2" type="uint16" units="A" sf="A_SF" offset="33" />
-            <point id="PowerAsWattsPositiveLimit1" type="uint16" units="A" sf="A_SF" offset="34" />
-            <point id="PowerAsWattsPositiveLimit2" type="uint16" units="A" sf="A_SF" offset="35" />
-            <point id="PowerTargetAsPerUnit1" type="uint16" units="W/unit" offset="36" />
-            <point id="PowerTargetAsPerUnit2" type="uint16" units="W/unit" offset="37" />
-            <point id="PowerTargetAsAmps1" type="uint16" units="A" sf="A_SF" offset="38" />
-            <point id="PowerTargetAsAmps2" type="uint16" units="A" sf="A_SF" offset="39" />
-            <point id="CTTargetSelfSupply1" type="uint16" units="W/unit" offset="40" />
-            <point id="CTTargetSelfSupply2" type="uint16" units="W/unit" offset="41" />
-            <point id="CTTargetZeroExport1" type="uint16" units="W/unit" offset="42" />
-            <point id="CTTargetZeroExport2" type="uint16" units="W/unit" offset="43" />
-            <point id="CTTargetZeroImport1" type="uint16" units="W/unit" offset="44" />
-            <point id="CTTargetZeroImport2" type="uint16" units="W/unit" offset="45" />
-            <point id="CTTargetGenConnected1" type="uint16" units="W/unit" offset="46" />
-            <point id="CTTargetGenConnected2" type="uint16" units="W/unit" offset="47" />
-            <point id="Hz_SF" access="r" type="sunssf" offset="48" />
-            <point id="V_Percent_SF" access="r" type="sunssf" offset="49" />
-            <point id="A_SF" access="r" type="sunssf" offset="50" />
-            <point id="Pad0" type="pad" offset="51" />
-            <point id="Pad1" type="pad" offset="52" />
-            <point id="Pad2" type="pad" offset="53" />
-            <point id="Pad3" type="pad" offset="54" />
-            <point id="Pad4" type="pad" offset="55" />
-            <point id="Pad5" type="pad" offset="56" />
-            <point id="Pad6" type="pad" offset="57" />
-            <point id="Pad7" type="pad" offset="58" />
-            <point id="Pad8" type="pad" offset="59" />
+            <point id="GSLReactivePowerCommand" type="int16" units="VAR_Percent" sf="VAR_Percent_SF" offset="19" /> <!-- VAR_Percent_SF = x10 -->
+            <point id="MaxReactiveAmpsReference" type="int16" units="A" offset="20" /> <!-- Raw sampled -->
+            <point id="ReactiveAmpsFromCapacitor" type="int16" units="A" sf="A_SF" offset="21" /> <!-- A_SF = x100 -->
+            <point id="ReactiveAmpsTarget" type="int16" units="A" sf="A_SF" offset="22" />
+            <point id="ReactiveAmpsTargetFromGSL" type="int16" units="A" sf="A_SF" offset="23" />
+            <point id="RealPowerAmpsReferenceTotal" type="int16" units="A" offset="24" />
+            <point id="RealPowerAmpsReference1" type="int16" units="A" offset="25" />
+            <point id="RealPowerAmpsReference2" type="int16" units="A" offset="26" />
+            <point id="ReactiveAmpsReference" type="int16" units="A" offset="27" />
+            <point id="RealPowerAmpsReferenceTarget" type="int16" units="A" offset="28" />
+            <point id="ApparentPowerVectorAmpLimit" type="int16" units="A" offset="29" /> <!-- NOT raw sampled -->
+            <point id="PowerAsWattsNegativeLimit" type="int16" units="W" offset="30" />
+            <point id="PowerAsWattsPositiveLimit" type="int16" units="W" offset="31" />
+            <point id="PowerTargetAsPercent" type="int16" units="W_Percent" sf="W_Percent_SF" offset="32" />
+            <point id="PowerTargetAsAmps" type="int16" units="A" sf="A_SF" offset="33" />
+            <point id="CTTargetSelfSupply" type="int16" units="W_Percent" sf="W_Percent_SF" offset="34" />
+            <point id="CTTargetZeroExport" type="int16" units="W_Percent" sf="W_Percent_SF" offset="35" />
+            <point id="CTTargetZeroImport" type="int16" units="W_Percent" sf="W_Percent_SF" offset="36" />
+            <point id="CTTargetGenConnected" type="int16" units="W_Percent" sf="W_Percent_SF" offset="37" />
+            <point id="V_SF" access="r" type="sunssf" offset="38" />
+            <point id="Hz_SF" access="r" type="sunssf" offset="39" />
+            <point id="V_Percent_SF" access="r" type="sunssf" offset="40" />
+            <point id="W_Percent_SF" access="r" type="sunssf" offset="41" />
+            <point id="VAR_Percent_SF" access="r" type="sunssf" offset="42" />
+            <point id="A_SF" access="r" type="sunssf" offset="43" />
+            <point id="Pad0" type="pad" offset="44" />
+            <point id="Pad1" type="pad" offset="45" />
+            <point id="Pad2" type="pad" offset="46" />
+            <point id="Pad3" type="pad" offset="47" />
+            <point id="Pad4" type="pad" offset="48" />
+            <point id="Pad5" type="pad" offset="49" />
+            <point id="Pad6" type="pad" offset="50" />
+            <point id="Pad7" type="pad" offset="51" />
+            <point id="Pad8" type="pad" offset="52" />
         </block>
     </model>
     <strings id="64268" locale="en">
@@ -76,12 +69,12 @@
         </model>
         <point id="AvgGridVoltage">
             <label>Average Grid Voltage from GSL Measurements</label>
-            <description>The average grid voltage as reported by the GSL</description>
+            <description>The average grid voltage as reported by the GSL - when the ATS is grid connected, these measurements are taken from the AC input of the inverter, while when the ATS is not grid connected, the measurements are taken from the interconnect via the CTs and ATS connection to the inverter</description>
             <notes></notes>
         </point>
         <point id="GridFrequency">
             <label>Grid Frequency from GSL Measurements</label>
-            <description>The grid frequency as reported by the GSL</description>
+            <description>The grid frequency as reported by the GSL - this is calculated using the voltage measurements' period</description>
             <notes></notes>
         </point>
         <point id="RealPower">
@@ -106,7 +99,7 @@
         </point>
         <point id="FreqWattActiveStatus">
             <label>Frequency Watt Active Status</label>
-            <description>The frequency watt control algorithm's active status</description>
+            <description>Active status of the frequency watt control algorithm</description>
             <notes></notes>
         </point>
         <point id="WattVarReactivePowerTarget">
@@ -130,7 +123,7 @@
             <notes></notes>
         </point>
         <point id="ConstantReactivePowerCommandReactivePowerTarget">
-            <label>Constant Power Factor Reactive Power Target</label>
+            <label>Constant Reactive Power Command Reactive Power Target</label>
             <description>The target for reactive power based on the constant reactive power command</description>
             <notes></notes>
         </point>
@@ -171,7 +164,7 @@
         </point>
         <point id="MaxReactiveAmpsReference">
             <label>Maximum Reactive Amps Reference</label>
-            <description>Positive and negative threshold for reactive amps target</description>
+            <description>The absolute threshold for the reactive amps target</description>
             <notes></notes>
         </point>
         <point id="ReactiveAmpsFromCapacitor">
@@ -186,7 +179,7 @@
         </point>
         <point id="ReactiveAmpsTargetFromGSL">
             <label>Reactive Amps Target From GSL</label>
-            <description>Reactive amps target from GSL</description>
+            <description>Target for reactive amps from GSL</description>
             <notes></notes>
         </point>
         <point id="RealPowerAmpsReferenceTotal">
@@ -209,19 +202,9 @@
             <description>Integral form of the reactive amps target</description>
             <notes></notes>
         </point>
-        <point id="RealPowerAmpsReferenceTargetTotal">
-            <label>Real Power Amps Reference Target Total</label>
+        <point id="RealPowerAmpsReferenceTarget">
+            <label>Real Power Amps Reference Target</label>
             <description>Target from divy - total</description>
-            <notes></notes>
-        </point>
-        <point id="RealPowerAmpsReferenceTarget1">
-            <label>Real Power Amps Reference Target for Phase 1</label>
-            <description>Target from divy - phase 1 component</description>
-            <notes></notes>
-        </point>
-        <point id="RealPowerAmpsReferenceTarget2">
-            <label>Real Power Amps Reference Target for Phase 2</label>
-            <description>Target from divy - phase 2 component </description>
             <notes></notes>
         </point>
         <point id="ApparentPowerVectorAmpLimit">
@@ -229,84 +212,44 @@
             <description>Restricts all combined real and reactive amps from exceeding this limit</description>
             <notes></notes>
         </point>
-        <point id="PowerAsWattsNegativeLimit1">
-            <label>Power as Watts Negative Limit for Phase 1</label>
-            <description>Negative real power limit for phase 1</description>
+        <point id="PowerAsWattsNegativeLimit">
+            <label>Power as Watts Negative Limit</label>
+            <description>Negative real power limit</description>
             <notes></notes>
         </point>
-        <point id="PowerAsWattsNegativeLimit2">
-            <label>Power as Watts Negative Limit for Phase 2</label>
-            <description>Negative real power limit for phase 2</description>
+        <point id="PowerAsWattsPositiveLimit">
+            <label>Power as Watts Positive Limit</label>
+            <description>Positive real power limit</description>
             <notes></notes>
         </point>
-        <point id="PowerAsWattsPositiveLimit1">
-            <label>Power as Watts Positive Limit for Phase 1</label>
-            <description>Positive real power limit for phase 1</description>
+        <point id="PowerTargetAsPercent">
+            <label>Power Target as Percent</label>
+            <description>Target for real power dependent on mode</description>
             <notes></notes>
         </point>
-        <point id="PowerAsWattsPositiveLimit2">
-            <label>Power as Watts Positive Limit for Phase 2</label>
-            <description>Positive real power limit for phase 2</description>
+        <point id="PowerTargetAsAmps">
+            <label>Power Target as Amps</label>
+            <description>Amps required to reach the target for real power</description>
             <notes></notes>
         </point>
-        <point id="PowerTargetAsPerUnit1">
-            <label>Power Target as Per Unit for Phase 1</label>
-            <description>Real power target dependent on mode - phase 1 component</description>
+        <point id="CTTargetSelfSupply">
+            <label>CT Target for Self Supply</label>
+            <description>CT target for self supply</description>
             <notes></notes>
         </point>
-        <point id="PowerTargetAsPerUnit2">
-            <label>Power Target as Per Unit for Phase 2</label>
-            <description>Real power target dependent on mode - phase 2 component</description>
+        <point id="CTTargetZeroExport">
+            <label>CT Target for Zero Export</label>
+            <description>CT target for zero export</description>
             <notes></notes>
         </point>
-        <point id="PowerTargetAsAmps1">
-            <label>Power Target as Amps for Phase 1</label>
-            <description>Amps required to reach the real power target - phase 1 component</description>
+        <point id="CTTargetZeroImport">
+            <label>CT Target for Zero Import</label>
+            <description>CT target for zero import</description>
             <notes></notes>
         </point>
-        <point id="PowerTargetAsAmps2">
-            <label>Power Target as Amps for Phase 2</label>
-            <description>Amps required to reach the real power target - phase 2 component</description>
-            <notes></notes>
-        </point>
-        <point id="CTTargetSelfSupply1">
-            <label>CT Target for Self Supply for Phase 1</label>
-            <description>CT target for self supply for phase 1</description>
-            <notes></notes>
-        </point>
-        <point id="CTTargetSelfSupply2">
-            <label>CT Target for Self Supply for Phase 2</label>
-            <description>CT target for self supply for phase 2</description>
-            <notes></notes>
-        </point>
-        <point id="CTTargetZeroExport1">
-            <label>CT Target for Zero Export for Phase 1</label>
-            <description>CT target for zero export for phase 1</description>
-            <notes></notes>
-        </point>
-        <point id="CTTargetZeroExport2">
-            <label>CT Target for Zero Export for Phase 2</label>
-            <description>CT target for zero export for phase 2</description>
-            <notes></notes>
-        </point>
-        <point id="CTTargetZeroImport1">
-            <label>CT Target for Zero Import for Phase 1</label>
-            <description>CT target for zero import for phase 1</description>
-            <notes></notes>
-        </point>
-        <point id="CTTargetZeroImport2">
-            <label>CT Target for Zero Import for Phase 2</label>
-            <description>CT target for zero import for phase 2</description>
-            <notes></notes>
-        </point>
-        <point id="CTTargetGenConnected1">
-            <label>CT Target when Gen Connected for Phase 1</label>
-            <description>CT target when generator connected for phase 1</description>
-            <notes></notes>
-        </point>
-        <point id="CTTargetGenConnected2">
-            <label>CT Target when Gen Connected for Phase 2</label>
-            <description>CT target when generator connected for phase 2</description>
+        <point id="CTTargetGenConnected">
+            <label>CT Target when Gen Connected</label>
+            <description>CT target when generator connected</description>
             <notes></notes>
         </point>
     </strings>

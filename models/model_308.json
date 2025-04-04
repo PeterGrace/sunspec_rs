@@ -1,0 +1,62 @@
+{
+  "group": {
+    "name": "mini_met",
+    "type": "group",
+    "label": "Mini Met Model",
+    "desc": "Include to support a few basic measurements",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 308
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "GHI",
+        "type": "uint16",
+        "size": 1,
+        "units": "W/m2",
+        "label": "GHI",
+        "desc": "Global Horizontal Irradiance"
+      },
+      {
+        "name": "TmpBOM",
+        "type": "int16",
+        "size": 1,
+        "sf": -1,
+        "units": "C",
+        "label": "Temp",
+        "desc": "Back of module temperature measurement"
+      },
+      {
+        "name": "TmpAmb",
+        "type": "int16",
+        "size": 1,
+        "sf": -1,
+        "units": "C",
+        "label": "Ambient Temperature"
+      },
+      {
+        "name": "WndSpd",
+        "type": "uint16",
+        "size": 1,
+        "units": "m/s",
+        "label": "Wind Speed"
+      }
+    ]
+  },
+  "id": 308
+}

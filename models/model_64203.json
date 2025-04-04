@@ -1,0 +1,156 @@
+{
+  "group": {
+    "name": "reconnect",
+    "type": "group",
+    "label": "Generac Reconnect Control",
+    "desc": "Define grid parameters required for reconnection",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64203
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "ModEna",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "ModEna",
+        "desc": "Enable this model's voltage and frequency window.",
+        "symbols": [
+          {
+            "name": "DISABLE",
+            "value": 0
+          },
+          {
+            "name": "ENABLE",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "ReConn_Tms",
+        "type": "uint16",
+        "size": 1,
+        "sf": "Tms_SF",
+        "units": "Secs",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "ReConn_Tms",
+        "desc": "Time to reconnect after fault, and within frequency and voltage window."
+      },
+      {
+        "name": "ReConnMinV",
+        "type": "uint16",
+        "size": 1,
+        "sf": "V_SF",
+        "units": "%VRef",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "ReConnMinV",
+        "desc": "Reconnect only above this voltage"
+      },
+      {
+        "name": "ReConnMaxV",
+        "type": "uint16",
+        "size": 1,
+        "sf": "V_SF",
+        "units": "%VRef",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "ReConnMaxV",
+        "desc": "Reconnect only below this voltage"
+      },
+      {
+        "name": "ReConnMinHz",
+        "type": "uint16",
+        "size": 1,
+        "sf": "Hz_SF",
+        "units": "Hz",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "ReConnMinHz",
+        "desc": "Reconnect only above this frequency"
+      },
+      {
+        "name": "ReConnMaxHz",
+        "type": "uint16",
+        "size": 1,
+        "sf": "Hz_SF",
+        "units": "Hz",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "ReConnMaxHz",
+        "desc": "Reconnect only below this frequency"
+      },
+      {
+        "name": "VWLatchTms",
+        "type": "uint16",
+        "size": 1,
+        "sf": "Tms_SF",
+        "units": "Secs",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "VoltWattLatchTime",
+        "desc": "Delay for this amount of time after voltage is restored before reconnecting"
+      },
+      {
+        "name": "FWLatchTms",
+        "type": "uint16",
+        "size": 1,
+        "sf": "Tms_SF",
+        "units": "Secs",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "FreqWattLatchTime",
+        "desc": "Delay for this amount of time after frequency is restored before reconnecting"
+      },
+      {
+        "name": "Tms_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Tms_SF",
+        "desc": "Scale factor for reconnect time."
+      },
+      {
+        "name": "V_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "label": "V_SF",
+        "desc": "Scale factor for voltage percent of Vref."
+      },
+      {
+        "name": "Hz_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Hz_SF",
+        "desc": "Scale factor for frequency."
+      },
+      {
+        "name": "Pad",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      }
+    ]
+  },
+  "id": 64203
+}

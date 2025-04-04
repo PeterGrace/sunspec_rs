@@ -1,0 +1,244 @@
+{
+  "group": {
+    "name": "pvrss_config",
+    "type": "group",
+    "label": "PV Link Settings",
+    "desc": "Commission the PV Link and configure the Photovoltaic Rapid Shutdown System (PVRSS)",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64263
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Enable",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Enable",
+        "desc": "Use this command to enable the PV Link. For first-time commissioning with SnapRS, use Auto Cfg PVRSS.",
+        "symbols": [
+          {
+            "name": "DISABLED",
+            "value": 0
+          },
+          {
+            "name": "ENABLED",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "AutoConfigPVRSS",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Auto Cfg PVRSS",
+        "desc": "Automatically configure and enable the PV Link for use with SnapRS. PV Link will count the number of SnapRS devices and set the installed count accordingly.",
+        "symbols": [
+          {
+            "name": "N/A",
+            "value": 0
+          },
+          {
+            "name": "BEGIN_AUTOCONFIG",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "PLMCh",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "PLM channel",
+        "desc": "Channel for REbus communications. All devices in a system must use the same channel (except REbus Beacon).",
+        "symbols": [
+          {
+            "name": "CH_0",
+            "value": 0
+          },
+          {
+            "name": "CH_1",
+            "value": 1
+          },
+          {
+            "name": "CH_2",
+            "value": 2
+          },
+          {
+            "name": "CH_3",
+            "value": 3
+          },
+          {
+            "name": "CH_4",
+            "value": 4
+          },
+          {
+            "name": "CH_5",
+            "value": 5
+          },
+          {
+            "name": "CH_6",
+            "value": 6
+          },
+          {
+            "name": "CH_7",
+            "value": 7
+          },
+          {
+            "name": "CH_8",
+            "value": 8
+          },
+          {
+            "name": "CH_9",
+            "value": 9
+          },
+          {
+            "name": "CH_10",
+            "value": 10
+          },
+          {
+            "name": "CH_11",
+            "value": 11
+          },
+          {
+            "name": "CH_12",
+            "value": 12
+          }
+        ]
+      },
+      {
+        "name": "VinStartup",
+        "type": "uint16",
+        "size": 1,
+        "sf": "SF_X10",
+        "units": "V",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Vin Startup (V)",
+        "desc": "Minimum DC input voltage from the PV substring for the PV Link to start making power."
+      },
+      {
+        "name": "NumStrings",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "String Count",
+        "desc": "Number of parallel PV substrings connected to this PV Link.",
+        "symbols": [
+          {
+            "name": "ONE_SUBSTRING",
+            "value": 1
+          },
+          {
+            "name": "TWO_SUBSTRINGS",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "name": "EnablePVRSS",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Enable PVRSS",
+        "desc": "If SnapRS devices are installed, this must be 'on'.",
+        "symbols": [
+          {
+            "name": "OFF",
+            "value": 0
+          },
+          {
+            "name": "ON",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "SnapRSInstalledCnt",
+        "type": "uint16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "SnapRSInstalled",
+        "desc": "The total number of SnapRS devices physically installed on this PV Link. "
+      },
+      {
+        "name": "SnapRSDetectedCnt",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "SnapRSDetected",
+        "desc": "The number of SnapRS devices detected by the PV Link after its daily count. "
+      },
+      {
+        "name": "PVRSSLockoutError",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "PVRSS Lockout Error Status",
+        "desc": "A PVRSS Lockout Error indicates that SnapRSDetected does not equal SnapRSInstalled. Inspect SnapRS devices on this substring(s) for damage and replace as necessary.",
+        "symbols": [
+          {
+            "name": "NO_ERROR",
+            "value": 0
+          },
+          {
+            "name": "ERROR_ACTIVE",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "ClearPVRSSLockoutError",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Clear PVRSS Lockout Error",
+        "desc": "Use to clear PVRSS Lockout error after confirming all SnapRS are functioning properly.",
+        "symbols": [
+          {
+            "name": "N/A",
+            "value": 0
+          },
+          {
+            "name": "CLEAR_ERROR",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "SF_X10",
+        "type": "sunssf",
+        "size": 1
+      },
+      {
+        "name": "Pad0",
+        "type": "pad",
+        "size": 1
+      }
+    ]
+  },
+  "id": 64263
+}

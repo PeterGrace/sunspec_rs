@@ -1,0 +1,51 @@
+{
+  "group": {
+    "name": "inverter_status",
+    "type": "group",
+    "label": "Inverter Status",
+    "desc": "Communicates details about the current behavior of a PWRcell inverter as part of an ESS",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 10040
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "DC_Generator_Inhibit",
+        "type": "enum16",
+        "size": 1,
+        "label": "DC Generator Inhibit",
+        "desc": "Allows a DC generator to be inhibited from producing power",
+        "symbols": [
+          {
+            "name": "NOT_INHIBIT",
+            "value": 0,
+            "label": "DC Generator Not Inhibit",
+            "desc": "The DC generator is permitted to run and produce power on REbus"
+          },
+          {
+            "name": "INHIBIT",
+            "value": 1,
+            "label": "DC Generator Inhibit",
+            "desc": "The DC generator is NOT permitted to run and produce power on REbus"
+          }
+        ]
+      }
+    ]
+  },
+  "id": 10040
+}

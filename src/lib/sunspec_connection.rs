@@ -63,7 +63,7 @@ const DEFAULT_BACKOFF_BASE_MS: u64 = 100_u64;
 // ====
 // 2023-10-03: I think I know why and it's pretty obvious when I think about it.  Model Id and
 // Model Length are each u16 values.  Maybe?
-const ADDR_OFFSET: u16 = 2_u16;
+pub(crate) const ADDR_OFFSET: u16 = 2_u16;
 
 pub type Word = u16;
 
@@ -202,7 +202,21 @@ impl SunSpecConnection {
         })
     }
     //endregion
-
+    pub async fn get_raw(
+        &mut self,
+        addr: Address,
+        amount: u16,
+    ) -> Result<Vec<Word>, SunSpecReadError> {
+        let data = match self
+            .clone()
+            .retry_read_holding_registers(addr, amount)
+            .await
+        {
+            Ok(data) => data,
+            Err(e) => return Err(SunSpecReadError::CommError(e.to_string())),
+        };
+        Ok(data)
+    }
     //region get value primitives
     /// Get a text string from the modbus connection
     ///
@@ -460,6 +474,7 @@ impl SunSpecConnection {
             if id == SUNSPEC_END_MODEL_ID {
                 break;
             }
+            info!("{id}");
             assert!(id >= 1);
             debug!("found model with id {id}, and length {length}");
             match ModelData::new(
@@ -602,7 +617,6 @@ impl SunSpecConnection {
     /// * `name` - The name of the point you're querying, e.g. "PhVPhA" -- you can find these
     ///            values specified in the sunspec model files.
     #[async_recursion]
-
     pub async fn get_point(
         mut self,
         mut md: ModelData,
@@ -687,6 +701,11 @@ impl SunSpecConnection {
             block_offset = fixed_block_len + (block_location * model.block[1].len);
         }
 
+        if point.value.is_some() {
+            // if value is set already, its a static value from the model file.
+            info!("Tendering static point for {}/{}", model_name, point.id);
+            return Ok(point);
+        }
         match point.r#type.as_str() {
             POINT_TYPE_STRING => {
                 match self

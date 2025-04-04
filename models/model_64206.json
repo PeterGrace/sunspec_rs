@@ -1,0 +1,881 @@
+{
+  "group": {
+    "name": "EIconfig",
+    "type": "group",
+    "label": "PWRcell Configuration",
+    "desc": "Configure PWRcell system settings",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64206
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Conn",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Enable inverter",
+        "desc": "Enable inverter",
+        "symbols": [
+          {
+            "name": "DISABLED",
+            "value": 0
+          },
+          {
+            "name": "ENABLED",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "Pwd",
+        "type": "uint64",
+        "size": 4,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Access code",
+        "desc": "Access code"
+      },
+      {
+        "name": "SRD",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Compliance selection",
+        "desc": "Select which utility your inverter is being installed under.",
+        "symbols": [
+          {
+            "name": "IEEE_1547",
+            "value": 0,
+            "label": "IEEE 1547-2003 (default)",
+            "desc": "'IEEE 1547' is the most common inverter compliance setting."
+          },
+          {
+            "name": "RULE_14H_1",
+            "value": 1,
+            "label": "HECO SRD V1.1",
+            "desc": "Configure for HI Rule 14H Islands of O'ahu, Maui, Hawai'i (Big Island). If your installation is not on one of these islands, do not use this selection. "
+          },
+          {
+            "name": "RULE_14H_2",
+            "value": 2,
+            "label": "HECO SRD V1.1 [L+M]",
+            "desc": "Configure for HI Rule 14H (Lana'i, Moloka'i)"
+          },
+          {
+            "name": "RULE_21",
+            "value": 3,
+            "label": "Rule 21 2017",
+            "desc": "Configure for California Rule 21 settings."
+          },
+          {
+            "name": "RULE_PREPA",
+            "value": 4,
+            "label": "PREPA 2017",
+            "desc": "Configure for Puerto Rico (PREPA) settings."
+          },
+          {
+            "name": "RULE_ISONE",
+            "value": 5,
+            "label": "ISO-NE (1547a-2014)",
+            "desc": "Configure ISO New England settings."
+          },
+          {
+            "name": "RULE_LADWP",
+            "value": 6,
+            "label": "LADWP 2019",
+            "desc": "Configure City of Los Angeles settings."
+          },
+          {
+            "name": "RULE_PECO",
+            "value": 7,
+            "label": "PECO (deprecated)",
+            "desc": "Configure PECO settings."
+          },
+          {
+            "name": "RULE_MISO",
+            "value": 8,
+            "label": "MISO (deprecated)",
+            "desc": "Configure MISO settings."
+          },
+          {
+            "name": "LPEA",
+            "value": 9,
+            "label": "LPEA 2019"
+          },
+          {
+            "name": "RULE_KIUC",
+            "value": 10,
+            "label": "KIUC 2021"
+          },
+          {
+            "name": "RULE_PECO_v2",
+            "value": 11,
+            "label": "PECO 2021"
+          },
+          {
+            "name": "RULE_21_v2",
+            "value": 12,
+            "label": "RULE 21 2019"
+          },
+          {
+            "name": "RULE_MISO_1547_2018",
+            "value": 13,
+            "label": "MISO 1547-2018"
+          },
+          {
+            "name": "IEEE_1547_2018",
+            "value": 14,
+            "label": "IEEE 1547-2018"
+          },
+          {
+            "name": "HECO_V2.0",
+            "value": 15,
+            "label": "HECO SRD V2.0"
+          },
+          {
+            "name": "PREPA_2023",
+            "value": 16,
+            "label": "PREPA 2023"
+          },
+          {
+            "name": "AmerenIL_Std_2018",
+            "value": 17,
+            "label": "AmerenIL Std 2018"
+          },
+          {
+            "name": "AmerenIL_Rebate_2018",
+            "value": 18,
+            "label": "AmerenIL Rebate 2018"
+          },
+          {
+            "name": "BC_HYDRO_2014",
+            "value": 19,
+            "label": "BC Hydro 2014"
+          },
+          {
+            "name": "ISO_NE_V2.0",
+            "value": 20,
+            "label": "ISO-NE 2023"
+          },
+          {
+            "name": "RULE_21_2023",
+            "value": 21,
+            "label": "Rule 21 2023"
+          },
+          {
+            "name": "National_Grid_NY_2023",
+            "value": 22,
+            "label": "National Grid NY 2023"
+          },
+          {
+            "name": "NYSEG_RGE_2023",
+            "value": 23,
+            "label": "NYSEG + RG&E 2023"
+          },
+          {
+            "name": "PSEG_LI_2023",
+            "value": 24,
+            "label": "PSEG-LI 2023"
+          },
+          {
+            "name": "ORU_2023",
+            "value": 25,
+            "label": "ORU 2023"
+          },
+          {
+            "name": "CHGE_2023",
+            "value": 26,
+            "label": "CHG&E 2023"
+          },
+          {
+            "name": "IEEE_1547a_2014",
+            "value": 27,
+            "label": "IEEE 1547a-2014"
+          },
+          {
+            "name": "IEEE_1547_2003_ReConnV_7_5",
+            "value": 28,
+            "label": "IEEE 1547-2003 (ReConnV 7.5%)"
+          },
+          {
+            "name": "IEEE_1547_2003_ReConnV_10",
+            "value": 29,
+            "label": "IEEE 1547-2003 (ReConnV 10%)"
+          },
+          {
+            "name": "MWEC_2023",
+            "value": 30,
+            "label": "MWEC 2023"
+          },
+          {
+            "name": "LADWP_2023",
+            "value": 31,
+            "label": "LADWP 2023"
+          },
+          {
+            "name": "BED_2022",
+            "value": 32,
+            "label": "BED 2022"
+          },
+          {
+            "name": "PREPA_LUMA_2024",
+            "value": 33,
+            "label": "PREPA-LUMA 2024"
+          },
+          {
+            "name": "ConEd_2024",
+            "value": 34,
+            "label": "Con Edison 2024"
+          },
+          {
+            "name": "IEEE_1547a_2014_ReConnV_10",
+            "value": 35,
+            "label": "IEEE 1547a-2014 (ReConnV 10%)"
+          }
+        ]
+      },
+      {
+        "name": "Def",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Compliance settings defaulted",
+        "desc": "Indicates whether or not the default settings from the Compliance Selection field have been applied.",
+        "symbols": [
+          {
+            "name": "NOT_DEFAULTED",
+            "value": 0
+          },
+          {
+            "name": "DEFAULTED",
+            "value": 1
+          },
+          {
+            "name": "UNKNOWN",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "name": "ZExp",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Export Limiting",
+        "desc": "When enabled, reduces the inverter exporting power to the utility grid to the value of Export Limit (below). NOTE: THIS IS A SET ONCE ATTRIBUTE. To unset Export Limiting, please contact Generac.",
+        "symbols": [
+          {
+            "name": "DISABLED",
+            "value": 0
+          },
+          {
+            "name": "ENABLED",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "IslandEna",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Enable Islanding",
+        "desc": "When enabled, PWRcell Inverter shall export backup power at its Protected Loads output terminals to connected load. This setting does not override or interfere with the anti-islanding capabilities of the inverter.",
+        "symbols": [
+          {
+            "name": "ISLANDING_DISABLED",
+            "value": 0
+          },
+          {
+            "name": "ISLANDING_ENABLED",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "ActSysMds",
+        "type": "bitfield16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Enabled SysModes",
+        "desc": "Select the Operational Modes that will be available to this installation",
+        "symbols": [
+          {
+            "name": "SAFETY_SHUTDOWN",
+            "value": 0
+          },
+          {
+            "name": "GRID_TIE",
+            "value": 1
+          },
+          {
+            "name": "SELF_SUPPLY",
+            "value": 2
+          },
+          {
+            "name": "CLEAN_BACKUP",
+            "value": 3
+          },
+          {
+            "name": "PRIORITY_BACKUP",
+            "value": 4
+          },
+          {
+            "name": "REMOTE_ARBITRAGE",
+            "value": 5
+          },
+          {
+            "name": "SELL",
+            "value": 6
+          }
+        ]
+      },
+      {
+        "name": "CTTrig",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Trigger CT calibration",
+        "desc": "Trigger CT calibration",
+        "symbols": [
+          {
+            "name": "AUTO",
+            "value": 0
+          },
+          {
+            "name": "TRIGGER",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "ClrDisp",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Clear display",
+        "desc": "Clear offline devices and reset the LCD display on the front cover of the inverter",
+        "symbols": [
+          {
+            "name": "NO",
+            "value": 0
+          },
+          {
+            "name": "CLEAR",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "PLMCh",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "PLM channel",
+        "desc": "Power line modem channel. Default is channel 1",
+        "symbols": [
+          {
+            "name": "CH_0",
+            "value": 0
+          },
+          {
+            "name": "CH_1",
+            "value": 1
+          },
+          {
+            "name": "CH_2",
+            "value": 2
+          },
+          {
+            "name": "CH_3",
+            "value": 3
+          },
+          {
+            "name": "CH_4",
+            "value": 4
+          },
+          {
+            "name": "CH_5",
+            "value": 5
+          },
+          {
+            "name": "CH_6",
+            "value": 6
+          },
+          {
+            "name": "CH_7",
+            "value": 7
+          },
+          {
+            "name": "CH_8",
+            "value": 8
+          },
+          {
+            "name": "CH_9",
+            "value": 9
+          },
+          {
+            "name": "CH_10",
+            "value": 10
+          },
+          {
+            "name": "CH_11",
+            "value": 11
+          },
+          {
+            "name": "CH_12",
+            "value": 12
+          }
+        ]
+      },
+      {
+        "name": "PLMEna",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "PLM enable",
+        "desc": "Enable the inverter's power line modem. Do not disable unless guided by Generac Technical Support",
+        "symbols": [
+          {
+            "name": "PLM_DISABLED",
+            "value": 0
+          },
+          {
+            "name": "PLM_ENABLED",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "GPLMRst",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Global PLM Reset",
+        "desc": "Reset all online devices (including those currently on different channels) to the default PLM channel (Ch 1)",
+        "symbols": [
+          {
+            "name": "RESET",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "GPLMCh",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "PLM Group Set",
+        "desc": "Set PLM channel for all devices (including inverter) that are currently on the inverter's channel (PLMCh) to the channel indicated by this register. This will not affect devices that aren't currently on PLMCh. PLMCh will also be set to the value of this register.",
+        "symbols": [
+          {
+            "name": "NONE",
+            "value": 0
+          },
+          {
+            "name": "CH_1",
+            "value": 1
+          },
+          {
+            "name": "CH_2",
+            "value": 2
+          },
+          {
+            "name": "CH_3",
+            "value": 3
+          },
+          {
+            "name": "CH_4",
+            "value": 4
+          },
+          {
+            "name": "CH_5",
+            "value": 5
+          },
+          {
+            "name": "CH_6",
+            "value": 6
+          },
+          {
+            "name": "CH_7",
+            "value": 7
+          },
+          {
+            "name": "CH_8",
+            "value": 8
+          },
+          {
+            "name": "CH_9",
+            "value": 9
+          },
+          {
+            "name": "CH_10",
+            "value": 10
+          },
+          {
+            "name": "CH_11",
+            "value": 11
+          },
+          {
+            "name": "CH_12",
+            "value": 12
+          }
+        ]
+      },
+      {
+        "name": "SS_Src",
+        "type": "uint16",
+        "size": 1,
+        "units": "W",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Self Supply Source Power",
+        "desc": "When in Self-Supply, the CT import power level above which causes the inverter to start exporting. With sufficient battery storage and/or PV generation, this will be the maximum load the meter will see."
+      },
+      {
+        "name": "SS_Sink",
+        "type": "uint16",
+        "size": 1,
+        "units": "W",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Self Supply Sink Power",
+        "desc": "When in Self-Supply, the CT import power level below which causes the inverter to start importing. (i.e., max rate to charge batteries from the grid)"
+      },
+      {
+        "name": "XFREna",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Number of Transfer Switches",
+        "desc": "Defines the number of external automatic transfer switches installed and enables transfer switch controls. For AC Coupled PV, this must be 1. For AC Generator Integration, this must be 1 in the Flexible Coverage configuration or 2 in the Whole Home Backup configuration.",
+        "symbols": [
+          {
+            "name": "NO_TRANSFER_SWITCH",
+            "value": 0
+          },
+          {
+            "name": "ONE_TRANSFER_SWITCH",
+            "value": 1
+          },
+          {
+            "name": "TWO_TRANSFER_SWITCHES",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "name": "XFRV_sf",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "XFRV",
+        "type": "uint16",
+        "size": 1,
+        "sf": "XFRV_sf",
+        "units": "V",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "External Transfer Voltage",
+        "desc": "Grid voltage below which to transfer local loads to the inverter, and above which to transfer loads to utility mains."
+      },
+      {
+        "name": "XFRTms",
+        "type": "uint16",
+        "size": 1,
+        "units": "s",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "External Transfer timeout",
+        "desc": "Amount of time after grid voltage returns to transfer local loads back to the utility mains. Grid voltage must be above External Transer Voltage for the entire time."
+      },
+      {
+        "name": "ZImp",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Zero Import",
+        "desc": "When enabled, prevents the batteries from charging with utility power. NOTE: THIS IS A SET ONCE ATTRIBUTE. This feature is only available for inverter firmware version >13130. To unset Zero Import or request a firmware update, please contact Generac.",
+        "symbols": [
+          {
+            "name": "DISABLED",
+            "value": 0
+          },
+          {
+            "name": "ENABLED",
+            "value": 1
+          },
+          {
+            "name": "N/A",
+            "value": 32768
+          }
+        ]
+      },
+      {
+        "name": "ZExpLim",
+        "type": "uint16",
+        "size": 1,
+        "units": "W",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Export Limit",
+        "desc": "\n        The limit, in watts, that the inverter is allowed to push onto the grid. This setting will only take effect if Export Limiting (above) is ENABLED.\n        NOTE: This value can only be lowered. This feature is only available for inverter firmware version >13200. For older firmware versions, the value 32768 may appear, and it can be ignored. To reset this limit or request a firmware update, please contact Generac.\n        NOTE: This feature requires CTs to be properly installed and calibrated prior to use. For more information on CT calibration, see the PWRcell Inverter Installation and Owners Manual.\n      "
+      },
+      {
+        "name": "ExpOverride",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Export Override",
+        "desc": "Formerly called Zero Export, this setting will inhibit the PWRcell system from exporting power to the grid.\n        NOTE: This feature requires CTs to be properly installed and calibrated prior to use. For more information on CT calibration, see the PWRcell Inverter Installation and Owners Manual.\n      ",
+        "symbols": [
+          {
+            "name": "DISABLED",
+            "value": 0
+          },
+          {
+            "name": "ENABLED",
+            "value": 1
+          },
+          {
+            "name": "N/A",
+            "value": 32768
+          }
+        ]
+      },
+      {
+        "name": "ACPVPowerRating",
+        "type": "int16",
+        "size": 1,
+        "sf": "SF_X10",
+        "units": "kW",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "AC-coupled PV Power Rating",
+        "desc": "Power rating of the attached AC Coupled PV array. Set this value to the cumulative power rating of AC Coupled PV connected to this inverter."
+      },
+      {
+        "name": "SF_X10",
+        "type": "sunssf",
+        "size": 1
+      },
+      {
+        "name": "LoadShedEnable",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Enable Load Shedding",
+        "desc": "Select 1 if using PWRmanager and / or SMM devices to manage loads. Select 2 if using the PWRcell ATS Controller to manage loads (with or without SMMs). Do not use PWRmanager and PWRcell ATS Controller together for load management.",
+        "symbols": [
+          {
+            "name": "LOAD_SHED_DISABLED",
+            "value": 0
+          },
+          {
+            "name": "LOAD_SHED_SMM_ONLY",
+            "value": 1
+          },
+          {
+            "name": "LOAD_SHED_ATS_AND_SMM",
+            "value": 2
+          },
+          {
+            "name": "N/A",
+            "value": 32768
+          }
+        ]
+      },
+      {
+        "name": "GridParallelInverters",
+        "type": "int16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Grid Parallel Inverters",
+        "desc": "This setting allows for two inverters to share one set of CTs. Set to 2 if daisy chaining CTs between two inverters."
+      },
+      {
+        "name": "CTTurnsRatio",
+        "type": "int16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "CT Turns Ratio",
+        "desc": "Allows setting a non-default turns ratio for the grid CTs. The default value is 1500"
+      },
+      {
+        "name": "GeneratorPower",
+        "type": "int16",
+        "size": 1,
+        "units": "kW",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "AC Generator Power Rating",
+        "desc": "Nameplate power rating of the AC coupled integrated generator. If no generator is integrated, leave at 0."
+      },
+      {
+        "name": "GeneratorControlMode",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "AC Generator Control Mode",
+        "desc": "Set AC Generator Control Mode for Single Transfer, Source Cycling, or Always On.",
+        "symbols": [
+          {
+            "name": "SINGLE_TRANSFER",
+            "value": 0
+          },
+          {
+            "name": "SOURCE_CYCLING",
+            "value": 1
+          },
+          {
+            "name": "ALWAYS_ON",
+            "value": 2
+          },
+          {
+            "name": "N/A",
+            "value": 32768
+          }
+        ]
+      },
+      {
+        "name": "ImportOverride",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Import Override",
+        "desc": "This setting will inhibit the PWRcell system from importing power from the grid to charge batteries.\n        NOTE: This feature requires CTs to be properly installed and calibrated prior to use. For more information on CT calibration, see the PWRcell Inverter Installation and Owners Manual.\n      ",
+        "symbols": [
+          {
+            "name": "DISABLED",
+            "value": 0
+          },
+          {
+            "name": "ENABLED",
+            "value": 1
+          },
+          {
+            "name": "N/A",
+            "value": 32768
+          }
+        ]
+      },
+      {
+        "name": "Pad11",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Pad",
+        "desc": "Large pad for future model expansion"
+      },
+      {
+        "name": "Pad12",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad13",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad14",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad15",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad16",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad17",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad18",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad19",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad20",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad21",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad22",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad23",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      }
+    ]
+  },
+  "id": 64206
+}

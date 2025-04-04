@@ -1,0 +1,79 @@
+{
+  "group": {
+    "name": "irradiance",
+    "type": "group",
+    "label": "Irradiance Model",
+    "desc": "Include to support various irradiance measurements",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 302
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      }
+    ],
+    "groups": [
+      {
+        "name": "repeating",
+        "type": "group",
+        "count": 0,
+        "points": [
+          {
+            "name": "GHI",
+            "type": "uint16",
+            "size": 1,
+            "units": "W/m2",
+            "label": "GHI",
+            "desc": "Global Horizontal Irradiance"
+          },
+          {
+            "name": "POAI",
+            "type": "uint16",
+            "size": 1,
+            "units": "W/m2",
+            "label": "POAI",
+            "desc": "Plane-of-Array Irradiance"
+          },
+          {
+            "name": "DFI",
+            "type": "uint16",
+            "size": 1,
+            "units": "W/m2",
+            "label": "DFI",
+            "desc": "Diffuse Irradiance"
+          },
+          {
+            "name": "DNI",
+            "type": "uint16",
+            "size": 1,
+            "units": "W/m2",
+            "label": "DNI",
+            "desc": "Direct Normal Irradiance"
+          },
+          {
+            "name": "OTI",
+            "type": "uint16",
+            "size": 1,
+            "units": "W/m2",
+            "label": "OTI",
+            "desc": "Other Irradiance"
+          }
+        ]
+      }
+    ]
+  },
+  "id": 302
+}

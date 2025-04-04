@@ -1,0 +1,435 @@
+{
+  "group": {
+    "name": "Power_Prioritization_Basic_Diagnostics",
+    "type": "group",
+    "label": "Power Prioritization Basic Diagnostics",
+    "desc": "Basic diagnostics model for understanding power prioritization",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64268
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "AvgGridVoltage",
+        "type": "int16",
+        "size": 1,
+        "sf": "V_SF",
+        "units": "V",
+        "label": "Average Grid Voltage from GSL Measurements",
+        "desc": "The average grid voltage as reported by the GSL - when the ATS is grid connected, these measurements are taken from the AC input of the inverter, while when the ATS is not grid connected, the measurements are taken from the interconnect via the CTs and ATS connection to the inverter"
+      },
+      {
+        "name": "GridFrequency",
+        "type": "int32",
+        "size": 2,
+        "sf": "Hz_SF",
+        "units": "Hz",
+        "label": "Grid Frequency from GSL Measurements",
+        "desc": "The grid frequency as reported by the GSL - this is calculated using the voltage measurements' period"
+      },
+      {
+        "name": "RealPower",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "label": "Real Power from GSL Measurements",
+        "desc": "The real power being imported from or exported to the grid as reported by the GSL"
+      },
+      {
+        "name": "ReactivePower",
+        "type": "int16",
+        "size": 1,
+        "units": "VAR",
+        "label": "Reactive Power from GSL Measurements",
+        "desc": "The reactive power being imported from or exported to the grid as reported by the GSL"
+      },
+      {
+        "name": "VoltWattExportLimit",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "label": "Volt Watt Export Limit",
+        "desc": "The export limit for real power based on the volt watt control algorithm"
+      },
+      {
+        "name": "FreqWattRealPowerTarget",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "label": "Frequency Watt Real Power Target",
+        "desc": "The target for real power based on the frequency watt control algorithm"
+      },
+      {
+        "name": "FreqWattActiveStatus",
+        "type": "enum16",
+        "size": 1,
+        "label": "Frequency Watt Active Status",
+        "desc": "Active status of the frequency watt control algorithm",
+        "symbols": [
+          {
+            "name": "INACTIVE",
+            "value": 0
+          },
+          {
+            "name": "ACTIVE",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "WattVarReactivePowerTarget",
+        "type": "int16",
+        "size": 1,
+        "units": "VAR",
+        "label": "Watt Var Reactive Power Target",
+        "desc": "The target for reactive power based on the watt var control algorithm"
+      },
+      {
+        "name": "VoltVarReactivePowerTarget",
+        "type": "int16",
+        "size": 1,
+        "units": "VAR",
+        "label": "Volt Var Reactive Power Target",
+        "desc": "The target for reactive power based on the volt var control algorithm"
+      },
+      {
+        "name": "VoltVarReferenceVoltage",
+        "type": "int16",
+        "size": 1,
+        "sf": "V_Percent_SF",
+        "units": "V_Percent",
+        "label": "Volt Var Reference Voltage",
+        "desc": "The reference voltage used to run the volt var algorithm"
+      },
+      {
+        "name": "ConstantPowerFactorReactivePowerTarget",
+        "type": "int16",
+        "size": 1,
+        "units": "VAR",
+        "label": "Constant Power Factor Reactive Power Target",
+        "desc": "The target for reactive power based on the constant power factor control algorithm"
+      },
+      {
+        "name": "ConstantReactivePowerCommandReactivePowerTarget",
+        "type": "int16",
+        "size": 1,
+        "units": "VAR",
+        "label": "Constant Reactive Power Command Reactive Power Target",
+        "desc": "The target for reactive power based on the constant reactive power command"
+      },
+      {
+        "name": "RealPowerLimit",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "label": "Real Power Limit",
+        "desc": "The limit for real power based on the real power limit"
+      },
+      {
+        "name": "RealPowerSettingTarget",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "label": "Real Power Setting Target",
+        "desc": "The target for real power based on the real power setting"
+      },
+      {
+        "name": "GSLRealPowerCommand",
+        "type": "int16",
+        "size": 1,
+        "sf": "W_Percent_SF",
+        "units": "W_Percent",
+        "label": "GSL Real Power Command",
+        "desc": "The real power command as requested by the GSL"
+      },
+      {
+        "name": "GSLRealPowerLowLimit",
+        "type": "int16",
+        "size": 1,
+        "sf": "W_Percent_SF",
+        "units": "W_Percent",
+        "label": "GSL Real Power Low Limit",
+        "desc": "The lower limit on real power as requested by the GSL"
+      },
+      {
+        "name": "GSLRealPowerHighLimit",
+        "type": "int16",
+        "size": 1,
+        "sf": "W_Percent_SF",
+        "units": "W_Percent",
+        "label": "GSL Real Power High Limit",
+        "desc": "The upper limit on real power as requested by the GSL"
+      },
+      {
+        "name": "GSLRealPowerCommandActiveStatus",
+        "type": "enum16",
+        "size": 1,
+        "label": "GSL Real Power Command Active Status",
+        "desc": "The active status of the GSL's real power command",
+        "symbols": [
+          {
+            "name": "INACTIVE",
+            "value": 0
+          },
+          {
+            "name": "ACTIVE",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "GSLReactivePowerCommand",
+        "type": "int16",
+        "size": 1,
+        "sf": "VAR_Percent_SF",
+        "units": "VAR_Percent",
+        "label": "GSL Reactive Power Command",
+        "desc": "The reactive power command as requested by the GSL"
+      },
+      {
+        "name": "MaxReactiveAmpsReference",
+        "type": "int16",
+        "size": 1,
+        "units": "A",
+        "label": "Maximum Reactive Amps Reference",
+        "desc": "The absolute threshold for the reactive amps target"
+      },
+      {
+        "name": "ReactiveAmpsFromCapacitor",
+        "type": "int16",
+        "size": 1,
+        "sf": "A_SF",
+        "units": "A",
+        "label": "Reactive Amps From Capacitor",
+        "desc": "Reactive amps adjustment from output capacitance"
+      },
+      {
+        "name": "ReactiveAmpsTarget",
+        "type": "int16",
+        "size": 1,
+        "sf": "A_SF",
+        "units": "A",
+        "label": "Reactive Amps Target",
+        "desc": "Final output reactive amps after adjustments from the GSL, capacitance, and anti-islanding"
+      },
+      {
+        "name": "ReactiveAmpsTargetFromGSL",
+        "type": "int16",
+        "size": 1,
+        "sf": "A_SF",
+        "units": "A",
+        "label": "Reactive Amps Target From GSL",
+        "desc": "Target for reactive amps from GSL"
+      },
+      {
+        "name": "RealPowerAmpsReferenceTotal",
+        "type": "int16",
+        "size": 1,
+        "units": "A",
+        "label": "Real Power Amps Reference Total",
+        "desc": "Used to determine whether power flows toward or away from REbus"
+      },
+      {
+        "name": "RealPowerAmpsReference1",
+        "type": "int16",
+        "size": 1,
+        "units": "A",
+        "label": "Real Power Amps Reference for Phase 1",
+        "desc": "Phase 1 component of real power amps reference total - allows us to balance power between the lines"
+      },
+      {
+        "name": "RealPowerAmpsReference2",
+        "type": "int16",
+        "size": 1,
+        "units": "A",
+        "label": "Real Power Amps Reference for Phase 2",
+        "desc": "Phase 2 component of real power amps reference total - allows us to balance power between the lines"
+      },
+      {
+        "name": "ReactiveAmpsReference",
+        "type": "int16",
+        "size": 1,
+        "units": "A",
+        "label": "Reactive Amps Reference",
+        "desc": "Integral form of the reactive amps target"
+      },
+      {
+        "name": "RealPowerAmpsReferenceTarget",
+        "type": "int16",
+        "size": 1,
+        "units": "A",
+        "label": "Real Power Amps Reference Target",
+        "desc": "Target from divy - total"
+      },
+      {
+        "name": "ApparentPowerVectorAmpLimit",
+        "type": "int16",
+        "size": 1,
+        "units": "A",
+        "label": "Apparent Power Vector Amp Limit",
+        "desc": "Restricts all combined real and reactive amps from exceeding this limit"
+      },
+      {
+        "name": "PowerAsWattsNegativeLimit",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "label": "Power as Watts Negative Limit",
+        "desc": "Negative real power limit"
+      },
+      {
+        "name": "PowerAsWattsPositiveLimit",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "label": "Power as Watts Positive Limit",
+        "desc": "Positive real power limit"
+      },
+      {
+        "name": "PowerTargetAsPercent",
+        "type": "int16",
+        "size": 1,
+        "sf": "W_Percent_SF",
+        "units": "W_Percent",
+        "label": "Power Target as Percent",
+        "desc": "Target for real power dependent on mode"
+      },
+      {
+        "name": "PowerTargetAsAmps",
+        "type": "int16",
+        "size": 1,
+        "sf": "A_SF",
+        "units": "A",
+        "label": "Power Target as Amps",
+        "desc": "Amps required to reach the target for real power"
+      },
+      {
+        "name": "CTTargetSelfSupply",
+        "type": "int16",
+        "size": 1,
+        "sf": "W_Percent_SF",
+        "units": "W_Percent",
+        "label": "CT Target for Self Supply",
+        "desc": "CT target for self supply"
+      },
+      {
+        "name": "CTTargetZeroExport",
+        "type": "int16",
+        "size": 1,
+        "sf": "W_Percent_SF",
+        "units": "W_Percent",
+        "label": "CT Target for Zero Export",
+        "desc": "CT target for zero export"
+      },
+      {
+        "name": "CTTargetZeroImport",
+        "type": "int16",
+        "size": 1,
+        "sf": "W_Percent_SF",
+        "units": "W_Percent",
+        "label": "CT Target for Zero Import",
+        "desc": "CT target for zero import"
+      },
+      {
+        "name": "CTTargetGenConnected",
+        "type": "int16",
+        "size": 1,
+        "sf": "W_Percent_SF",
+        "units": "W_Percent",
+        "label": "CT Target when Gen Connected",
+        "desc": "CT target when generator connected"
+      },
+      {
+        "name": "V_SF",
+        "type": "sunssf",
+        "size": 1
+      },
+      {
+        "name": "Hz_SF",
+        "type": "sunssf",
+        "size": 1
+      },
+      {
+        "name": "V_Percent_SF",
+        "type": "sunssf",
+        "size": 1
+      },
+      {
+        "name": "W_Percent_SF",
+        "type": "sunssf",
+        "size": 1
+      },
+      {
+        "name": "VAR_Percent_SF",
+        "type": "sunssf",
+        "size": 1
+      },
+      {
+        "name": "A_SF",
+        "type": "sunssf",
+        "size": 1
+      },
+      {
+        "name": "Pad0",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad1",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad2",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad3",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad4",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad5",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad6",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad7",
+        "type": "pad",
+        "size": 1
+      },
+      {
+        "name": "Pad8",
+        "type": "pad",
+        "size": 1
+      }
+    ]
+  },
+  "id": 64268
+}

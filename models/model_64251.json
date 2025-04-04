@@ -1,0 +1,390 @@
+{
+  "group": {
+    "name": "pvlink_status",
+    "type": "group",
+    "label": "Generac PV Link Status",
+    "desc": "Miscellaneous PV Link status registers",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64251
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "ErrorWord",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Error status",
+        "desc": "Error status bitfield",
+        "symbols": [
+          {
+            "name": "UNUSED0",
+            "value": 0
+          },
+          {
+            "name": "HW_ARC_FAULT",
+            "value": 1
+          },
+          {
+            "name": "HW_REVERSE_CURRENT",
+            "value": 2
+          },
+          {
+            "name": "OVER_CURRENT",
+            "value": 3
+          },
+          {
+            "name": "INPUT_OVERVOLTAGE",
+            "value": 4
+          },
+          {
+            "name": "GFTEST_FAIL",
+            "value": 5
+          },
+          {
+            "name": "LOW_INPUT_IMPEDANCE",
+            "value": 6
+          },
+          {
+            "name": "UNUSED7",
+            "value": 7
+          },
+          {
+            "name": "UNUSED8",
+            "value": 8
+          },
+          {
+            "name": "FLASH_FAILURE",
+            "value": 9
+          },
+          {
+            "name": "EEPROM_FAILURE",
+            "value": 10
+          },
+          {
+            "name": "SPT_CRC_FAIL",
+            "value": 11
+          },
+          {
+            "name": "OVER_TEMP",
+            "value": 12
+          },
+          {
+            "name": "UNUSED13",
+            "value": 13
+          },
+          {
+            "name": "DEAD_FET",
+            "value": 14
+          },
+          {
+            "name": "HWV_MISMATCH",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "EnableBits",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Enable bits",
+        "desc": "Internal status register",
+        "symbols": [
+          {
+            "name": "DEADMAN",
+            "value": 0
+          },
+          {
+            "name": "UNUSED1",
+            "value": 1
+          },
+          {
+            "name": "UNUSED2",
+            "value": 2
+          },
+          {
+            "name": "UNUSED3",
+            "value": 3
+          },
+          {
+            "name": "CONNECT_INPUT",
+            "value": 4
+          },
+          {
+            "name": "CONNECT_OUTPUT",
+            "value": 5
+          },
+          {
+            "name": "UNUSED6",
+            "value": 6
+          },
+          {
+            "name": "UNUSED7",
+            "value": 7
+          },
+          {
+            "name": "UNUSED8",
+            "value": 8
+          },
+          {
+            "name": "GF_STARTTEST",
+            "value": 9
+          },
+          {
+            "name": "INPUT_IMPED_STARTTEST",
+            "value": 11
+          },
+          {
+            "name": "UNUSED11",
+            "value": 11
+          },
+          {
+            "name": "PHASE2",
+            "value": 12
+          },
+          {
+            "name": "UNUSED13",
+            "value": 13
+          },
+          {
+            "name": "UNUSED14",
+            "value": 14
+          },
+          {
+            "name": "UNUSED15",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "StatusWord",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "General status",
+        "desc": "General system status",
+        "symbols": [
+          {
+            "name": "DEADMAN_UP",
+            "value": 0
+          },
+          {
+            "name": "LOW_SUPPLY_VOLTAGE",
+            "value": 1
+          },
+          {
+            "name": "GF_TESTED",
+            "value": 2
+          },
+          {
+            "name": "INPUT_IMPED_TESTED",
+            "value": 3
+          },
+          {
+            "name": "INPUT_CONNECTED",
+            "value": 4
+          },
+          {
+            "name": "OUTPUT_CONNECTED",
+            "value": 5
+          },
+          {
+            "name": "INPUT_DISCONNETED",
+            "value": 6
+          },
+          {
+            "name": "OUTPUT_DISCONNETED",
+            "value": 7
+          },
+          {
+            "name": "GF_SW_ACTIVE",
+            "value": 8
+          },
+          {
+            "name": "MASTER_FAULT_ACTIVE",
+            "value": 9
+          },
+          {
+            "name": "GF_ACTIVE",
+            "value": 10
+          },
+          {
+            "name": "ARC_FAULT_ACTIVE",
+            "value": 11
+          },
+          {
+            "name": "PBUS_LOW",
+            "value": 12
+          },
+          {
+            "name": "UNBAL_INPUT_FAULT_ACTIVE",
+            "value": 13
+          },
+          {
+            "name": "PH2_ON",
+            "value": 14
+          },
+          {
+            "name": "PH2_OFF",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "V_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "I_SF",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Vin",
+        "type": "int16",
+        "size": 1,
+        "sf": "V_SF",
+        "mandatory": "M",
+        "label": "PV String Voltage",
+        "desc": "Input voltage of PV string"
+      },
+      {
+        "name": "Iin",
+        "type": "int16",
+        "size": 1,
+        "sf": "I_SF",
+        "mandatory": "M",
+        "label": "PV String Current",
+        "desc": "Input current of PV string"
+      },
+      {
+        "name": "AMax",
+        "type": "int16",
+        "size": 1,
+        "sf": "I_SF",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Maximum Input Current",
+        "desc": "Maximum permitted input current from PV string"
+      },
+      {
+        "name": "Ena",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Enable or Disable PV Link",
+        "symbols": [
+          {
+            "name": "DISABLE",
+            "value": 0
+          },
+          {
+            "name": "ENABLE",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "Pad0",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Pad",
+        "desc": "Large pad for future model expansion"
+      },
+      {
+        "name": "Pad1",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad2",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad3",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad4",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad5",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad6",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad7",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad8",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad9",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad10",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad11",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad12",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      }
+    ]
+  },
+  "id": 64251
+}

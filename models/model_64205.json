@@ -1,0 +1,252 @@
+{
+  "group": {
+    "name": "SA_defaults",
+    "type": "group",
+    "label": "Utility Compliance Configuration",
+    "desc": "Configure inverter settings based on utility requirements",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64205
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "SRD",
+        "type": "enum16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "Compliance selection",
+        "desc": "Select which utility your inverter is being installed under.",
+        "symbols": [
+          {
+            "name": "IEEE_1547",
+            "value": 0,
+            "label": "IEEE 1547-2003 (default)",
+            "desc": "'IEEE 1547' is the most common inverter compliance setting."
+          },
+          {
+            "name": "RULE_14H_1",
+            "value": 1,
+            "label": "HECO SRD V1.1",
+            "desc": "Configure for HI Rule 14H Islands of O'ahu, Maui, Hawai'i (Big Island). If your installation is not on one of these islands, do not use this selection. "
+          },
+          {
+            "name": "RULE_14H_2",
+            "value": 2,
+            "label": "HECO SRD V1.1 [L+M]",
+            "desc": "Configure for HI Rule 14H (Lana'i, Moloka'i)"
+          },
+          {
+            "name": "RULE_21",
+            "value": 3,
+            "label": "Rule 21 2017",
+            "desc": "Configure for California Rule 21 settings."
+          },
+          {
+            "name": "RULE_PREPA",
+            "value": 4,
+            "label": "PREPA 2017",
+            "desc": "Configure for Puerto Rico (PREPA) settings."
+          },
+          {
+            "name": "RULE_ISONE",
+            "value": 5,
+            "label": "ISO-NE (1547a-2014)",
+            "desc": "Configure ISO New England settings."
+          },
+          {
+            "name": "RULE_LADWP",
+            "value": 6,
+            "label": "LADWP 2019",
+            "desc": "Configure City of Los Angeles settings."
+          },
+          {
+            "name": "RULE_PECO",
+            "value": 7,
+            "label": "PECO (deprecated)",
+            "desc": "Configure PECO settings."
+          },
+          {
+            "name": "RULE_MISO",
+            "value": 8,
+            "label": "MISO (deprecated)",
+            "desc": "Configure MISO settings."
+          },
+          {
+            "name": "LPEA",
+            "value": 9,
+            "label": "LPEA 2019"
+          },
+          {
+            "name": "RULE_KIUC",
+            "value": 10,
+            "label": "KIUC 2021"
+          },
+          {
+            "name": "RULE_PECO_v2",
+            "value": 11,
+            "label": "PECO 2021"
+          },
+          {
+            "name": "RULE_21_v2",
+            "value": 12,
+            "label": "RULE 21 2019"
+          },
+          {
+            "name": "RULE_MISO_1547_2018",
+            "value": 13,
+            "label": "MISO 1547-2018"
+          },
+          {
+            "name": "IEEE_1547_2018",
+            "value": 14,
+            "label": "IEEE 1547-2018"
+          },
+          {
+            "name": "HECO_V2.0",
+            "value": 15,
+            "label": "HECO SRD V2.0"
+          },
+          {
+            "name": "PREPA_2023",
+            "value": 16,
+            "label": "PREPA 2023"
+          },
+          {
+            "name": "AmerenIL_Std_2018",
+            "value": 17,
+            "label": "AmerenIL Std 2018"
+          },
+          {
+            "name": "AmerenIL_Rebate_2018",
+            "value": 18,
+            "label": "AmerenIL Rebate 2018"
+          },
+          {
+            "name": "BC_HYDRO_2014",
+            "value": 19,
+            "label": "BC Hydro 2014"
+          },
+          {
+            "name": "ISO_NE_V2.0",
+            "value": 20,
+            "label": "ISO-NE 2023"
+          },
+          {
+            "name": "RULE_21_2023",
+            "value": 21,
+            "label": "Rule 21 2023"
+          },
+          {
+            "name": "National_Grid_NY_2023",
+            "value": 22,
+            "label": "National Grid NY 2023"
+          },
+          {
+            "name": "NYSEG_RGE_2023",
+            "value": 23,
+            "label": "NYSEG + RG&E 2023"
+          },
+          {
+            "name": "PSEG_LI_2023",
+            "value": 24,
+            "label": "PSEG-LI 2023"
+          },
+          {
+            "name": "ORU_2023",
+            "value": 25,
+            "label": "ORU 2023"
+          },
+          {
+            "name": "CHGE_2023",
+            "value": 26,
+            "label": "CHG&E 2023"
+          },
+          {
+            "name": "IEEE_1547a_2014",
+            "value": 27,
+            "label": "IEEE 1547a-2014"
+          },
+          {
+            "name": "IEEE_1547_2003_ReConnV_7_5",
+            "value": 28,
+            "label": "IEEE 1547-2003 (ReConnV 7.5%)"
+          },
+          {
+            "name": "IEEE_1547_2003_ReConnV_10",
+            "value": 29,
+            "label": "IEEE 1547-2003 (ReConnV 10%)"
+          },
+          {
+            "name": "MWEC_2023",
+            "value": 30,
+            "label": "MWEC 2023"
+          },
+          {
+            "name": "LADWP_2023",
+            "value": 31,
+            "label": "LADWP 2023"
+          },
+          {
+            "name": "BED_2022",
+            "value": 32,
+            "label": "BED 2022"
+          },
+          {
+            "name": "PREPA_LUMA_2024",
+            "value": 33,
+            "label": "PREPA-LUMA 2024"
+          },
+          {
+            "name": "ConEd_2024",
+            "value": 34,
+            "label": "Con Edison 2024"
+          },
+          {
+            "name": "IEEE_1547a_2014_ReConnV_10",
+            "value": 35,
+            "label": "IEEE 1547a-2014 (ReConnV 10%)"
+          }
+        ]
+      },
+      {
+        "name": "Def",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Defaulted",
+        "desc": "Indicates whether or not the default settings from the Compliance Selection field have been applied.",
+        "symbols": [
+          {
+            "name": "NOT_DEFAULTED",
+            "value": 0
+          },
+          {
+            "name": "DEFAULTED",
+            "value": 1
+          },
+          {
+            "name": "UNKNOWN",
+            "value": 2
+          }
+        ]
+      }
+    ]
+  },
+  "id": 64205
+}

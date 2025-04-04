@@ -1,0 +1,82 @@
+{
+  "group": {
+    "name": "common",
+    "type": "group",
+    "label": "Common",
+    "desc": "Make, model and serial number information for this device",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 1
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Mn",
+        "type": "string",
+        "size": 16,
+        "mandatory": "M",
+        "label": "Manufacturer",
+        "desc": "Well known value registered with SunSpec for compliance"
+      },
+      {
+        "name": "Md",
+        "type": "string",
+        "size": 16,
+        "mandatory": "M",
+        "label": "Model",
+        "desc": "Manufacturer specific value (32 chars)"
+      },
+      {
+        "name": "Opt",
+        "type": "string",
+        "size": 8,
+        "label": "Options",
+        "desc": "Manufacturer specific value (16 chars)"
+      },
+      {
+        "name": "Vr",
+        "type": "string",
+        "size": 8,
+        "label": "Version",
+        "desc": "Manufacturer specific value (16 chars)"
+      },
+      {
+        "name": "SN",
+        "type": "string",
+        "size": 16,
+        "mandatory": "M",
+        "label": "Serial Number",
+        "desc": "Manufacturer specific value (32 chars)"
+      },
+      {
+        "name": "DA",
+        "type": "uint16",
+        "size": 1,
+        "access": "RW",
+        "label": "Device Address",
+        "desc": "Modbus device address"
+      },
+      {
+        "name": "Pad",
+        "type": "pad",
+        "size": 1,
+        "desc": "Force even alignment"
+      }
+    ]
+  },
+  "id": 1
+}

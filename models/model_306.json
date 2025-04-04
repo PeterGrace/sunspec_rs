@@ -1,0 +1,62 @@
+{
+  "group": {
+    "name": "ref_point",
+    "type": "group",
+    "label": "Reference Point Model",
+    "desc": "Include to support a standard reference point",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 306
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "GHI",
+        "type": "uint16",
+        "size": 1,
+        "units": "W/m2",
+        "label": "GHI",
+        "desc": "Global Horizontal Irradiance"
+      },
+      {
+        "name": "A",
+        "type": "uint16",
+        "size": 1,
+        "units": "W/m2",
+        "label": "Amps",
+        "desc": "Current measurement at reference point"
+      },
+      {
+        "name": "V",
+        "type": "uint16",
+        "size": 1,
+        "units": "W/m2",
+        "label": "Voltage",
+        "desc": "Voltage  measurement at reference point"
+      },
+      {
+        "name": "Tmp",
+        "type": "uint16",
+        "size": 1,
+        "units": "W/m2",
+        "label": "Temperature",
+        "desc": "Temperature measurement at reference point"
+      }
+    ]
+  },
+  "id": 306
+}

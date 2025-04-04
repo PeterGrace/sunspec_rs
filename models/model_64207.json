@@ -1,0 +1,1117 @@
+{
+  "group": {
+    "name": "REbus_status",
+    "type": "group",
+    "label": "REbus Status",
+    "desc": "REbus status data that is defined commonly across Generac REbus devices",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64207
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "P",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "mandatory": "M",
+        "label": "REbus Power",
+        "desc": "REbus power. Positive indicates the device is sourcing to REbus, and negative indicates sinking from REbus."
+      },
+      {
+        "name": "E",
+        "type": "uint32",
+        "size": 2,
+        "units": "Wh",
+        "mandatory": "M",
+        "label": "Accumulated Energy",
+        "desc": "Total accumulated energy (exact definition differs by device)"
+      },
+      {
+        "name": "V",
+        "type": "uint16",
+        "size": 1,
+        "sf": "VT_sf",
+        "units": "V",
+        "mandatory": "M",
+        "label": "REbus Voltage ",
+        "desc": "REbus DC Bus Voltage"
+      },
+      {
+        "name": "I",
+        "type": "int16",
+        "size": 1,
+        "sf": "I_sf",
+        "units": "A",
+        "mandatory": "M",
+        "label": "REbus Current",
+        "desc": "REbus current. Positive indicates the device is sourcing to REbus, and negative indicates sinking from REbus."
+      },
+      {
+        "name": "T",
+        "type": "int16",
+        "size": 1,
+        "sf": "VT_sf",
+        "units": "Deg C",
+        "mandatory": "M",
+        "label": "Device Temperature",
+        "desc": "Device temperature"
+      },
+      {
+        "name": "St",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "State",
+        "symbols": [
+          {
+            "name": "UNKNOWN",
+            "value": 0,
+            "label": "device offline"
+          },
+          {
+            "name": "DISABLED",
+            "value": 16,
+            "label": "disabled"
+          },
+          {
+            "name": "ESTOP_ACTIVE",
+            "value": 32,
+            "label": "e-stop active"
+          },
+          {
+            "name": "INITIALIZING",
+            "value": 256,
+            "label": "initializing"
+          },
+          {
+            "name": "POWERING_UP",
+            "value": 272,
+            "label": "powering up"
+          },
+          {
+            "name": "CONNECTING_BUS",
+            "value": 288,
+            "label": "connecting to REbus"
+          },
+          {
+            "name": "DISCONNECTING_BUS",
+            "value": 304,
+            "label": "disconnecting REbus"
+          },
+          {
+            "name": "TESTING_BUS",
+            "value": 320,
+            "label": "testing REbus..."
+          },
+          {
+            "name": "LOW_BUS_VOLTAGE",
+            "value": 512,
+            "label": "low REbus voltage"
+          },
+          {
+            "name": "STANDBY",
+            "value": 768,
+            "label": "standby"
+          },
+          {
+            "name": "WAITING",
+            "value": 784,
+            "label": "waiting"
+          },
+          {
+            "name": "WAITING_NO_INPUT",
+            "value": 800,
+            "label": "waiting: no input"
+          },
+          {
+            "name": "WAITING_HEARTBEAT",
+            "value": 816,
+            "label": "waiting: no heartbeat"
+          },
+          {
+            "name": "CONNECTING_GRID",
+            "value": 2048,
+            "label": "connecting grid"
+          },
+          {
+            "name": "DISCONNECTING_GRID",
+            "value": 2064,
+            "label": "disconnecting grid"
+          },
+          {
+            "name": "GRID_CONNECTED",
+            "value": 2080,
+            "label": "grid connected"
+          },
+          {
+            "name": "ISLANDED",
+            "value": 2096,
+            "label": "islanded"
+          },
+          {
+            "name": "CONNECTING_GENERATOR",
+            "value": 2112,
+            "label": "connecting gen"
+          },
+          {
+            "name": "GENERATOR_CONNECTED",
+            "value": 2128,
+            "label": "gen connected"
+          },
+          {
+            "name": "DISCONNECTING_GENERATOR",
+            "value": 2144,
+            "label": "disconnecting gen"
+          },
+          {
+            "name": "ISLAND_OVERLOAD",
+            "value": 2160,
+            "label": "island overload"
+          },
+          {
+            "name": "ISLANDED_WITH_ACCPV",
+            "value": 2176,
+            "label": "islanded: AC PV on "
+          },
+          {
+            "name": "ISLANDED_WITHOUT_ACCPV",
+            "value": 2192,
+            "label": "islanded: AC PV off"
+          },
+          {
+            "name": "LOW_INPUT_VOLTAGE",
+            "value": 4096,
+            "label": "low input voltage"
+          },
+          {
+            "name": "TESTING_DEVICE_INPUT",
+            "value": 4112,
+            "label": "testing input"
+          },
+          {
+            "name": "SAFETY_CHECKS",
+            "value": 4128,
+            "label": "safety checks"
+          },
+          {
+            "name": "CONNECTING_INPUT",
+            "value": 4352,
+            "label": "connecting input"
+          },
+          {
+            "name": "DISCONNECTING_INPUT",
+            "value": 4368,
+            "label": "disconnecting input"
+          },
+          {
+            "name": "CALIBRATING",
+            "value": 4608,
+            "label": "calibrating"
+          },
+          {
+            "name": "CALIBRATION_SUCCESS",
+            "value": 4624,
+            "label": "calibration success!"
+          },
+          {
+            "name": "CALIBRATION_NEEDED",
+            "value": 4640,
+            "label": "calibration required"
+          },
+          {
+            "name": "BURN_IN",
+            "value": 4656,
+            "label": "burning in"
+          },
+          {
+            "name": "BURN_IN_DONE",
+            "value": 4672,
+            "label": "burn in done"
+          },
+          {
+            "name": "SCHEDULER_OVERRIDDEN",
+            "value": 4864,
+            "label": "running, overridden"
+          },
+          {
+            "name": "SCHEDULER_DISABLED",
+            "value": 4880,
+            "label": "scheduler disabled"
+          },
+          {
+            "name": "SCHEDULER_NOT_CONFIGURED",
+            "value": 4896,
+            "label": "scheduler not configured"
+          },
+          {
+            "name": "RUNNING",
+            "value": 8192,
+            "label": "running"
+          },
+          {
+            "name": "MAKING_POWER",
+            "value": 8208,
+            "label": "making power"
+          },
+          {
+            "name": "LIMITING_POWER",
+            "value": 8224,
+            "label": "limiting power"
+          },
+          {
+            "name": "LOW_WIND",
+            "value": 12288,
+            "label": "low wind"
+          },
+          {
+            "name": "HIGH_WIND",
+            "value": 12304,
+            "label": "high wind"
+          },
+          {
+            "name": "LOW_SUN",
+            "value": 12544,
+            "label": "low sun"
+          },
+          {
+            "name": "GROUND_FAULT",
+            "value": 16384,
+            "label": "ground fault"
+          },
+          {
+            "name": "INSULATION_FAULT",
+            "value": 16400,
+            "label": "insulation fault"
+          },
+          {
+            "name": "GROUND_FAULT_LOCKOUT",
+            "value": 16416,
+            "label": "ground fault lockout"
+          },
+          {
+            "name": "ARC_FAULT",
+            "value": 16640,
+            "label": "arc fault"
+          },
+          {
+            "name": "BUS_OVER_VOLTAGE",
+            "value": 16896,
+            "label": "high REbus voltage"
+          },
+          {
+            "name": "TEST_SUCCESS",
+            "value": 20480,
+            "label": "test success"
+          },
+          {
+            "name": "TEST_FAILURE",
+            "value": 20496,
+            "label": "test failure"
+          },
+          {
+            "name": "TESTING_AFD",
+            "value": 20512,
+            "label": "testing AFD"
+          },
+          {
+            "name": "TESTING_PVRSS",
+            "value": 20528,
+            "label": "testing PVRSS"
+          },
+          {
+            "name": "TESTING_GFD",
+            "value": 20544,
+            "label": "testing GFD"
+          },
+          {
+            "name": "TEST_FAIL_PVRSS",
+            "value": 20752,
+            "label": "PVRSS selftest failed"
+          },
+          {
+            "name": "TEST_FAIL_PVRSS_LOWVOC",
+            "value": 20768,
+            "label": "PVRSS fail: low input"
+          },
+          {
+            "name": "TEST_FAIL_PVRSS_COUNT_MISMATCH",
+            "value": 20784,
+            "label": "PVRSS count mismatch"
+          },
+          {
+            "name": "TEST_FAIL_PVRSS_VLOW_HIGH",
+            "value": 20800,
+            "label": "PVRSS fail: hi input"
+          },
+          {
+            "name": "TEST_FAIL_PVRSS_VLOW_TIMEOUT",
+            "value": 20816,
+            "label": "PVRSS fail: timeout"
+          },
+          {
+            "name": "TEST_FAIL_AFD",
+            "value": 20832,
+            "label": "AFD selftest failed"
+          },
+          {
+            "name": "TEST_FAIL_GFD",
+            "value": 20848,
+            "label": "GFD selftest failed"
+          },
+          {
+            "name": "TEST_FAIL_PVRSS_NOT_CONFIGURED",
+            "value": 20864,
+            "label": "PVRSS not configured"
+          },
+          {
+            "name": "UPDATING_FIRMWARE",
+            "value": 20992,
+            "label": "updating firmware"
+          },
+          {
+            "name": "CHARGING_BATTERY",
+            "value": 24576,
+            "label": "charging"
+          },
+          {
+            "name": "FLOAT_CHARGING_BATTERY",
+            "value": 24592,
+            "label": "float charging"
+          },
+          {
+            "name": "BULK_CHARGING_BATTERY",
+            "value": 24608,
+            "label": "bulk charging"
+          },
+          {
+            "name": "ABSORPTION_CHARGING_BATTERY",
+            "value": 24624,
+            "label": "absorption charging"
+          },
+          {
+            "name": "EQUALIZE_CHARGING_BATTERY",
+            "value": 24640,
+            "label": "equalizing"
+          },
+          {
+            "name": "DISCHARGING_BATTERY",
+            "value": 24832,
+            "label": "discharging"
+          },
+          {
+            "name": "LOW_BATTERY_VOLTAGE",
+            "value": 24848,
+            "label": "low battery voltage"
+          },
+          {
+            "name": "CELL_IMBALANCE",
+            "value": 25344,
+            "label": "cell imbalance"
+          },
+          {
+            "name": "ERROR_GENERIC",
+            "value": 28672,
+            "label": "error"
+          },
+          {
+            "name": "OVER_VOLTAGE_INPUT",
+            "value": 28688,
+            "label": "input over voltage"
+          },
+          {
+            "name": "OVER_VOLTAGE_OUTPUT",
+            "value": 28704,
+            "label": "output over voltage"
+          },
+          {
+            "name": "OVER_CURRENT_INPUT",
+            "value": 28720,
+            "label": "input over current"
+          },
+          {
+            "name": "OVER_CURRENT_OUTPUT",
+            "value": 28736,
+            "label": "output over current"
+          },
+          {
+            "name": "ERROR_LOW_BATTERY_VOLTAGE",
+            "value": 28752,
+            "label": "low battery voltage"
+          },
+          {
+            "name": "OVER_TEMPERATURE",
+            "value": 28928,
+            "label": "over temperature"
+          },
+          {
+            "name": "GROUND_FAULT_LOCKOUT_DEFUNCT",
+            "value": 29184,
+            "label": "ground fault lockout"
+          },
+          {
+            "name": "INSULATION_FAULT_LOCKOUT",
+            "value": 29200,
+            "label": "insulation fault lockout"
+          },
+          {
+            "name": "ARC_FAULT_LOCKOUT",
+            "value": 29440,
+            "label": "arc fault lockout"
+          },
+          {
+            "name": "PVRSS_LOCKOUT",
+            "value": 29456,
+            "label": "PVRSS lockout error"
+          },
+          {
+            "name": "INPUT_REVERSED",
+            "value": 29696,
+            "label": "input reversed"
+          },
+          {
+            "name": "ERROR_REBUS_FAULT",
+            "value": 29968,
+            "label": "error: REbus fault"
+          },
+          {
+            "name": "ERROR_INTERNAL_BUS_FAULT",
+            "value": 29984,
+            "label": "error: int DC fault"
+          },
+          {
+            "name": "CONFIGURATION_ERROR",
+            "value": 30464,
+            "label": "config error"
+          },
+          {
+            "name": "BAD_RESET_ERROR",
+            "value": 30480,
+            "label": "bad reset error"
+          },
+          {
+            "name": "WIRING_ERROR",
+            "value": 30496,
+            "label": "wiring error"
+          },
+          {
+            "name": "ERROR_FUSE_BLOWN",
+            "value": 30512,
+            "label": "fuse blown error"
+          },
+          {
+            "name": "CALIBRATION_0",
+            "value": 32256,
+            "label": "calibration mode"
+          },
+          {
+            "name": "CALIBRATION_1",
+            "value": 32272,
+            "label": "calibration mode"
+          },
+          {
+            "name": "CALIBRATION_2",
+            "value": 32288,
+            "label": "calibration mode"
+          },
+          {
+            "name": "CALIBRATION_3",
+            "value": 32304,
+            "label": "calibration mode"
+          }
+        ]
+      },
+      {
+        "name": "Ev",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Last Event",
+        "symbols": [
+          {
+            "name": "GENERIC",
+            "value": 32768,
+            "label": "generic event"
+          },
+          {
+            "name": "POWERUP",
+            "value": 32784,
+            "label": "power up"
+          },
+          {
+            "name": "SUPPLY_UNDERVOLTAGE",
+            "value": 32800,
+            "label": "supply under voltage"
+          },
+          {
+            "name": "DAILY_EVENT",
+            "value": 32816,
+            "label": "daily event"
+          },
+          {
+            "name": "FIRMWARE_RECEIVED",
+            "value": 32832,
+            "label": "firmware received"
+          },
+          {
+            "name": "SUPPLY_OVERVOLTAGE",
+            "value": 32848,
+            "label": "supply over voltage"
+          },
+          {
+            "name": "CT_CALIBRATION_NIBBLED",
+            "value": 32864,
+            "label": "ct cal = "
+          },
+          {
+            "name": "CT_CALIBRATION_SUCCESS",
+            "value": 32880,
+            "label": "ct cal success"
+          },
+          {
+            "name": "CT_CALIBRATION_FAULT",
+            "value": 32896,
+            "label": "ct cal fault"
+          },
+          {
+            "name": "FIRMWARE_REJECTED",
+            "value": 32912,
+            "label": "firmware rejected"
+          },
+          {
+            "name": "ENABLE",
+            "value": 33024,
+            "label": "enable"
+          },
+          {
+            "name": "DISABLE",
+            "value": 33280,
+            "label": "disable"
+          },
+          {
+            "name": "MANUAL_DISABLE",
+            "value": 33296,
+            "label": "manual disable"
+          },
+          {
+            "name": "EXTERNAL_ESTOP",
+            "value": 33312,
+            "label": "external estop"
+          },
+          {
+            "name": "ENTERING_ISLANDED",
+            "value": 33328,
+            "label": "entering islanded"
+          },
+          {
+            "name": "SYSMODE_CHANGE",
+            "value": 33536,
+            "label": "sysmode change"
+          },
+          {
+            "name": "HEARTBEAT_LOST",
+            "value": 33584,
+            "label": "heartbeat lost"
+          },
+          {
+            "name": "SYSMODE_BAD",
+            "value": 33792,
+            "label": "unauthorized sysmode"
+          },
+          {
+            "name": "DEBUG_TRACE",
+            "value": 34048,
+            "label": "debug trace recorded"
+          },
+          {
+            "name": "TOU_ENTRY_ACTIVATED",
+            "value": 34304,
+            "label": "TOU entry activated"
+          },
+          {
+            "name": "PVRSS_INSTALLED_COUNT_CHANGED",
+            "value": 34560,
+            "label": "PVRSS count changed"
+          },
+          {
+            "name": "PVRSS_LOCKOUT_CLEARED",
+            "value": 34576,
+            "label": "PVRSS lockout cleared"
+          },
+          {
+            "name": "PVRSS_LOCKOUT_SET",
+            "value": 34592,
+            "label": "PVRSS lockout set"
+          },
+          {
+            "name": "SOFTWARE_VERSION",
+            "value": 36832,
+            "label": "software version mismatch"
+          },
+          {
+            "name": "HARDWARE_VERSION",
+            "value": 36848,
+            "label": "hardware version mismatch"
+          },
+          {
+            "name": "INTERRUPT_FAULT",
+            "value": 36864,
+            "label": "interrupt fault"
+          },
+          {
+            "name": "GATEDRIVE_FAULT",
+            "value": 37120,
+            "label": "gate drive fault"
+          },
+          {
+            "name": "TIMER_FAULT",
+            "value": 37376,
+            "label": "int. timer fault"
+          },
+          {
+            "name": "MUX_STUCK",
+            "value": 37632,
+            "label": "mux stuck"
+          },
+          {
+            "name": "RELAY_FAULT",
+            "value": 37664,
+            "label": "relay fault"
+          },
+          {
+            "name": "TRANSISTOR_FAILURE",
+            "value": 39168,
+            "label": "transistor failure"
+          },
+          {
+            "name": "OVER_TEMPERATURE",
+            "value": 41216,
+            "label": "over temp shutdown"
+          },
+          {
+            "name": "FAN_FAILURE",
+            "value": 41232,
+            "label": "fan failure"
+          },
+          {
+            "name": "FUSE_BLOWN",
+            "value": 41248,
+            "label": "fuse blown"
+          },
+          {
+            "name": "MISWIRING",
+            "value": 41472,
+            "label": "miswiring"
+          },
+          {
+            "name": "ALTERNATOR_BAD",
+            "value": 42496,
+            "label": "bad alternator"
+          },
+          {
+            "name": "REVERSE_ROTATION",
+            "value": 42752,
+            "label": "reverse rotation"
+          },
+          {
+            "name": "BUS_FAULT",
+            "value": 45056,
+            "label": "REbus fault"
+          },
+          {
+            "name": "BUS_NO_LOAD",
+            "value": 45072,
+            "label": "REbus no load"
+          },
+          {
+            "name": "BUS_PRECHARGE_FAIL",
+            "value": 45088,
+            "label": "precharge fail"
+          },
+          {
+            "name": "BUS_OVER_VOLTAGE",
+            "value": 45312,
+            "label": "REbus over voltage"
+          },
+          {
+            "name": "BUS_UNDER_VOLTAGE",
+            "value": 45328,
+            "label": "REbus under voltage"
+          },
+          {
+            "name": "BUS_OVER_CURRENT",
+            "value": 45568,
+            "label": "REbus over current"
+          },
+          {
+            "name": "INTERNAL_OVERVOLTAGE",
+            "value": 45824,
+            "label": "internal over voltage"
+          },
+          {
+            "name": "RAPID_SHUTDOWN_FAULT",
+            "value": 46096,
+            "label": "PVRSS selftest failed"
+          },
+          {
+            "name": "BATTERY_GENERIC",
+            "value": 47104,
+            "label": "battery issue"
+          },
+          {
+            "name": "BATTERY_READY",
+            "value": 47120,
+            "label": "battery ready"
+          },
+          {
+            "name": "BATTERY_NOT_READY",
+            "value": 47136,
+            "label": "battery not ready"
+          },
+          {
+            "name": "BATTERY_CONNECTED",
+            "value": 47152,
+            "label": "battery connected"
+          },
+          {
+            "name": "BATTERY_DISCONNECTED",
+            "value": 47168,
+            "label": "battery disconnected"
+          },
+          {
+            "name": "BATTERY_UNDER_CHARGE",
+            "value": 47184,
+            "label": "battery under charge"
+          },
+          {
+            "name": "BATTERY_OVER_CHARGE",
+            "value": 47200,
+            "label": "battery over charge"
+          },
+          {
+            "name": "BATTERY_BAD_MODULE",
+            "value": 47216,
+            "label": "battery over charge"
+          },
+          {
+            "name": "BMS_GENERIC",
+            "value": 47360,
+            "label": "BMS generic"
+          },
+          {
+            "name": "BMS_ALARM",
+            "value": 47376,
+            "label": "BMS alarm"
+          },
+          {
+            "name": "BMS_WARNING",
+            "value": 47392,
+            "label": "BMS warning"
+          },
+          {
+            "name": "BMS_ERROR",
+            "value": 47408,
+            "label": "BMS error"
+          },
+          {
+            "name": "GROUND_FAULT",
+            "value": 49152,
+            "label": "ground fault"
+          },
+          {
+            "name": "GROUND_FAULT_LOCKOUT",
+            "value": 49168,
+            "label": "ground fault lockout"
+          },
+          {
+            "name": "INSULATION_FAULT",
+            "value": 49184,
+            "label": "insulation fault"
+          },
+          {
+            "name": "INPUT_LOW",
+            "value": 49408,
+            "label": "input low"
+          },
+          {
+            "name": "INPUT_SENSOR_FAULT",
+            "value": 49664,
+            "label": "input sensor fault"
+          },
+          {
+            "name": "INPUT_OVER_CURRENT",
+            "value": 49920,
+            "label": "input over current"
+          },
+          {
+            "name": "INPUT_OVERSPEED",
+            "value": 50176,
+            "label": "input over speed"
+          },
+          {
+            "name": "INPUT_HIGH",
+            "value": 50432,
+            "label": "input high"
+          },
+          {
+            "name": "ARC_FAULT",
+            "value": 50688,
+            "label": "arc fault"
+          },
+          {
+            "name": "ARC_FAULT_LOCKOUT",
+            "value": 50704,
+            "label": "arc fault lockout"
+          },
+          {
+            "name": "INPUT_READY",
+            "value": 50944,
+            "label": "input ready"
+          },
+          {
+            "name": "INPUT_REVERSED",
+            "value": 51200,
+            "label": "input reversed"
+          },
+          {
+            "name": "INPUT_OVER_VOLTAGE",
+            "value": 51456,
+            "label": "input over voltage"
+          },
+          {
+            "name": "GRID_FAULT",
+            "value": 53248,
+            "label": "grid fault"
+          },
+          {
+            "name": "GRID_OVER_VOLTAGE",
+            "value": 53264,
+            "label": "grid over voltage"
+          },
+          {
+            "name": "GRID_OVER_CURRENT",
+            "value": 53280,
+            "label": "grid over current"
+          },
+          {
+            "name": "GRID_OVER_FREQUENCY",
+            "value": 53296,
+            "label": "grid over frequency"
+          },
+          {
+            "name": "GRID_UNDER_VOLTAGE",
+            "value": 53312,
+            "label": "grid under voltage"
+          },
+          {
+            "name": "GRID_UNDER_FREQUENCY",
+            "value": 53328,
+            "label": "grid under frequency"
+          },
+          {
+            "name": "GRID_OVER_VOLTAGE_FAST",
+            "value": 53344,
+            "label": "grid overvoltage fast"
+          },
+          {
+            "name": "GRID_HIGH_IMPEDANCE",
+            "value": 53360,
+            "label": "grid high impedance"
+          },
+          {
+            "name": "TRANSFER_FAIL",
+            "value": 53504,
+            "label": "transfer sw fail"
+          },
+          {
+            "name": "ISLAND_OVERLOAD",
+            "value": 53520,
+            "label": "island overload"
+          },
+          {
+            "name": "SETPOINT_CRC_FAULT",
+            "value": 57344,
+            "label": "bad spt crc"
+          },
+          {
+            "name": "EEPROM_FAULT",
+            "value": 57600,
+            "label": "EEPROM failure"
+          },
+          {
+            "name": "FLASH_FAULT",
+            "value": 57856,
+            "label": "FLASH fault"
+          },
+          {
+            "name": "PLM_RESTART",
+            "value": 58112,
+            "label": "PLM restart"
+          },
+          {
+            "name": "DEBUG_DATA_COLLECTION",
+            "value": 58368,
+            "label": "debug data collected"
+          },
+          {
+            "name": "EVPATTERN_LOCKOUT",
+            "value": 58624,
+            "label": "event pattern lockout"
+          },
+          {
+            "name": "BAD_RESET_ERROR",
+            "value": 58880,
+            "label": "bad reset error"
+          },
+          {
+            "name": "PLM_FAULT",
+            "value": 59136,
+            "label": "PLM fault"
+          },
+          {
+            "name": "DEFAULT_TRAP",
+            "value": 61440,
+            "label": "default trap"
+          },
+          {
+            "name": "ADDRESS_ERROR",
+            "value": 61456,
+            "label": "address error trap"
+          },
+          {
+            "name": "STACK_ERROR",
+            "value": 61472,
+            "label": "stack error trap"
+          },
+          {
+            "name": "OSCILLATOR_FAIL",
+            "value": 61488,
+            "label": "osc. fail trap"
+          },
+          {
+            "name": "MATH_ERROR",
+            "value": 61504,
+            "label": "math error trap"
+          },
+          {
+            "name": "DMAC_ERROR",
+            "value": 61520,
+            "label": "dmac error trap"
+          }
+        ]
+      },
+      {
+        "name": "RB",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "REbusBits",
+        "desc": "REbus status register",
+        "symbols": [
+          {
+            "name": "ENABLE_MASTER",
+            "value": 0
+          },
+          {
+            "name": "ENABLE_SOURCE",
+            "value": 1
+          },
+          {
+            "name": "ENABLE_SINK",
+            "value": 2
+          },
+          {
+            "name": "RESERVED3",
+            "value": 3
+          },
+          {
+            "name": "BUS_CONNECTED",
+            "value": 4
+          },
+          {
+            "name": "BUS_DISCONNECTED",
+            "value": 5
+          },
+          {
+            "name": "SOURCING",
+            "value": 6
+          },
+          {
+            "name": "SINKING",
+            "value": 7
+          },
+          {
+            "name": "BUS_VOLTAGE_LOW",
+            "value": 8
+          },
+          {
+            "name": "BUS_VOLTAGE_HIGH",
+            "value": 9
+          },
+          {
+            "name": "BUS_IMBALANCE",
+            "value": 10
+          },
+          {
+            "name": "RESERVED11",
+            "value": 11
+          },
+          {
+            "name": "PLC_GOOD",
+            "value": 12
+          },
+          {
+            "name": "HEARTBEAT_GOOD",
+            "value": 13
+          },
+          {
+            "name": "ADAPTIVE_VREBUS_ACTIVE",
+            "value": 14
+          },
+          {
+            "name": "RESERVED15",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "VT_sf",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "label": "VT_sf",
+        "desc": "Scale factor for V and T"
+      },
+      {
+        "name": "I_sf",
+        "type": "sunssf",
+        "size": 1,
+        "mandatory": "M",
+        "label": "I_sf",
+        "desc": "Scale factor for I"
+      },
+      {
+        "name": "Pad0",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      }
+    ]
+  },
+  "id": 64207
+}

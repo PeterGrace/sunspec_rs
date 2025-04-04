@@ -1,0 +1,129 @@
+{
+  "group": {
+    "name": "freq_watt_param",
+    "type": "group",
+    "label": "Freq-Watt Param",
+    "desc": "Parameterized Frequency-Watt ",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 127
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "WGra",
+        "type": "uint16",
+        "size": 1,
+        "sf": "WGra_SF",
+        "units": "%PM/Hz",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "WGra",
+        "desc": "The slope of the reduction in the maximum allowed watts output as a function of frequency."
+      },
+      {
+        "name": "HzStr",
+        "type": "int16",
+        "size": 1,
+        "sf": "HzStrStop_SF",
+        "units": "Hz",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "HzStr",
+        "desc": "The frequency deviation from nominal frequency (ECPNomHz) at which a snapshot of the instantaneous power output is taken to act as the CAPPED power level (PM) and above which reduction in power output occurs."
+      },
+      {
+        "name": "HzStop",
+        "type": "int16",
+        "size": 1,
+        "sf": "HzStrStop_SF",
+        "units": "Hz",
+        "access": "RW",
+        "mandatory": "M",
+        "label": "HzStop",
+        "desc": "The frequency deviation from nominal frequency (ECPNomHz) at which curtailed power output may return to normal and the cap on the power level value is removed."
+      },
+      {
+        "name": "HysEna",
+        "type": "bitfield16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "HysEna",
+        "desc": "Enable hysteresis",
+        "symbols": [
+          {
+            "name": "ENABLED",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "name": "ModEna",
+        "type": "bitfield16",
+        "size": 1,
+        "access": "RW",
+        "mandatory": "M",
+        "label": "ModEna",
+        "desc": "Is Parameterized Frequency-Watt control active.",
+        "symbols": [
+          {
+            "name": "ENABLED",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "name": "HzStopWGra",
+        "type": "uint16",
+        "size": 1,
+        "sf": "RmpIncDec_SF",
+        "units": "%WMax/min",
+        "access": "RW",
+        "label": "HzStopWGra",
+        "desc": "The maximum time-based rate of change at which power output returns to normal after having been capped by an over frequency event."
+      },
+      {
+        "name": "WGra_SF",
+        "type": "sunssf",
+        "size": 1,
+        "label": "WGra_SF",
+        "desc": "Scale factor for output gradient."
+      },
+      {
+        "name": "HzStrStop_SF",
+        "type": "sunssf",
+        "size": 1,
+        "label": "HzStrStop_SF",
+        "desc": "Scale factor for frequency deviations."
+      },
+      {
+        "name": "RmpIncDec_SF",
+        "type": "sunssf",
+        "size": 1,
+        "label": "RmpIncDec_SF",
+        "desc": "Scale factor for increment and decrement ramps."
+      },
+      {
+        "name": "Pad",
+        "type": "pad",
+        "size": 1
+      }
+    ]
+  },
+  "id": 127
+}

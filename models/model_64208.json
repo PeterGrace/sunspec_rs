@@ -1,0 +1,528 @@
+{
+  "group": {
+    "name": "inverter_status",
+    "type": "group",
+    "label": "Inverter Status",
+    "desc": "Miscellaneous Generac inverter status registers",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64208
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "SysMd",
+        "type": "enum16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "System Operating Mode",
+        "symbols": [
+          {
+            "name": "SAFETY_SHUTDOWN",
+            "value": 0,
+            "label": "Saftey Shutdown",
+            "desc": "All devices disabled and DC bus de-energized."
+          },
+          {
+            "name": "GRID_TIE",
+            "value": 1,
+            "label": "Grid Tie",
+            "desc": "Support local loads and export solar power to the utility grid."
+          },
+          {
+            "name": "SELF_SUPPLY",
+            "value": 2,
+            "label": "Self Supply",
+            "desc": "Utilize both solar power and battery power to support local loads before exporting surplus solar to utility grid."
+          },
+          {
+            "name": "CLEAN_BACKUP",
+            "value": 3,
+            "label": "Clean Backup",
+            "desc": "Charge batteries from solar only before supporting local loads and exporting to utility grid."
+          },
+          {
+            "name": "PRIORITY_BACKUP",
+            "value": 4,
+            "label": "Priority Backup",
+            "desc": "Charge batteries with both solar and the utility grid"
+          },
+          {
+            "name": "REMOTE_ARBITRAGE",
+            "value": 5
+          },
+          {
+            "name": "SELL",
+            "value": 6,
+            "label": "Sell",
+            "desc": "Export full capacity, including battery power, to utility grid."
+          }
+        ]
+      },
+      {
+        "name": "CTPow",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "mandatory": "M",
+        "label": "External CT Power measurement",
+        "desc": "Positive is exporting, negative is importing. Reads 0x8000 when CTs are not connected."
+      },
+      {
+        "name": "WhIn",
+        "type": "uint32",
+        "size": 2,
+        "units": "Wh",
+        "mandatory": "M",
+        "label": "Total AC Energy Imported",
+        "desc": "As measured from CTs"
+      },
+      {
+        "name": "WhOut",
+        "type": "uint32",
+        "size": 2,
+        "units": "Wh",
+        "mandatory": "M",
+        "label": "Total AC Energy Exported",
+        "desc": "As measured from CTs"
+      },
+      {
+        "name": "ErrorWord",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Error status",
+        "desc": "Error status bitfield",
+        "symbols": [
+          {
+            "name": "LINE1_OVERCURRENT",
+            "value": 0
+          },
+          {
+            "name": "AC_PRECHARGE_FAIL",
+            "value": 1
+          },
+          {
+            "name": "DC_OVERCURRENT",
+            "value": 2
+          },
+          {
+            "name": "DC_UNBALANCED_CURRENT",
+            "value": 3
+          },
+          {
+            "name": "GATEDRIVE_FAULT",
+            "value": 4
+          },
+          {
+            "name": "BAD_THERMISTER",
+            "value": 5
+          },
+          {
+            "name": "OVERTEMP_COMP",
+            "value": 6
+          },
+          {
+            "name": "DC_PRECHARGE_FAIL",
+            "value": 7
+          },
+          {
+            "name": "XFR_SWITCH_FAIL",
+            "value": 8
+          },
+          {
+            "name": "FLASH_FAIL",
+            "value": 9
+          },
+          {
+            "name": "EEPROM_FAIL",
+            "value": 10
+          },
+          {
+            "name": "AINV_INVALID",
+            "value": 11
+          }
+        ]
+      },
+      {
+        "name": "EnableBits",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Enable bits",
+        "desc": "Internal status register",
+        "symbols": [
+          {
+            "name": "DEADMAN",
+            "value": 0
+          },
+          {
+            "name": "DEADMAN_UP",
+            "value": 1
+          },
+          {
+            "name": "UNLOCK_GRIDSYNC",
+            "value": 2
+          },
+          {
+            "name": "CTCAL",
+            "value": 3
+          },
+          {
+            "name": "REBUS_CONNECT",
+            "value": 4
+          },
+          {
+            "name": "GRID_DISCONNECT",
+            "value": 5
+          },
+          {
+            "name": "OUTPUT_CONNECT",
+            "value": 6
+          },
+          {
+            "name": "LINE3_CONNECT",
+            "value": 7
+          },
+          {
+            "name": "VOLTAGE_MODE",
+            "value": 8
+          },
+          {
+            "name": "CURRENT_MODE",
+            "value": 9
+          },
+          {
+            "name": "BRIDGE",
+            "value": 10
+          },
+          {
+            "name": "NEUT_BRIDGE",
+            "value": 11
+          },
+          {
+            "name": "UNUSED12",
+            "value": 12
+          },
+          {
+            "name": "AUTOFAN_ON",
+            "value": 13
+          },
+          {
+            "name": "LCM_RCP",
+            "value": 14
+          },
+          {
+            "name": "USB_RCP",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "RelayStatus",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Relay status",
+        "desc": "Internal status register",
+        "symbols": [
+          {
+            "name": "AC_PRECHARGE",
+            "value": 0
+          },
+          {
+            "name": "DC_PRECHARGE",
+            "value": 1
+          },
+          {
+            "name": "REBUS_CONNECTED",
+            "value": 2
+          },
+          {
+            "name": "REBUS_DISCONNETED",
+            "value": 3
+          },
+          {
+            "name": "GRID_CONNECTED",
+            "value": 4
+          },
+          {
+            "name": "GRID_DISCONNECTED",
+            "value": 5
+          },
+          {
+            "name": "OUTPUT_CONNECTED",
+            "value": 6
+          },
+          {
+            "name": "OUTPUT_DISCONNECTED",
+            "value": 7
+          },
+          {
+            "name": "LINE3_CONNECTED",
+            "value": 8
+          },
+          {
+            "name": "LINE3_DISCONNECTED",
+            "value": 9
+          },
+          {
+            "name": "LINE3_RETURNING",
+            "value": 10
+          },
+          {
+            "name": "UNUSED11",
+            "value": 11
+          },
+          {
+            "name": "UNUSED12",
+            "value": 12
+          },
+          {
+            "name": "UNUSED13",
+            "value": 13
+          },
+          {
+            "name": "UNUSED14",
+            "value": 14
+          },
+          {
+            "name": "UNUSED15",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "StatusWord",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "General status",
+        "desc": "Internal status register",
+        "symbols": [
+          {
+            "name": "V1_LOCKED",
+            "value": 0
+          },
+          {
+            "name": "V2_LOCKED",
+            "value": 1
+          },
+          {
+            "name": "FREQ_LOCKED",
+            "value": 2
+          },
+          {
+            "name": "PHASE_LOCKED",
+            "value": 3
+          },
+          {
+            "name": "LOCKED_TO_GRID",
+            "value": 4
+          },
+          {
+            "name": "PRERES_OVERTEMP",
+            "value": 5
+          },
+          {
+            "name": "QPRIORITY",
+            "value": 6
+          },
+          {
+            "name": "EXT_TRANSFERRED",
+            "value": 7
+          },
+          {
+            "name": "MFLT_ACTIVE",
+            "value": 8
+          },
+          {
+            "name": "ESTOP_ACTIVE",
+            "value": 9
+          },
+          {
+            "name": "GF_ACTIVE",
+            "value": 10
+          },
+          {
+            "name": "AF_ACTIVE",
+            "value": 11
+          },
+          {
+            "name": "PLM_READY",
+            "value": 12
+          },
+          {
+            "name": "INST_IFACE",
+            "value": 13
+          },
+          {
+            "name": "XESTOP_ACTIVE",
+            "value": 14
+          },
+          {
+            "name": "UNUSED15",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "LineStatus",
+        "type": "bitfield16",
+        "size": 1,
+        "mandatory": "M",
+        "label": "AC Line Status",
+        "desc": "Internal status register",
+        "symbols": [
+          {
+            "name": "V1_LOW",
+            "value": 0
+          },
+          {
+            "name": "V1_HIGH",
+            "value": 1
+          },
+          {
+            "name": "V2_LOW",
+            "value": 2
+          },
+          {
+            "name": "V2_HIGH",
+            "value": 3
+          },
+          {
+            "name": "V3_LOW",
+            "value": 4
+          },
+          {
+            "name": "V3_HIGH",
+            "value": 5
+          },
+          {
+            "name": "FREQ_LOW",
+            "value": 6
+          },
+          {
+            "name": "FREQ_HIGH",
+            "value": 7
+          },
+          {
+            "name": "UNLOCK",
+            "value": 8
+          },
+          {
+            "name": "NO_ZCROSS",
+            "value": 9
+          },
+          {
+            "name": "HIGH_IMP",
+            "value": 10
+          },
+          {
+            "name": "GRIDFAULT",
+            "value": 11
+          },
+          {
+            "name": "GT_SPLIT_OR_REVERSE",
+            "value": 12
+          },
+          {
+            "name": "GT_3PHASE",
+            "value": 13
+          },
+          {
+            "name": "CESSATION",
+            "value": 14
+          },
+          {
+            "name": "GENMODE",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "name": "Pad0",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M",
+        "label": "Pad",
+        "desc": "Large pad for future model expansion"
+      },
+      {
+        "name": "Pad1",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad2",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad3",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad4",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad5",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad6",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad7",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad8",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad9",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      },
+      {
+        "name": "Pad10",
+        "type": "pad",
+        "size": 1,
+        "mandatory": "M"
+      }
+    ]
+  },
+  "id": 64208
+}

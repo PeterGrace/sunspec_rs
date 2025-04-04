@@ -1,3 +1,11 @@
+use crate::json::defaults::point_access;
+use crate::json::group::GroupType;
+use crate::json::misc::JSONModel;
+use crate::json::point::{
+    Point as JSONPoint, PointAccess, PointMandatory, PointSf, PointStatic, PointType as jpt,
+    PointValue,
+};
+use crate::sunspec_connection::ADDR_OFFSET;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -134,4 +142,230 @@ pub enum LiteralType {
 pub struct SunSpecModels {
     pub model: Model,
     pub strings: Vec<Strings>,
+}
+
+impl From<&JSONModel> for SunSpecModels {
+    fn from(json: &JSONModel) -> Self {
+        let mut model_len: u16 = 0;
+        for p in json.group.points.iter() {
+            model_len = model_len.saturating_add(p.size as u16);
+        }
+
+        let mut blocks: Vec<Block> = vec![];
+
+        let mut block_len: u16 = 0;
+        block_len = model_len;
+        let mut points: Vec<Point> = vec![];
+
+        let mut offset: u16 = 0;
+        // in the json model, ID and L are always zero and 1 in the array.  In the xml/smdx,
+        // ID and L aren't specified because they're implied.  Because of this, we skip processing
+        // the first two points so that the offset address lines up.
+        for point in json.group.points.iter().skip(2) {
+            info!("{}: offset value for {} is {offset}", point.name, json.id);
+
+            let sf_string: Option<String>;
+            if point.sf.is_some() {
+                match point.clone().sf.unwrap() {
+                    PointSf::String(s) => sf_string = Some(s),
+                    PointSf::Integer(i) => sf_string = Some(format!("{}", i)),
+                }
+            } else {
+                sf_string = None;
+            }
+
+            let foo = Point {
+                id: point.name.clone(),
+                offset,
+                r#type: match point.type_ {
+                    jpt::Int16 => "int16".to_string(),
+                    jpt::Int32 => "int32".to_string(),
+                    jpt::Int64 => "int64".to_string(),
+                    jpt::Raw16 => "raw16".to_string(),
+                    jpt::Uint16 => "uint16".to_string(),
+                    jpt::Uint32 => "uint32".to_string(),
+                    jpt::Uint64 => "uint64".to_string(),
+                    jpt::Acc16 => "acc16".to_string(),
+                    jpt::Acc32 => "acc32".to_string(),
+                    jpt::Acc64 => "acc64".to_string(),
+                    jpt::Bitfield16 => "bitfield16".to_string(),
+                    jpt::Bitfield32 => "bitfield32".to_string(),
+                    jpt::Bitfield64 => "bitfield64".to_string(),
+                    jpt::Enum16 => "enum16".to_string(),
+                    jpt::Enum32 => "enum32".to_string(),
+                    jpt::Float32 => "float32".to_string(),
+                    jpt::Float64 => "float64".to_string(),
+                    jpt::String => "string".to_string(),
+                    jpt::Sf => "sf".to_string(),
+                    jpt::Pad => "pad".to_string(),
+                    jpt::Ipaddr => "ipaddr".to_string(),
+                    jpt::Ipv6addr => "ipv6addr".to_string(),
+                    jpt::Eui48 => "eui48".to_string(),
+                    jpt::Sunssf => "sunssf".to_string(),
+                    jpt::Count => "count".to_string(),
+                },
+                len: Some(point.size as u16),
+                mandatory: if point.mandatory == PointMandatory::M {
+                    Some(true)
+                } else {
+                    Some(false)
+                },
+                access: if point.access == PointAccess::Rw {
+                    Some(Access::ReadWrite)
+                } else {
+                    Some(Access::ReadOnly)
+                },
+                symbol: Some(
+                    point
+                        .symbols
+                        .iter()
+                        .map(|s| Symbol {
+                            symbol: s.clone().value.to_string(),
+                            id: s.clone().name,
+                        })
+                        .collect(),
+                ),
+                units: point.units.clone(),
+                scale_factor: sf_string,
+                value: if point.static_ == PointStatic::S {
+                    match point.value.clone() {
+                        Some(PointValue::String(s)) => Some(ValueType::String(s)),
+                        Some(PointValue::Integer(i)) => Some(ValueType::Integer(i as i32)),
+                        None => {
+                            warn!(
+                                "Point is specified as static, but no value provided: {:#?}",
+                                serde_json::to_string(point)
+                            );
+                            None
+                        }
+                    }
+                } else {
+                    None
+                },
+                literal: None,
+                block_id: None,
+            };
+            points.push(foo);
+            offset = offset.saturating_add(point.size as u16);
+        }
+
+        blocks.push(Block {
+            len: block_len,
+            r#type: None,
+            name: None,
+            point: points,
+        });
+
+        if !json.group.groups.is_empty() {
+            // we need to generate a new block per group
+            for g in json.group.groups.iter() {
+                // reinitialize an empty points vec per grouping
+                let mut points: Vec<Point> = vec![];
+                let mut block = Block::default();
+                block.name = Some(g.clone().name);
+                for point in g.points.iter() {
+                    info!("{}: offset value for {} is {offset}", point.name, json.id);
+
+                    let sf_string: Option<String>;
+                    if point.sf.is_some() {
+                        match point.clone().sf.unwrap() {
+                            PointSf::String(s) => sf_string = Some(s),
+                            PointSf::Integer(i) => sf_string = Some(format!("{}", i)),
+                        }
+                    } else {
+                        sf_string = None;
+                    }
+
+                    let foo = Point {
+                        id: point.name.clone(),
+                        offset,
+                        r#type: match point.type_ {
+                            jpt::Int16 => "int16".to_string(),
+                            jpt::Int32 => "int32".to_string(),
+                            jpt::Int64 => "int64".to_string(),
+                            jpt::Raw16 => "raw16".to_string(),
+                            jpt::Uint16 => "uint16".to_string(),
+                            jpt::Uint32 => "uint32".to_string(),
+                            jpt::Uint64 => "uint64".to_string(),
+                            jpt::Acc16 => "acc16".to_string(),
+                            jpt::Acc32 => "acc32".to_string(),
+                            jpt::Acc64 => "acc64".to_string(),
+                            jpt::Bitfield16 => "bitfield16".to_string(),
+                            jpt::Bitfield32 => "bitfield32".to_string(),
+                            jpt::Bitfield64 => "bitfield64".to_string(),
+                            jpt::Enum16 => "enum16".to_string(),
+                            jpt::Enum32 => "enum32".to_string(),
+                            jpt::Float32 => "float32".to_string(),
+                            jpt::Float64 => "float64".to_string(),
+                            jpt::String => "string".to_string(),
+                            jpt::Sf => "sf".to_string(),
+                            jpt::Pad => "pad".to_string(),
+                            jpt::Ipaddr => "ipaddr".to_string(),
+                            jpt::Ipv6addr => "ipv6addr".to_string(),
+                            jpt::Eui48 => "eui48".to_string(),
+                            jpt::Sunssf => "sunssf".to_string(),
+                            jpt::Count => "count".to_string(),
+                        },
+                        len: Some(point.size as u16),
+                        mandatory: if point.mandatory == PointMandatory::M {
+                            Some(true)
+                        } else {
+                            Some(false)
+                        },
+                        access: if point.access == PointAccess::Rw {
+                            Some(Access::ReadWrite)
+                        } else {
+                            Some(Access::ReadOnly)
+                        },
+                        symbol: Some(
+                            point
+                                .symbols
+                                .iter()
+                                .map(|s| Symbol {
+                                    symbol: s.clone().value.to_string(),
+                                    id: s.clone().name,
+                                })
+                                .collect(),
+                        ),
+                        units: point.units.clone(),
+                        scale_factor: sf_string,
+                        value: if point.static_ == PointStatic::S {
+                            match point.value.clone() {
+                                Some(PointValue::String(s)) => Some(ValueType::String(s)),
+                                Some(PointValue::Integer(i)) => Some(ValueType::Integer(i as i32)),
+                                None => {
+                                    warn!(
+                                "Point is specified as static, but no value provided: {:#?}",
+                                serde_json::to_string(point)
+                            );
+                                    None
+                                }
+                            }
+                        } else {
+                            None
+                        },
+                        literal: None,
+                        block_id: None,
+                    };
+                    points.push(foo);
+                    offset = offset.saturating_add(point.size as u16);
+                }
+                block.point = points;
+                blocks.push(block);
+            }
+        }
+
+        assert!(model_len > 0);
+        let model = Model {
+            id: json.id,
+            len: model_len,
+            name: json.group.clone().name,
+            block: blocks,
+        };
+
+        SunSpecModels {
+            model,
+            strings: vec![],
+        }
+    }
 }

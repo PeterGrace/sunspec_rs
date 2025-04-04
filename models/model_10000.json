@@ -1,0 +1,205 @@
+{
+  "group": {
+    "name": "batt_status",
+    "type": "group",
+    "label": "Battery Status",
+    "desc": "Contains the status of a battery.",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 10000
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "size": 1,
+        "mandatory": "M",
+        "static": "S",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "DeviceID",
+        "type": "uint16",
+        "size": 1
+      },
+      {
+        "name": "BatteryType",
+        "type": "uint16",
+        "size": 1,
+        "desc": "Harbor, etc."
+      },
+      {
+        "name": "BatterySubtype",
+        "type": "uint16",
+        "size": 1,
+        "desc": "Number of modules,"
+      },
+      {
+        "name": "State",
+        "type": "enum16",
+        "size": 1,
+        "desc": "disabled, ready, standby, etc."
+      },
+      {
+        "name": "BattP",
+        "type": "int16",
+        "size": 1,
+        "units": "W",
+        "desc": "Signed watts at present"
+      },
+      {
+        "name": "SoC",
+        "type": "uint16",
+        "size": 1,
+        "sf": "Tenth_SF",
+        "units": "1/10 %"
+      },
+      {
+        "name": "Tenth_SF",
+        "type": "sunssf",
+        "size": 1
+      },
+      {
+        "name": "BattV",
+        "type": "int16",
+        "size": 1,
+        "sf": "Tenth_SF",
+        "units": "V"
+      },
+      {
+        "name": "Priority",
+        "type": "uint16",
+        "size": 1,
+        "desc": "From REB.h: the B-Link's active priority pair"
+      },
+      {
+        "name": "MaxChargePower",
+        "type": "uint16",
+        "size": 1,
+        "units": "W",
+        "desc": "Watts, always >= 0"
+      },
+      {
+        "name": "MaxDischargePower",
+        "type": "uint16",
+        "size": 1,
+        "units": "W",
+        "desc": "Watts, always >= 0"
+      },
+      {
+        "name": "WhyChargeLimit",
+        "type": "bitfield16",
+        "size": 1,
+        "symbols": [
+          {
+            "name": "CellV",
+            "value": 0
+          },
+          {
+            "name": "ModuleV",
+            "value": 1
+          },
+          {
+            "name": "StackV",
+            "value": 2
+          },
+          {
+            "name": "CellTemp",
+            "value": 3
+          },
+          {
+            "name": "SoC",
+            "value": 4
+          },
+          {
+            "name": "Disabled",
+            "value": 5
+          },
+          {
+            "name": "min_factor_bit0",
+            "value": 6
+          },
+          {
+            "name": "min_factor_bit1",
+            "value": 7
+          },
+          {
+            "name": "min_factor_bit2",
+            "value": 8
+          },
+          {
+            "name": "min_factor_bit3",
+            "value": 9
+          }
+        ]
+      },
+      {
+        "name": "WhyDischargeLimit",
+        "type": "bitfield16",
+        "size": 1,
+        "symbols": [
+          {
+            "name": "CellV",
+            "value": 0
+          },
+          {
+            "name": "ModuleV",
+            "value": 1
+          },
+          {
+            "name": "StackV",
+            "value": 2
+          },
+          {
+            "name": "CellTemp",
+            "value": 3
+          },
+          {
+            "name": "SoC",
+            "value": 4
+          },
+          {
+            "name": "Disabled",
+            "value": 5
+          },
+          {
+            "name": "min_factor_bit0",
+            "value": 6
+          },
+          {
+            "name": "min_factor_bit1",
+            "value": 7
+          },
+          {
+            "name": "min_factor_bit2",
+            "value": 8
+          },
+          {
+            "name": "min_factor_bit3",
+            "value": 9
+          }
+        ]
+      },
+      {
+        "name": "AmpHourCap",
+        "type": "uint16",
+        "size": 1,
+        "sf": "AmpHourCap_SF",
+        "units": "x100 Ah"
+      },
+      {
+        "name": "AmpHourCap_SF",
+        "type": "sunssf",
+        "size": 1
+      }
+    ]
+  },
+  "id": 10000
+}
