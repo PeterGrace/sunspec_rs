@@ -26,34 +26,34 @@ use tokio_modbus::{Address, Quantity, Slave};
 use tokio_retry::strategy::{jitter, ExponentialBackoff};
 use tokio_retry::RetryIf;
 
-const SUNSPEC_END_MODEL_ID: u16 = 65535;
-const POINT_TYPE_STRING: &str = "string";
-const POINT_TYPE_INT16: &str = "int16";
-const POINT_TYPE_UINT16: &str = "uint16";
-const POINT_TYPE_ACC16: &str = "acc16";
-const POINT_TYPE_ENUM16: &str = "enum16";
-const POINT_TYPE_BITFIELD16: &str = "bitfield16";
-const POINT_TYPE_INT32: &str = "int32";
-const POINT_TYPE_UINT32: &str = "uint32";
-const POINT_TYPE_ACC32: &str = "acc32";
-const POINT_TYPE_ENUM32: &str = "enum32";
-const POINT_TYPE_BITFIELD32: &str = "bitfield32";
-const POINT_TYPE_SUNSSF: &str = "sunssf";
-const POINT_TYPE_PAD: &str = "pad";
+pub const SUNSPEC_END_MODEL_ID: u16 = 65535;
+pub const POINT_TYPE_STRING: &str = "string";
+pub const POINT_TYPE_INT16: &str = "int16";
+pub const POINT_TYPE_UINT16: &str = "uint16";
+pub const POINT_TYPE_ACC16: &str = "acc16";
+pub const POINT_TYPE_ENUM16: &str = "enum16";
+pub const POINT_TYPE_BITFIELD16: &str = "bitfield16";
+pub const POINT_TYPE_INT32: &str = "int32";
+pub const POINT_TYPE_UINT32: &str = "uint32";
+pub const POINT_TYPE_ACC32: &str = "acc32";
+pub const POINT_TYPE_ENUM32: &str = "enum32";
+pub const POINT_TYPE_BITFIELD32: &str = "bitfield32";
+pub const POINT_TYPE_SUNSSF: &str = "sunssf";
+pub const POINT_TYPE_PAD: &str = "pad";
 
-const NOT_ACCUMULATED_32: u32 = 0x00000000;
-const NOT_IMPLEMENTED_U32: u32 = 0xffffffff;
-const NOT_IMPLEMENTED_I32: u32 = 0x80000000;
-const NOT_ACCUMULATED_16: u16 = 0x0000;
-const NOT_IMPLEMENTED_U16: u16 = 0xffff;
-const NOT_IMPLEMENTED_I16: u16 = 0x8000;
+pub const NOT_ACCUMULATED_32: u32 = 0x00000000;
+pub const NOT_IMPLEMENTED_U32: u32 = 0xffffffff;
+pub const NOT_IMPLEMENTED_I32: u32 = 0x80000000;
+pub const NOT_ACCUMULATED_16: u16 = 0x0000;
+pub const NOT_IMPLEMENTED_U16: u16 = 0xffff;
+pub const NOT_IMPLEMENTED_I16: u16 = 0x8000;
 
-const ERROR_ILLEGAL_DATA_VALUE: &str = "Modbus function 3: Illegal data value";
-const ERROR_GATEWAY_DEVICE_FAILED_TO_RESPOND: &str =
+pub const ERROR_ILLEGAL_DATA_VALUE: &str = "Modbus function 3: Illegal data value";
+pub const ERROR_GATEWAY_DEVICE_FAILED_TO_RESPOND: &str =
     "Modbus function 3: Gateway target device failed to respond";
-const ERROR_INVALID_RESPONSE_HEADER: &str = "Invalid response header: expected/request";
-const DEFAULT_NETWORK_TIMEOUT_MS: u64 = 10_000_u64;
-const DEFAULT_BACKOFF_BASE_MS: u64 = 100_u64;
+pub const ERROR_INVALID_RESPONSE_HEADER: &str = "Invalid response header: expected/request";
+pub const DEFAULT_NETWORK_TIMEOUT_MS: u64 = 10_000_u64;
+pub const DEFAULT_BACKOFF_BASE_MS: u64 = 100_u64;
 
 // Addresses are offset by 2. why?  I'd expect them to be offset in the negative per below
 // ====
@@ -74,6 +74,10 @@ const DEFAULT_BACKOFF_BASE_MS: u64 = 100_u64;
 // the model id and length in the data struct, where smdx does not.  If I apply ADDR_OFFSET when I read a json
 // model, that'd push everything forward by two.
 // 2025-05-31: Maybe the address is offset by two because of the `SunS` header at the start of the sunspec data block?
+// 2025-06-02:
+// Ah-hah: SunSpec DIM Spec v 1.1 says the Length point indicates the **REMAINING** number of registers left.  Since the
+// first two registers are ID and L, that means everything's shifted by two (and any references to total length of model
+// data would also need to have 2 added to them
 pub(crate) const ADDR_OFFSET: u16 = 2_u16;
 
 pub type Word = u16;

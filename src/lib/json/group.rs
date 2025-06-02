@@ -67,7 +67,7 @@ impl std::convert::TryFrom<String> for GroupType {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, Default, PartialEq)]
-pub(crate) struct Group {
+pub struct Group {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub comments: Vec<String>,
     #[serde(default = "defaults::group_count")]
