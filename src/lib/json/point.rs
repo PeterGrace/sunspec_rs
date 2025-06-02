@@ -1,7 +1,7 @@
 use crate::json::defaults;
 use crate::json::Symbol;
 use serde::{Deserialize, Serialize};
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Point {
     #[serde(default = "defaults::point_access")]
     pub access: PointAccess,
@@ -160,7 +160,7 @@ impl Default for PointMandatory {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum PointSf {
     String(String),
@@ -428,7 +428,7 @@ impl std::convert::TryFrom<String> for PointType {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum PointValue {
     String(String),

@@ -42,7 +42,7 @@ pub mod error {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Symbol {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub comments: Vec<String>,

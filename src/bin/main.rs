@@ -7,9 +7,10 @@ mod cli_args;
 use clap::Parser;
 use cli_args::CliArgs;
 use std::process;
+use std::time::Duration;
 use sunspec_rs::sunspec_connection::{SunSpecConnection, Word};
 use sunspec_rs::sunspec_data::SunSpecData;
-use sunspec_rs::sunspec_models::ValueType;
+use sunspec_rs::sunspec_models::{GroupIdentifier, OptionalGroupIdentifier, ValueType};
 use tokio_modbus::Address;
 use tracing_log::AsTrace;
 use tracing_subscriber;
@@ -25,8 +26,8 @@ pub async fn main() {
         .with_line_number(true)
         .init();
 
-    let socket_addr = "10.174.2.83:502".parse().unwrap();
-    let mut ss = match SunSpecConnection::new(socket_addr, Some(4), false).await {
+    let socket_addr = "127.0.0.1:8502".parse().unwrap();
+    let mut ss = match SunSpecConnection::new(socket_addr, Some(1), false).await {
         Ok(mb) => mb,
         Err(e) => {
             error!("Can't create modbus connection: {e}");
@@ -43,7 +44,11 @@ pub async fn main() {
     };
 
     let write = false;
+    let modules = false;
 
+    info!("sleep sleep sleep start");
+    tokio::time::sleep(Duration::from_secs(5)).await;
+    info!("sleep sleep sleep done");
     if write {
         // write value
         let _model: u16 = 64206_u16;
@@ -61,20 +66,49 @@ pub async fn main() {
                 error!("Oh no, it didn't work: {e}")
             }
         }
-    } else {
+    } else if modules {
         // read fields
         let _model: u16 = 804_u16;
         let md = ss.models.get(&_model).unwrap().clone();
         // let testing: Vec<Word> = ss.get_raw(md.address, 64).await.unwrap();
         // info!("{:#?}", testing);
-        let _fields: Vec<&str> = vec![
-            "ModSoC",
-            "ModSoH"
-        ];
+        let _fields: Vec<&str> = vec!["ModSoC", "ModSoH"];
         for f in _fields {
-            match ss.clone().get_point(md.clone(), f, None).await {
+            for a in 0..6 {
+                match ss
+                    .clone()
+                    .get_point(
+                        md.clone(),
+                        f,
+                        OptionalGroupIdentifier(Some(GroupIdentifier::String("Crv".to_string()))),
+                        Some(a),
+                    )
+                    .await
+                {
+                    Ok(pt) => {
+                        println!("{_model}/{f}/{a} = {:#?}", pt.value);
+                    }
+                    Err(e) => {
+                        error!("Error received: {e}");
+                    }
+                }
+            }
+        }
+    } else {
+        // read fields
+        let _model: u16 = 705_u16;
+        let md = ss.models.get(&_model).unwrap().clone();
+        let block = OptionalGroupIdentifier(Some(GroupIdentifier::String("Crv".to_string())));
+        let _fields: Vec<&str> = vec!["VRefAutoTms"];
+        for f in _fields {
+            let which_block = 1;
+            match ss
+                .clone()
+                .get_point(md.clone(), f, block.clone(), Some(which_block))
+                .await
+            {
                 Ok(pt) => {
-                    println!("{_model}/{f} = {:#?}", pt.value);
+                    println!("{_model}/{block}[{which_block}]/{f} = {:#?}", pt.value);
                 }
                 Err(e) => {
                     error!("Error received: {e}");

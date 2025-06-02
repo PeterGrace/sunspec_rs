@@ -74,12 +74,13 @@ impl SunSpecData {
     }
     fn load_model(id: u16, manufacturer: Option<String>) -> anyhow::Result<SunSpecModels> {
         return if let Ok(ssm) = SunSpecData::load_model_json(id, &manufacturer).map_err(|e| {
-            error!("{e}");
+            trace!("{e}");
             e
         }) {
-            info!("JSON model loaded for {id}");
+            trace!("load_model_json {id}");
             Ok(ssm)
         } else {
+            trace!("load_model_xml {id}");
             SunSpecData::load_model_xml(id, &manufacturer)
         };
     }

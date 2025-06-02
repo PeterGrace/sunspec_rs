@@ -1,6 +1,8 @@
 use crate::sunspec_connection::SunSpecConnection;
 use crate::sunspec_data::{ResolvedModel, SunSpecData};
-use crate::sunspec_models::{LiteralType, SunSpecModels, ValueType};
+use crate::sunspec_models::{
+    GroupIdentifier, LiteralType, OptionalGroupIdentifier, SunSpecModels, ValueType,
+};
 use std::collections::HashMap;
 use std::string::ToString;
 use thiserror::Error;
@@ -96,12 +98,17 @@ impl ModelData {
         &mut self,
         name: &str,
         conn: SunSpecConnection,
-        block: Option<u16>,
+        block: Option<GroupIdentifier>,
+        addr: Option<u16>,
     ) -> Option<i16> {
         if let Some(value) = self.scale_factors.get(name) {
             return Some(*value);
         } else {
-            if let Ok(point) = conn.clone().get_point(self.clone(), name, block).await {
+            if let Ok(point) = conn
+                .clone()
+                .get_point(self.clone(), name, OptionalGroupIdentifier(block), addr)
+                .await
+            {
                 if let Some(ValueType::Integer(val)) = point.value {
                     self.scale_factors.insert(name.to_string(), val as i16);
                     return Some(val as i16);

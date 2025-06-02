@@ -1,12 +1,14 @@
 use crate::json::defaults::point_access;
-use crate::json::group::GroupType;
+use crate::json::group::{Group, GroupType};
 use crate::json::misc::JSONModel;
 use crate::json::point::{
     Point as JSONPoint, PointAccess, PointMandatory, PointSf, PointStatic, PointType as jpt,
     PointValue,
 };
-use crate::sunspec_connection::ADDR_OFFSET;
+use async_recursion::async_recursion;
 use serde::{Deserialize, Serialize};
+use std::fmt::Display;
+use std::ops::Deref;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ValueType {
@@ -71,6 +73,61 @@ pub struct Block {
     pub(crate) r#type: Option<String>,
     pub(crate) name: Option<String>,
     pub(crate) point: Vec<Point>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub enum GroupIdentifier {
+    Integer(u16),
+    String(String),
+}
+#[derive(Serialize, Deserialize, Debug, Default, Clone)]
+pub struct OptionalGroupIdentifier(pub Option<GroupIdentifier>);
+
+impl Deref for OptionalGroupIdentifier {
+    type Target = Option<GroupIdentifier>;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl From<OptionalGroupIdentifier> for Option<GroupIdentifier> {
+    fn from(value: OptionalGroupIdentifier) -> Self {
+        value.0
+    }
+}
+
+impl From<Option<GroupIdentifier>> for OptionalGroupIdentifier {
+    fn from(value: Option<GroupIdentifier>) -> Self {
+        match value.clone() {
+            None => OptionalGroupIdentifier(None),
+            Some(GroupIdentifier::Integer(i)) => {
+                OptionalGroupIdentifier(Some(GroupIdentifier::Integer(i)))
+            }
+            Some(GroupIdentifier::String(s)) => {
+                OptionalGroupIdentifier(Some(GroupIdentifier::String(s)))
+            }
+        }
+    }
+}
+impl Display for GroupIdentifier {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            GroupIdentifier::Integer(i) => write!(f, "{}", i),
+            GroupIdentifier::String(s) => write!(f, "{}", s),
+        }
+    }
+}
+impl Display for OptionalGroupIdentifier {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if let Some(val) = self.0.clone() {
+            match val {
+                GroupIdentifier::Integer(i) => write!(f, "{}", i),
+                GroupIdentifier::String(s) => write!(f, "{}", s),
+            }
+        } else {
+            write!(f, "None")
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
@@ -138,10 +195,18 @@ pub enum LiteralType {
     Symbol(SymbolLiteral),
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+pub enum ModelSource {
+    #[default]
+    XML,
+    Json(JSONModel),
+}
+
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct SunSpecModels {
     pub model: Model,
     pub strings: Vec<Strings>,
+    pub source: ModelSource,
 }
 
 impl From<&JSONModel> for SunSpecModels {
@@ -151,6 +216,7 @@ impl From<&JSONModel> for SunSpecModels {
             model_len = model_len.saturating_add(p.size as u16);
         }
 
+        info!("JSON Groups count is {:#?}", json.group.count);
         let mut blocks: Vec<Block> = vec![];
 
         let mut block_len: u16 = 0;
@@ -162,7 +228,7 @@ impl From<&JSONModel> for SunSpecModels {
         // ID and L aren't specified because they're implied.  Because of this, we skip processing
         // the first two points so that the offset address lines up.
         for point in json.group.points.iter().skip(2) {
-            info!("{}: offset value for {} is {offset}", point.name, json.id);
+            trace!("{}: offset value for {} is {offset}", point.name, json.id);
 
             let sf_string: Option<String>;
             if point.sf.is_some() {
@@ -232,9 +298,9 @@ impl From<&JSONModel> for SunSpecModels {
                         Some(PointValue::String(s)) => Some(ValueType::String(s)),
                         Some(PointValue::Integer(i)) => Some(ValueType::Integer(i as i32)),
                         None => {
-                            warn!(
-                                "Point is specified as static, but no value provided: {:#?}",
-                                serde_json::to_string(point)
+                            info!(
+                                "{}/{}: Point is specified as static, but no value provided.",
+                                json.id, point.name,
                             );
                             None
                         }
@@ -252,7 +318,7 @@ impl From<&JSONModel> for SunSpecModels {
         blocks.push(Block {
             len: block_len,
             r#type: None,
-            name: None,
+            name: Some(json.group.name.clone()),
             point: points,
         });
 
@@ -260,17 +326,16 @@ impl From<&JSONModel> for SunSpecModels {
             // we need to generate a new block per group
             for g in json.group.groups.iter() {
                 // reinitialize an empty points vec per grouping
+                let mut offset: u16 = 0;
                 let mut points: Vec<Point> = vec![];
                 let mut block = Block::default();
                 block.name = Some(g.clone().name);
                 for point in g.points.iter() {
-                    info!("{}: offset value for {} is {offset}", point.name, json.id);
-
                     let sf_string: Option<String>;
                     if point.sf.is_some() {
                         match point.clone().sf.unwrap() {
                             PointSf::String(s) => sf_string = Some(s),
-                            PointSf::Integer(i) => sf_string = Some(format!("{}", i)),
+                            PointSf::Integer(i) => sf_string = Some(format!("{i}")),
                         }
                     } else {
                         sf_string = None;
@@ -334,7 +399,7 @@ impl From<&JSONModel> for SunSpecModels {
                                 Some(PointValue::String(s)) => Some(ValueType::String(s)),
                                 Some(PointValue::Integer(i)) => Some(ValueType::Integer(i as i32)),
                                 None => {
-                                    warn!(
+                                    debug!(
                                 "Point is specified as static, but no value provided: {:#?}",
                                 serde_json::to_string(point)
                             );
@@ -347,10 +412,15 @@ impl From<&JSONModel> for SunSpecModels {
                         literal: None,
                         block_id: None,
                     };
+                    debug!(
+                        "{}/{}/{}: offset value is {offset}, size = {}",
+                        json.id, g.name, point.name, point.size
+                    );
                     points.push(foo);
                     offset = offset.saturating_add(point.size as u16);
                 }
                 block.point = points;
+                block.len = offset;
                 blocks.push(block);
             }
         }
@@ -366,6 +436,7 @@ impl From<&JSONModel> for SunSpecModels {
         SunSpecModels {
             model,
             strings: vec![],
+            source: ModelSource::Json(json.clone()),
         }
     }
 }
