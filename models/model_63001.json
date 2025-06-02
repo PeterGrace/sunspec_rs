@@ -1,421 +1,421 @@
 {
-  "group": {
-    "name": "model_63001",
-    "type": "group",
-    "label": "SunSpec Test Model 1",
-    "points": [
-      {
-        "name": "ID",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "static": "S",
-        "label": "Model ID",
-        "desc": "Model identifier",
-        "value": 63001
-      },
-      {
-        "name": "L",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "static": "S",
-        "label": "Model Length",
-        "desc": "Model length"
-      },
-      {
-        "name": "sunssf_1",
-        "type": "sunssf",
-        "size": 1
-      },
-      {
-        "name": "sunssf_2",
-        "type": "sunssf",
-        "size": 1
-      },
-      {
-        "name": "sunssf_3",
-        "type": "sunssf",
-        "size": 1
-      },
-      {
-        "name": "sunssf_4",
-        "type": "sunssf",
-        "size": 1
-      },
-      {
-        "name": "int16_1",
-        "type": "int16",
-        "size": 1,
-        "sf": "sunssf_1"
-      },
-      {
-        "name": "int16_2",
-        "type": "int16",
-        "size": 1,
-        "sf": "sunssf_2"
-      },
-      {
-        "name": "int16_3",
-        "type": "int16",
-        "size": 1,
-        "sf": "sunssf_3"
-      },
-      {
-        "name": "int16_4",
-        "type": "int16",
-        "size": 1,
-        "sf": "sunssf_4",
-        "access": "RW"
-      },
-      {
-        "name": "int16_5",
-        "type": "int16",
-        "size": 1
-      },
-      {
-        "name": "int16_u",
-        "type": "int16",
-        "size": 1
-      },
-      {
-        "name": "uint16_1",
-        "type": "uint16",
-        "size": 1,
-        "sf": "sunssf_1"
-      },
-      {
-        "name": "uint16_2",
-        "type": "uint16",
-        "size": 1,
-        "sf": "sunssf_2"
-      },
-      {
-        "name": "uint16_3",
-        "type": "uint16",
-        "size": 1,
-        "sf": "sunssf_3"
-      },
-      {
-        "name": "uint16_4",
-        "type": "uint16",
-        "size": 1,
-        "sf": "sunssf_4",
-        "access": "RW"
-      },
-      {
-        "name": "uint16_5",
-        "type": "uint16",
-        "size": 1
-      },
-      {
-        "name": "uint16_u",
-        "type": "uint16",
-        "size": 1
-      },
-      {
-        "name": "acc16",
-        "type": "acc16",
-        "size": 1
-      },
-      {
-        "name": "acc16_u",
-        "type": "acc16",
-        "size": 1
-      },
-      {
-        "name": "enum16",
-        "type": "enum16",
-        "size": 1
-      },
-      {
-        "name": "enum16_u",
-        "type": "enum16",
-        "size": 1
-      },
-      {
-        "name": "bitfield16",
-        "type": "bitfield16",
-        "size": 1
-      },
-      {
-        "name": "bitfield16_u",
-        "type": "bitfield16",
-        "size": 1
-      },
-      {
-        "name": "int32_1",
-        "type": "int32",
-        "size": 2,
-        "sf": "sunssf_5"
-      },
-      {
-        "name": "int32_2",
-        "type": "int32",
-        "size": 2,
-        "sf": "sunssf_6"
-      },
-      {
-        "name": "int32_3",
-        "type": "int32",
-        "size": 2,
-        "sf": "sunssf_7",
-        "access": "RW"
-      },
-      {
-        "name": "int32_4",
-        "type": "int32",
-        "size": 2
-      },
-      {
-        "name": "int32_5",
-        "type": "int32",
-        "size": 2
-      },
-      {
-        "name": "int32_u",
-        "type": "int32",
-        "size": 2
-      },
-      {
-        "name": "uint32_1",
-        "type": "uint32",
-        "size": 2,
-        "sf": "sunssf_5"
-      },
-      {
-        "name": "uint32_2",
-        "type": "uint32",
-        "size": 2,
-        "sf": "sunssf_6"
-      },
-      {
-        "name": "uint32_3",
-        "type": "uint32",
-        "size": 2,
-        "sf": "sunssf_7",
-        "access": "RW"
-      },
-      {
-        "name": "uint32_4",
-        "type": "uint32",
-        "size": 2,
-        "sf": 1
-      },
-      {
-        "name": "uint32_5",
-        "type": "uint32",
-        "size": 2
-      },
-      {
-        "name": "uint32_u",
-        "type": "uint32",
-        "size": 2
-      },
-      {
-        "name": "acc32",
-        "type": "acc32",
-        "size": 2
-      },
-      {
-        "name": "acc32_u",
-        "type": "acc32",
-        "size": 2
-      },
-      {
-        "name": "enum32",
-        "type": "enum32",
-        "size": 2
-      },
-      {
-        "name": "enum32_u",
-        "type": "enum32",
-        "size": 2
-      },
-      {
-        "name": "bitfield32",
-        "type": "bitfield32",
-        "size": 2
-      },
-      {
-        "name": "bitfield32_u",
-        "type": "bitfield32",
-        "size": 2
-      },
-      {
-        "name": "ipaddr",
-        "type": "ipaddr",
-        "size": 2,
-        "access": "RW"
-      },
-      {
-        "name": "ipaddr_u",
-        "type": "ipaddr",
-        "size": 2
-      },
-      {
-        "name": "int64",
-        "type": "int64",
-        "size": 4,
-        "access": "RW"
-      },
-      {
-        "name": "int64_u",
-        "type": "int64",
-        "size": 4
-      },
-      {
-        "name": "acc64",
-        "type": "acc64",
-        "size": 4
-      },
-      {
-        "name": "acc64_u",
-        "type": "acc64",
-        "size": 4
-      },
-      {
-        "name": "ipv6addr",
-        "type": "ipv6addr",
-        "size": 8
-      },
-      {
-        "name": "ipv6addr_u",
-        "type": "ipv6addr",
-        "size": 8
-      },
-      {
-        "name": "float32",
-        "type": "float32",
-        "size": 2,
-        "access": "RW"
-      },
-      {
-        "name": "float32_u",
-        "type": "float32",
-        "size": 2
-      },
-      {
-        "name": "string",
-        "type": "string",
-        "size": 16,
-        "access": "RW"
-      },
-      {
-        "name": "string_u",
-        "type": "string",
-        "size": 16
-      },
-      {
-        "name": "sunssf_5",
-        "type": "sunssf",
-        "size": 1
-      },
-      {
-        "name": "sunssf_6",
-        "type": "sunssf",
-        "size": 1
-      },
-      {
-        "name": "sunssf_7",
-        "type": "sunssf",
-        "size": 1
-      },
-      {
-        "name": "pad_1",
-        "type": "pad",
-        "size": 1
-      }
-    ],
-    "groups": [
-      {
-        "name": "repeating",
-        "type": "group",
-        "count": 0,
+    "group": {
+        "groups": [
+            {
+                "count": 0,
+                "name": "repeating",
+                "points": [
+                    {
+                        "name": "sunssf_8",
+                        "size": 1,
+                        "type": "sunssf"
+                    },
+                    {
+                        "access": "RW",
+                        "name": "int16_11",
+                        "sf": "sunssf_8",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "name": "int16_12",
+                        "sf": "sunssf_9",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "name": "int16_u",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "name": "uint16_11",
+                        "sf": "sunssf_8",
+                        "size": 1,
+                        "type": "uint16"
+                    },
+                    {
+                        "name": "uint16_12",
+                        "sf": "sunssf_9",
+                        "size": 1,
+                        "type": "uint16"
+                    },
+                    {
+                        "name": "uint16_13",
+                        "size": 1,
+                        "type": "uint16"
+                    },
+                    {
+                        "name": "uint16_u",
+                        "size": 1,
+                        "type": "uint16"
+                    },
+                    {
+                        "access": "RW",
+                        "name": "int32",
+                        "sf": "sunssf_1",
+                        "size": 2,
+                        "type": "int32"
+                    },
+                    {
+                        "name": "int32_u",
+                        "size": 2,
+                        "type": "int32"
+                    },
+                    {
+                        "access": "RW",
+                        "name": "uint32",
+                        "sf": "sunssf_9",
+                        "size": 2,
+                        "type": "uint32"
+                    },
+                    {
+                        "name": "uint32_u",
+                        "size": 2,
+                        "type": "uint32"
+                    },
+                    {
+                        "name": "sunssf_9",
+                        "size": 1,
+                        "type": "sunssf"
+                    },
+                    {
+                        "name": "pad_2",
+                        "size": 1,
+                        "type": "pad"
+                    }
+                ],
+                "type": "group"
+            }
+        ],
+        "label": "SunSpec Test Model 1",
+        "name": "model_63001",
         "points": [
-          {
-            "name": "sunssf_8",
-            "type": "sunssf",
-            "size": 1
-          },
-          {
-            "name": "int16_11",
-            "type": "int16",
-            "size": 1,
-            "sf": "sunssf_8",
-            "access": "RW"
-          },
-          {
-            "name": "int16_12",
-            "type": "int16",
-            "size": 1,
-            "sf": "sunssf_9"
-          },
-          {
-            "name": "int16_u",
-            "type": "int16",
-            "size": 1
-          },
-          {
-            "name": "uint16_11",
-            "type": "uint16",
-            "size": 1,
-            "sf": "sunssf_8",
-            "access": "RW"
-          },
-          {
-            "name": "uint16_12",
-            "type": "uint16",
-            "size": 1,
-            "sf": "sunssf_9"
-          },
-          {
-            "name": "uint16_13",
-            "type": "uint16",
-            "size": 1
-          },
-          {
-            "name": "uint16_u",
-            "type": "uint16",
-            "size": 1
-          },
-          {
-            "name": "int32",
-            "type": "int32",
-            "size": 2,
-            "sf": "sunssf_1",
-            "access": "RW"
-          },
-          {
-            "name": "int32_u",
-            "type": "int32",
-            "size": 2
-          },
-          {
-            "name": "uint32",
-            "type": "uint32",
-            "size": 2,
-            "sf": "sunssf_9",
-            "access": "RW"
-          },
-          {
-            "name": "uint32_u",
-            "type": "uint32",
-            "size": 2
-          },
-          {
-            "name": "sunssf_9",
-            "type": "sunssf",
-            "size": 1
-          },
-          {
-            "name": "pad_2",
-            "type": "pad",
-            "size": 1
-          }
-        ]
-      }
-    ]
-  },
-  "id": 63001
+            {
+                "desc": "Model identifier",
+                "label": "Model ID",
+                "mandatory": "M",
+                "name": "ID",
+                "size": 1,
+                "static": "S",
+                "type": "uint16",
+                "value": 63001
+            },
+            {
+                "desc": "Model length",
+                "label": "Model Length",
+                "mandatory": "M",
+                "name": "L",
+                "size": 1,
+                "static": "S",
+                "type": "uint16"
+            },
+            {
+                "name": "sunssf_1",
+                "size": 1,
+                "type": "sunssf"
+            },
+            {
+                "name": "sunssf_2",
+                "size": 1,
+                "type": "sunssf"
+            },
+            {
+                "name": "sunssf_3",
+                "size": 1,
+                "type": "sunssf"
+            },
+            {
+                "name": "sunssf_4",
+                "size": 1,
+                "type": "sunssf"
+            },
+            {
+                "name": "int16_1",
+                "sf": "sunssf_1",
+                "size": 1,
+                "type": "int16"
+            },
+            {
+                "name": "int16_2",
+                "sf": "sunssf_2",
+                "size": 1,
+                "type": "int16"
+            },
+            {
+                "name": "int16_3",
+                "sf": "sunssf_3",
+                "size": 1,
+                "type": "int16"
+            },
+            {
+                "access": "RW",
+                "name": "int16_4",
+                "sf": "sunssf_4",
+                "size": 1,
+                "type": "int16"
+            },
+            {
+                "name": "int16_5",
+                "size": 1,
+                "type": "int16"
+            },
+            {
+                "name": "int16_u",
+                "size": 1,
+                "type": "int16"
+            },
+            {
+                "name": "uint16_1",
+                "sf": "sunssf_1",
+                "size": 1,
+                "type": "uint16"
+            },
+            {
+                "name": "uint16_2",
+                "sf": "sunssf_2",
+                "size": 1,
+                "type": "uint16"
+            },
+            {
+                "name": "uint16_3",
+                "sf": "sunssf_3",
+                "size": 1,
+                "type": "uint16"
+            },
+            {
+                "access": "RW",
+                "name": "uint16_4",
+                "sf": "sunssf_4",
+                "size": 1,
+                "type": "uint16"
+            },
+            {
+                "name": "uint16_5",
+                "size": 1,
+                "type": "uint16"
+            },
+            {
+                "name": "uint16_u",
+                "size": 1,
+                "type": "uint16"
+            },
+            {
+                "name": "acc16",
+                "size": 1,
+                "type": "acc16"
+            },
+            {
+                "name": "acc16_u",
+                "size": 1,
+                "type": "acc16"
+            },
+            {
+                "name": "enum16",
+                "size": 1,
+                "type": "enum16"
+            },
+            {
+                "name": "enum16_u",
+                "size": 1,
+                "type": "enum16"
+            },
+            {
+                "name": "bitfield16",
+                "size": 1,
+                "type": "bitfield16"
+            },
+            {
+                "name": "bitfield16_u",
+                "size": 1,
+                "type": "bitfield16"
+            },
+            {
+                "name": "int32_1",
+                "sf": "sunssf_5",
+                "size": 2,
+                "type": "int32"
+            },
+            {
+                "name": "int32_2",
+                "sf": "sunssf_6",
+                "size": 2,
+                "type": "int32"
+            },
+            {
+                "access": "RW",
+                "name": "int32_3",
+                "sf": "sunssf_7",
+                "size": 2,
+                "type": "int32"
+            },
+            {
+                "name": "int32_4",
+                "size": 2,
+                "type": "int32"
+            },
+            {
+                "name": "int32_5",
+                "size": 2,
+                "type": "int32"
+            },
+            {
+                "name": "int32_u",
+                "size": 2,
+                "type": "int32"
+            },
+            {
+                "name": "uint32_1",
+                "sf": "sunssf_5",
+                "size": 2,
+                "type": "uint32"
+            },
+            {
+                "name": "uint32_2",
+                "sf": "sunssf_6",
+                "size": 2,
+                "type": "uint32"
+            },
+            {
+                "access": "RW",
+                "name": "uint32_3",
+                "sf": "sunssf_7",
+                "size": 2,
+                "type": "uint32"
+            },
+            {
+                "name": "uint32_4",
+                "sf": 1,
+                "size": 2,
+                "type": "uint32"
+            },
+            {
+                "name": "uint32_5",
+                "size": 2,
+                "type": "uint32"
+            },
+            {
+                "name": "uint32_u",
+                "size": 2,
+                "type": "uint32"
+            },
+            {
+                "name": "acc32",
+                "size": 2,
+                "type": "acc32"
+            },
+            {
+                "name": "acc32_u",
+                "size": 2,
+                "type": "acc32"
+            },
+            {
+                "name": "enum32",
+                "size": 2,
+                "type": "enum32"
+            },
+            {
+                "name": "enum32_u",
+                "size": 2,
+                "type": "enum32"
+            },
+            {
+                "name": "bitfield32",
+                "size": 2,
+                "type": "bitfield32"
+            },
+            {
+                "name": "bitfield32_u",
+                "size": 2,
+                "type": "bitfield32"
+            },
+            {
+                "access": "RW",
+                "name": "ipaddr",
+                "size": 2,
+                "type": "ipaddr"
+            },
+            {
+                "name": "ipaddr_u",
+                "size": 2,
+                "type": "ipaddr"
+            },
+            {
+                "access": "RW",
+                "name": "int64",
+                "size": 4,
+                "type": "int64"
+            },
+            {
+                "name": "int64_u",
+                "size": 4,
+                "type": "int64"
+            },
+            {
+                "name": "acc64",
+                "size": 4,
+                "type": "acc64"
+            },
+            {
+                "name": "acc64_u",
+                "size": 4,
+                "type": "acc64"
+            },
+            {
+                "name": "ipv6addr",
+                "size": 8,
+                "type": "ipv6addr"
+            },
+            {
+                "name": "ipv6addr_u",
+                "size": 8,
+                "type": "ipv6addr"
+            },
+            {
+                "access": "RW",
+                "name": "float32",
+                "size": 2,
+                "type": "float32"
+            },
+            {
+                "name": "float32_u",
+                "size": 2,
+                "type": "float32"
+            },
+            {
+                "access": "RW",
+                "name": "string",
+                "size": 16,
+                "type": "string"
+            },
+            {
+                "name": "string_u",
+                "size": 16,
+                "type": "string"
+            },
+            {
+                "name": "sunssf_5",
+                "size": 1,
+                "type": "sunssf"
+            },
+            {
+                "name": "sunssf_6",
+                "size": 1,
+                "type": "sunssf"
+            },
+            {
+                "name": "sunssf_7",
+                "size": 1,
+                "type": "sunssf"
+            },
+            {
+                "name": "pad_1",
+                "size": 1,
+                "type": "pad"
+            }
+        ],
+        "type": "group"
+    },
+    "id": 63001
 }

@@ -1,600 +1,600 @@
 {
-  "group": {
-    "name": "watt_pf",
-    "type": "group",
-    "label": "Watt-PF",
-    "desc": "Watt-Power Factor ",
-    "points": [
-      {
-        "name": "ID",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "static": "S",
-        "label": "Model ID",
-        "desc": "Model identifier",
-        "value": 131
-      },
-      {
-        "name": "L",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "static": "S",
-        "label": "Model Length",
-        "desc": "Model length"
-      },
-      {
-        "name": "ActCrv",
-        "type": "uint16",
-        "size": 1,
-        "access": "RW",
-        "mandatory": "M",
-        "label": "ActCrv",
-        "desc": "Index of active curve. 0=no active curve."
-      },
-      {
-        "name": "ModEna",
-        "type": "bitfield16",
-        "size": 1,
-        "access": "RW",
-        "mandatory": "M",
-        "label": "ModEna",
-        "desc": "Is watt-PF mode active.",
-        "symbols": [
-          {
-            "name": "ENABLED",
-            "value": 0
-          }
-        ]
-      },
-      {
-        "name": "WinTms",
-        "type": "uint16",
-        "size": 1,
-        "units": "Secs",
-        "access": "RW",
-        "label": "WinTms",
-        "desc": "Time window for watt-PF change."
-      },
-      {
-        "name": "RvrtTms",
-        "type": "uint16",
-        "size": 1,
-        "units": "Secs",
-        "access": "RW",
-        "label": "RvrtTms",
-        "desc": "Timeout period for watt-PF curve selection."
-      },
-      {
-        "name": "RmpTms",
-        "type": "uint16",
-        "size": 1,
-        "units": "Secs",
-        "access": "RW",
-        "label": "RmpTms",
-        "desc": "Ramp time for moving from current mode to new mode."
-      },
-      {
-        "name": "NCrv",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "label": "NCrv",
-        "desc": "Number of curves supported (recommend 4)."
-      },
-      {
-        "name": "NPt",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "label": "NPt",
-        "desc": "Max number of points in array."
-      },
-      {
-        "name": "W_SF",
-        "type": "sunssf",
-        "size": 1,
-        "mandatory": "M",
-        "label": "W_SF",
-        "desc": "Scale factor for percent WMax."
-      },
-      {
-        "name": "PF_SF",
-        "type": "sunssf",
-        "size": 1,
-        "mandatory": "M",
-        "label": "PF_SF",
-        "desc": "Scale factor for PF."
-      },
-      {
-        "name": "RmpIncDec_SF",
-        "type": "sunssf",
-        "size": 1,
-        "label": "RmpIncDec_SF",
-        "desc": "Scale factor for increment and decrement ramps."
-      }
-    ],
-    "groups": [
-      {
-        "name": "curve",
-        "type": "group",
-        "count": 0,
+    "group": {
+        "desc": "Watt-Power Factor ",
+        "groups": [
+            {
+                "count": 0,
+                "name": "curve",
+                "points": [
+                    {
+                        "access": "RW",
+                        "desc": "Number of active points in array.",
+                        "label": "ActPt",
+                        "mandatory": "M",
+                        "name": "ActPt",
+                        "size": 1,
+                        "type": "uint16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 1 Watts.",
+                        "label": "W1",
+                        "mandatory": "M",
+                        "name": "W1",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 1 PF in EEI notation.",
+                        "label": "PF1",
+                        "mandatory": "M",
+                        "name": "PF1",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 2 Watts.",
+                        "label": "W2",
+                        "name": "W2",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 2 PF in EEI notation.",
+                        "label": "PF2",
+                        "name": "PF2",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 3 Watts.",
+                        "label": "W3",
+                        "name": "W3",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 3 PF in EEI notation.",
+                        "label": "PF3",
+                        "name": "PF3",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 4 Watts.",
+                        "label": "W4",
+                        "name": "W4",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 4 PF in EEI notation.",
+                        "label": "PF4",
+                        "name": "PF4",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 5 Watts.",
+                        "label": "W5",
+                        "name": "W5",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 5 PF in EEI notation.",
+                        "label": "PF5",
+                        "name": "PF5",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 6 Watts.",
+                        "label": "W6",
+                        "name": "W6",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 6 PF in EEI notation.",
+                        "label": "PF6",
+                        "name": "PF6",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 7 Watts.",
+                        "label": "W7",
+                        "name": "W7",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 7 PF in EEI notation.",
+                        "label": "PF7",
+                        "name": "PF7",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 8 Watts.",
+                        "label": "W8",
+                        "name": "W8",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 8 PF in EEI notation.",
+                        "label": "PF8",
+                        "name": "PF8",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 9 Watts.",
+                        "label": "W9",
+                        "name": "W9",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 9 PF in EEI notation.",
+                        "label": "PF9",
+                        "name": "PF9",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 10 Watts.",
+                        "label": "W10",
+                        "name": "W10",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 10 PF in EEI notation.",
+                        "label": "PF10",
+                        "name": "PF10",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 11 Watts.",
+                        "label": "W11",
+                        "name": "W11",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 11 PF in EEI notation.",
+                        "label": "PF11",
+                        "name": "PF11",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 12 Watts.",
+                        "label": "W12",
+                        "name": "W12",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 12 PF in EEI notation.",
+                        "label": "PF12",
+                        "name": "PF12",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 13 Watts.",
+                        "label": "W13",
+                        "name": "W13",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 13 PF in EEI notation.",
+                        "label": "PF13",
+                        "name": "PF13",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 14 Watts.",
+                        "label": "W14",
+                        "name": "W14",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 14 PF in EEI notation.",
+                        "label": "PF14",
+                        "name": "PF14",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 15 Watts.",
+                        "label": "W15",
+                        "name": "W15",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 15 PF in EEI notation.",
+                        "label": "PF15",
+                        "name": "PF15",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 16 Watts.",
+                        "label": "W16",
+                        "name": "W16",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 16 PF in EEI notation.",
+                        "label": "PF16",
+                        "name": "PF16",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 17 Watts.",
+                        "label": "W17",
+                        "name": "W17",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 17 PF in EEI notation.",
+                        "label": "PF17",
+                        "name": "PF17",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 18 Watts.",
+                        "label": "W18",
+                        "name": "W18",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 18 PF in EEI notation.",
+                        "label": "PF18",
+                        "name": "PF18",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 19 Watts.",
+                        "label": "W19",
+                        "name": "W19",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 19 PF in EEI notation.",
+                        "label": "PF19",
+                        "name": "PF19",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 20 Watts.",
+                        "label": "W20",
+                        "name": "W20",
+                        "sf": "W_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "% WMax"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 20 PF in EEI notation.",
+                        "label": "PF20",
+                        "name": "PF20",
+                        "sf": "PF_SF",
+                        "size": 1,
+                        "type": "int16",
+                        "units": "cos()"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Optional description for curve.",
+                        "label": "CrvNam",
+                        "name": "CrvNam",
+                        "size": 8,
+                        "type": "string"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "The time of the PT1 in seconds (time to accomplish a change of 95%).",
+                        "label": "RmpPT1Tms",
+                        "name": "RmpPT1Tms",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "Secs"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "The maximum rate at which the power factor may be reduced in response to changes in the power value.",
+                        "label": "RmpDecTmm",
+                        "name": "RmpDecTmm",
+                        "sf": "RmpIncDec_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% PF/min"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "The maximum rate at which the power factor may be increased in response to changes in the power value.",
+                        "label": "RmpIncTmm",
+                        "name": "RmpIncTmm",
+                        "sf": "RmpIncDec_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% PF/min"
+                    },
+                    {
+                        "desc": "Enumerated value indicates if curve is read-only or can be modified.",
+                        "label": "ReadOnly",
+                        "mandatory": "M",
+                        "name": "ReadOnly",
+                        "size": 1,
+                        "symbols": [
+                            {
+                                "name": "READWRITE",
+                                "value": 0
+                            },
+                            {
+                                "name": "READONLY",
+                                "value": 1
+                            }
+                        ],
+                        "type": "enum16"
+                    },
+                    {
+                        "name": "Pad",
+                        "size": 1,
+                        "type": "pad"
+                    }
+                ],
+                "type": "group"
+            }
+        ],
+        "label": "Watt-PF",
+        "name": "watt_pf",
         "points": [
-          {
-            "name": "ActPt",
-            "type": "uint16",
-            "size": 1,
-            "access": "RW",
-            "mandatory": "M",
-            "label": "ActPt",
-            "desc": "Number of active points in array."
-          },
-          {
-            "name": "W1",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "mandatory": "M",
-            "label": "W1",
-            "desc": "Point 1 Watts."
-          },
-          {
-            "name": "PF1",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "mandatory": "M",
-            "label": "PF1",
-            "desc": "Point 1 PF in EEI notation."
-          },
-          {
-            "name": "W2",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W2",
-            "desc": "Point 2 Watts."
-          },
-          {
-            "name": "PF2",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF2",
-            "desc": "Point 2 PF in EEI notation."
-          },
-          {
-            "name": "W3",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W3",
-            "desc": "Point 3 Watts."
-          },
-          {
-            "name": "PF3",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF3",
-            "desc": "Point 3 PF in EEI notation."
-          },
-          {
-            "name": "W4",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W4",
-            "desc": "Point 4 Watts."
-          },
-          {
-            "name": "PF4",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF4",
-            "desc": "Point 4 PF in EEI notation."
-          },
-          {
-            "name": "W5",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W5",
-            "desc": "Point 5 Watts."
-          },
-          {
-            "name": "PF5",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF5",
-            "desc": "Point 5 PF in EEI notation."
-          },
-          {
-            "name": "W6",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W6",
-            "desc": "Point 6 Watts."
-          },
-          {
-            "name": "PF6",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF6",
-            "desc": "Point 6 PF in EEI notation."
-          },
-          {
-            "name": "W7",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W7",
-            "desc": "Point 7 Watts."
-          },
-          {
-            "name": "PF7",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF7",
-            "desc": "Point 7 PF in EEI notation."
-          },
-          {
-            "name": "W8",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W8",
-            "desc": "Point 8 Watts."
-          },
-          {
-            "name": "PF8",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF8",
-            "desc": "Point 8 PF in EEI notation."
-          },
-          {
-            "name": "W9",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W9",
-            "desc": "Point 9 Watts."
-          },
-          {
-            "name": "PF9",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF9",
-            "desc": "Point 9 PF in EEI notation."
-          },
-          {
-            "name": "W10",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W10",
-            "desc": "Point 10 Watts."
-          },
-          {
-            "name": "PF10",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF10",
-            "desc": "Point 10 PF in EEI notation."
-          },
-          {
-            "name": "W11",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W11",
-            "desc": "Point 11 Watts."
-          },
-          {
-            "name": "PF11",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF11",
-            "desc": "Point 11 PF in EEI notation."
-          },
-          {
-            "name": "W12",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W12",
-            "desc": "Point 12 Watts."
-          },
-          {
-            "name": "PF12",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF12",
-            "desc": "Point 12 PF in EEI notation."
-          },
-          {
-            "name": "W13",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W13",
-            "desc": "Point 13 Watts."
-          },
-          {
-            "name": "PF13",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF13",
-            "desc": "Point 13 PF in EEI notation."
-          },
-          {
-            "name": "W14",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W14",
-            "desc": "Point 14 Watts."
-          },
-          {
-            "name": "PF14",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF14",
-            "desc": "Point 14 PF in EEI notation."
-          },
-          {
-            "name": "W15",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W15",
-            "desc": "Point 15 Watts."
-          },
-          {
-            "name": "PF15",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF15",
-            "desc": "Point 15 PF in EEI notation."
-          },
-          {
-            "name": "W16",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W16",
-            "desc": "Point 16 Watts."
-          },
-          {
-            "name": "PF16",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF16",
-            "desc": "Point 16 PF in EEI notation."
-          },
-          {
-            "name": "W17",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W17",
-            "desc": "Point 17 Watts."
-          },
-          {
-            "name": "PF17",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF17",
-            "desc": "Point 17 PF in EEI notation."
-          },
-          {
-            "name": "W18",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W18",
-            "desc": "Point 18 Watts."
-          },
-          {
-            "name": "PF18",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF18",
-            "desc": "Point 18 PF in EEI notation."
-          },
-          {
-            "name": "W19",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W19",
-            "desc": "Point 19 Watts."
-          },
-          {
-            "name": "PF19",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF19",
-            "desc": "Point 19 PF in EEI notation."
-          },
-          {
-            "name": "W20",
-            "type": "int16",
-            "size": 1,
-            "sf": "W_SF",
-            "units": "%WMax",
-            "access": "RW",
-            "label": "W20",
-            "desc": "Point 20 Watts."
-          },
-          {
-            "name": "PF20",
-            "type": "int16",
-            "size": 1,
-            "sf": "PF_SF",
-            "units": "cos()",
-            "access": "RW",
-            "label": "PF20",
-            "desc": "Point 20 PF in EEI notation."
-          },
-          {
-            "name": "CrvNam",
-            "type": "string",
-            "size": 8,
-            "access": "RW",
-            "label": "CrvNam",
-            "desc": "Optional description for curve."
-          },
-          {
-            "name": "RmpPT1Tms",
-            "type": "uint16",
-            "size": 1,
-            "units": "Secs",
-            "access": "RW",
-            "label": "RmpPT1Tms",
-            "desc": "The time of the PT1 in seconds (time to accomplish a change of 95%)."
-          },
-          {
-            "name": "RmpDecTmm",
-            "type": "uint16",
-            "size": 1,
-            "sf": "RmpIncDec_SF",
-            "units": "%PF/min",
-            "access": "RW",
-            "label": "RmpDecTmm",
-            "desc": "The maximum rate at which the power factor may be reduced in response to changes in the power value."
-          },
-          {
-            "name": "RmpIncTmm",
-            "type": "uint16",
-            "size": 1,
-            "sf": "RmpIncDec_SF",
-            "units": "%PF/min",
-            "access": "RW",
-            "label": "RmpIncTmm",
-            "desc": "The maximum rate at which the power factor may be increased in response to changes in the power value."
-          },
-          {
-            "name": "ReadOnly",
-            "type": "enum16",
-            "size": 1,
-            "mandatory": "M",
-            "label": "ReadOnly",
-            "desc": "Enumerated value indicates if curve is read-only or can be modified.",
-            "symbols": [
-              {
-                "name": "READWRITE",
-                "value": 0
-              },
-              {
-                "name": "READONLY",
-                "value": 1
-              }
-            ]
-          },
-          {
-            "name": "Pad",
-            "type": "pad",
-            "size": 1
-          }
-        ]
-      }
-    ]
-  },
-  "id": 131
+            {
+                "desc": "Model identifier",
+                "label": "Model ID",
+                "mandatory": "M",
+                "name": "ID",
+                "size": 1,
+                "static": "S",
+                "type": "uint16",
+                "value": 131
+            },
+            {
+                "desc": "Model length",
+                "label": "Model Length",
+                "mandatory": "M",
+                "name": "L",
+                "size": 1,
+                "static": "S",
+                "type": "uint16"
+            },
+            {
+                "access": "RW",
+                "desc": "Index of active curve. 0=no active curve.",
+                "label": "ActCrv",
+                "mandatory": "M",
+                "name": "ActCrv",
+                "size": 1,
+                "type": "uint16"
+            },
+            {
+                "access": "RW",
+                "desc": "Is watt-PF mode active.",
+                "label": "ModEna",
+                "mandatory": "M",
+                "name": "ModEna",
+                "size": 1,
+                "symbols": [
+                    {
+                        "name": "ENABLED",
+                        "value": 0
+                    }
+                ],
+                "type": "bitfield16"
+            },
+            {
+                "access": "RW",
+                "desc": "Time window for watt-PF change.",
+                "label": "WinTms",
+                "name": "WinTms",
+                "size": 1,
+                "type": "uint16",
+                "units": "Secs"
+            },
+            {
+                "access": "RW",
+                "desc": "Timeout period for watt-PF curve selection.",
+                "label": "RvrtTms",
+                "name": "RvrtTms",
+                "size": 1,
+                "type": "uint16",
+                "units": "Secs"
+            },
+            {
+                "access": "RW",
+                "desc": "Ramp time for moving from current mode to new mode.",
+                "label": "RmpTms",
+                "name": "RmpTms",
+                "size": 1,
+                "type": "uint16",
+                "units": "Secs"
+            },
+            {
+                "desc": "Number of curves supported (recommend 4).",
+                "label": "NCrv",
+                "mandatory": "M",
+                "name": "NCrv",
+                "size": 1,
+                "type": "uint16"
+            },
+            {
+                "desc": "Max number of points in array.",
+                "label": "NPt",
+                "mandatory": "M",
+                "name": "NPt",
+                "size": 1,
+                "type": "uint16"
+            },
+            {
+                "desc": "Scale factor for percent WMax.",
+                "label": "W_SF",
+                "mandatory": "M",
+                "name": "W_SF",
+                "size": 1,
+                "type": "sunssf"
+            },
+            {
+                "desc": "Scale factor for PF.",
+                "label": "PF_SF",
+                "mandatory": "M",
+                "name": "PF_SF",
+                "size": 1,
+                "type": "sunssf"
+            },
+            {
+                "desc": "Scale factor for increment and decrement ramps.",
+                "label": "RmpIncDec_SF",
+                "name": "RmpIncDec_SF",
+                "size": 1,
+                "type": "sunssf"
+            }
+        ],
+        "type": "group"
+    },
+    "id": 131
 }

@@ -1,277 +1,241 @@
 {
-  "group": {
-    "name": "model_12",
-    "type": "group",
-    "label": "IPv4",
-    "desc": "Include to support an IPv4 protocol stack on this interface",
-    "points": [
-      {
-        "name": "ID",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "static": "S",
-        "label": "Model ID",
-        "desc": "Model identifier",
-        "value": 12
-      },
-      {
-        "name": "L",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "static": "S",
-        "label": "Model Length",
-        "desc": "Model length"
-      },
-      {
-        "name": "Nam",
-        "type": "string",
-        "size": 4,
-        "access": "RW",
-        "label": "Name",
-        "desc": "Interface name"
-      },
-      {
-        "name": "CfgSt",
-        "type": "enum16",
-        "size": 1,
-        "mandatory": "M",
-        "label": "Config Status",
-        "desc": "Enumerated value.  Configuration status",
-        "symbols": [
-          {
-            "name": "NOT_CONFIGURED",
-            "value": 0,
-            "label": "not configured",
-            "desc": "the stack is not configured"
-          },
-          {
-            "name": "VALID_SETTING",
-            "value": 1,
-            "label": "valid setting",
-            "desc": "a valid configuration from BOOTP, DHCP, or NV mem"
-          },
-          {
-            "name": "VALID_HW",
-            "value": 2,
-            "label": "valid hardware",
-            "desc": "a valid configuration from hardware settings"
-          }
-        ]
-      },
-      {
-        "name": "ChgSt",
-        "type": "bitfield16",
-        "size": 1,
-        "mandatory": "M",
-        "label": "Change Status",
-        "desc": "Bitmask value.  A configuration change is pending",
-        "symbols": [
-          {
-            "name": "PENDING",
-            "value": 0,
-            "label": "pending",
-            "desc": "a configuration change is pending"
-          }
-        ]
-      },
-      {
-        "name": "Cap",
-        "type": "bitfield16",
-        "size": 1,
-        "mandatory": "M",
-        "label": "Config Capability",
-        "desc": "Bitmask value. Identify capable sources of configuration",
-        "symbols": [
-          {
-            "name": "DHCP",
-            "value": 0,
-            "label": "DHCP",
-            "desc": "DHCP Client capable"
-          },
-          {
-            "name": "BOOTP",
-            "value": 1,
-            "label": "BOOTP",
-            "desc": "BOOTP client capable"
-          },
-          {
-            "name": "ZEROCONF",
-            "value": 2,
-            "label": "zeroconf",
-            "desc": "Zeroconf capable"
-          },
-          {
-            "name": "DNS",
-            "value": 3,
-            "label": "DNS",
-            "desc": "DNS Client capable"
-          },
-          {
-            "name": "CFG_SETTABLE",
-            "value": 4,
-            "label": "configurable",
-            "desc": "Settable configuration capable"
-          },
-          {
-            "name": "HW_CONFIG",
-            "value": 5,
-            "label": "hw",
-            "desc": "Hardware configuration capable"
-          },
-          {
-            "name": "NTP_CLIENT",
-            "value": 6,
-            "label": "ntp",
-            "desc": "NTP Client capable"
-          },
-          {
-            "name": "RESET_REQUIRED",
-            "value": 7,
-            "label": "reset required",
-            "desc": "configuration change requires reset"
-          }
-        ]
-      },
-      {
-        "name": "Cfg",
-        "type": "enum16",
-        "size": 1,
-        "access": "RW",
-        "mandatory": "M",
-        "label": "IPv4 Config",
-        "desc": "Enumerated value.  Configuration method used.",
-        "symbols": [
-          {
-            "name": "STATIC",
-            "value": 0,
-            "label": "static",
-            "desc": "Use static IP"
-          },
-          {
-            "name": "DHCP",
-            "value": 1,
-            "label": "DHCP",
-            "desc": "Use DHCP"
-          },
-          {
-            "name": "BOOTP",
-            "value": 2,
-            "label": "BOOTP",
-            "desc": "Use BOOTP"
-          },
-          {
-            "name": "ZEROCONF",
-            "value": 3,
-            "label": "zeroconf",
-            "desc": "Use Zeroconf"
-          }
-        ]
-      },
-      {
-        "name": "Ctl",
-        "type": "enum16",
-        "size": 1,
-        "access": "RW",
-        "mandatory": "M",
-        "label": "Control",
-        "desc": "Configure use of services",
-        "symbols": [
-          {
-            "name": "ENABLE_DNS",
-            "value": 0,
-            "label": "DNS",
-            "desc": "Enable DNS"
-          },
-          {
-            "name": "ENABLE_NTP",
-            "value": 1,
-            "label": "NTP",
-            "desc": "Enable NTP"
-          }
-        ]
-      },
-      {
-        "name": "Addr",
-        "type": "string",
-        "size": 8,
-        "access": "RW",
-        "mandatory": "M",
-        "label": "IP",
-        "desc": "IPv4 numeric address as a dotted string xxx.xxx.xxx.xxx"
-      },
-      {
-        "name": "Msk",
-        "type": "string",
-        "size": 8,
-        "access": "RW",
-        "mandatory": "M",
-        "label": "Netmask",
-        "desc": "IPv4 numeric netmask as a dotted string xxx.xxx.xxx.xxx"
-      },
-      {
-        "name": "Gw",
-        "type": "string",
-        "size": 8,
-        "access": "RW",
-        "label": "Gateway",
-        "desc": "IPv4 numeric gateway address as a dotted string xxx.xxx.xxx.xxx"
-      },
-      {
-        "name": "DNS1",
-        "type": "string",
-        "size": 8,
-        "access": "RW",
-        "label": "DNS1",
-        "desc": "IPv4 numeric DNS address as a dotted string xxx.xxx.xxx.xxx"
-      },
-      {
-        "name": "DNS2",
-        "type": "string",
-        "size": 8,
-        "access": "RW",
-        "label": "DNS2",
-        "desc": "IPv4 numeric DNS address as a dotted string xxx.xxx.xxx.xxx"
-      },
-      {
-        "name": "NTP1",
-        "type": "string",
-        "size": 12,
-        "access": "RW",
-        "label": "NTP1",
-        "desc": "IPv4 numeric NTP address as a dotted string xxx.xxx.xxx.xxx"
-      },
-      {
-        "name": "NTP2",
-        "type": "string",
-        "size": 12,
-        "access": "RW",
-        "label": "NTP2",
-        "desc": "IPv4 numeric NTP address as a dotted string xxx.xxx.xxx.xxx"
-      },
-      {
-        "name": "DomNam",
-        "type": "string",
-        "size": 12,
-        "access": "RW",
-        "label": "Domain",
-        "desc": "Domain name (24 chars max)"
-      },
-      {
-        "name": "HostNam",
-        "type": "string",
-        "size": 12,
-        "access": "RW",
-        "label": "Host Name",
-        "desc": "Host name (24 chars max)"
-      },
-      {
-        "name": "Pad",
-        "type": "pad",
-        "size": 1
-      }
-    ]
-  },
-  "id": 12
+    "group": {
+        "desc": "Include to support an IPv4 protocol stack on this interface",
+        "label": "IPv4",
+        "name": "model_12",
+        "points": [
+            {
+                "desc": "Model identifier",
+                "label": "Model ID",
+                "mandatory": "M",
+                "name": "ID",
+                "size": 1,
+                "static": "S",
+                "type": "uint16",
+                "value": 12
+            },
+            {
+                "desc": "Model length",
+                "label": "Model Length",
+                "mandatory": "M",
+                "name": "L",
+                "size": 1,
+                "static": "S",
+                "type": "uint16"
+            },
+            {
+                "access": "RW",
+                "desc": "Interface name",
+                "label": "Name",
+                "name": "Nam",
+                "size": 4,
+                "type": "string"
+            },
+            {
+                "desc": "Enumerated value.  Configuration status",
+                "label": "Config Status",
+                "mandatory": "M",
+                "name": "CfgSt",
+                "size": 1,
+                "symbols": [
+                    {
+                        "name": "NOT_CONFIGURED",
+                        "value": 0
+                    },
+                    {
+                        "name": "VALID_SETTING",
+                        "value": 1
+                    },
+                    {
+                        "name": "VALID_HW",
+                        "value": 2
+                    }
+                ],
+                "type": "enum16"
+            },
+            {
+                "desc": "Bitmask value.  A configuration change is pending",
+                "label": "Change Status",
+                "mandatory": "M",
+                "name": "ChgSt",
+                "size": 1,
+                "symbols": [
+                    {
+                        "name": "PENDING",
+                        "value": 0
+                    }
+                ],
+                "type": "bitfield16"
+            },
+            {
+                "desc": "Bitmask value. Identify capable sources of configuration",
+                "label": "Config Capability",
+                "mandatory": "M",
+                "name": "Cap",
+                "size": 1,
+                "symbols": [
+                    {
+                        "name": "DHCP",
+                        "value": 0
+                    },
+                    {
+                        "name": "BOOTP",
+                        "value": 1
+                    },
+                    {
+                        "name": "ZEROCONF",
+                        "value": 2
+                    },
+                    {
+                        "name": "DNS",
+                        "value": 3
+                    },
+                    {
+                        "name": "CFG_SETTABLE",
+                        "value": 4
+                    },
+                    {
+                        "name": "HW_CONFIG",
+                        "value": 5
+                    },
+                    {
+                        "name": "NTP_CLIENT",
+                        "value": 6
+                    },
+                    {
+                        "name": "RESET_REQUIRED",
+                        "value": 7
+                    }
+                ],
+                "type": "bitfield16"
+            },
+            {
+                "access": "RW",
+                "desc": "Enumerated value.  Configuration method used.",
+                "label": "IPv4 Config",
+                "mandatory": "M",
+                "name": "Cfg",
+                "size": 1,
+                "symbols": [
+                    {
+                        "name": "STATIC",
+                        "value": 0
+                    },
+                    {
+                        "name": "DHCP",
+                        "value": 1
+                    },
+                    {
+                        "name": "BOOTP",
+                        "value": 2
+                    },
+                    {
+                        "name": "ZEROCONF",
+                        "value": 3
+                    }
+                ],
+                "type": "enum16"
+            },
+            {
+                "access": "RW",
+                "desc": "Configure use of services",
+                "label": "Control",
+                "mandatory": "M",
+                "name": "Ctl",
+                "size": 1,
+                "symbols": [
+                    {
+                        "name": "ENABLE_DNS",
+                        "value": 0
+                    },
+                    {
+                        "name": "ENABLE_NTP",
+                        "value": 1
+                    }
+                ],
+                "type": "enum16"
+            },
+            {
+                "access": "RW",
+                "desc": "IPv4 numeric address as a dotted string xxx.xxx.xxx.xxx",
+                "label": "IP",
+                "mandatory": "M",
+                "name": "Addr",
+                "size": 8,
+                "type": "string"
+            },
+            {
+                "access": "RW",
+                "desc": "IPv4 numeric netmask as a dotted string xxx.xxx.xxx.xxx",
+                "label": "Netmask",
+                "mandatory": "M",
+                "name": "Msk",
+                "size": 8,
+                "type": "string"
+            },
+            {
+                "access": "RW",
+                "desc": "IPv4 numeric gateway address as a dotted string xxx.xxx.xxx.xxx",
+                "label": "Gateway",
+                "name": "Gw",
+                "size": 8,
+                "type": "string"
+            },
+            {
+                "access": "RW",
+                "desc": "IPv4 numeric DNS address as a dotted string xxx.xxx.xxx.xxx",
+                "label": "DNS1",
+                "name": "DNS1",
+                "size": 8,
+                "type": "string"
+            },
+            {
+                "access": "RW",
+                "desc": "IPv4 numeric DNS address as a dotted string xxx.xxx.xxx.xxx",
+                "label": "DNS2",
+                "name": "DNS2",
+                "size": 8,
+                "type": "string"
+            },
+            {
+                "access": "RW",
+                "desc": "IPv4 numeric NTP address as a dotted string xxx.xxx.xxx.xxx",
+                "label": "NTP1",
+                "name": "NTP1",
+                "size": 12,
+                "type": "string"
+            },
+            {
+                "access": "RW",
+                "desc": "IPv4 numeric NTP address as a dotted string xxx.xxx.xxx.xxx",
+                "label": "NTP2",
+                "name": "NTP2",
+                "size": 12,
+                "type": "string"
+            },
+            {
+                "access": "RW",
+                "desc": "Domain name (24 chars max)",
+                "label": "Domain",
+                "name": "DomNam",
+                "size": 12,
+                "type": "string"
+            },
+            {
+                "access": "RW",
+                "desc": "Host name (24 chars max)",
+                "label": "Host Name",
+                "name": "HostNam",
+                "size": 12,
+                "type": "string"
+            },
+            {
+                "name": "Pad",
+                "size": 1,
+                "type": "pad"
+            }
+        ],
+        "type": "group"
+    },
+    "id": 12
 }

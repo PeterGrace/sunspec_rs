@@ -1,189 +1,162 @@
 {
-  "group": {
-    "name": "model_17",
-    "type": "group",
-    "label": "Serial Interface",
-    "desc": "Include this model for serial interface configuration support",
-    "points": [
-      {
-        "name": "ID",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "static": "S",
-        "label": "Model ID",
-        "desc": "Model identifier",
-        "value": 17
-      },
-      {
-        "name": "L",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "static": "S",
-        "label": "Model Length",
-        "desc": "Model length"
-      },
-      {
-        "name": "Nam",
-        "type": "string",
-        "size": 4,
-        "access": "RW",
-        "label": "Name",
-        "desc": "Interface name (8 chars)"
-      },
-      {
-        "name": "Rte",
-        "type": "uint32",
-        "size": 2,
-        "units": "bps",
-        "access": "RW",
-        "mandatory": "M",
-        "label": "Rate",
-        "desc": "Interface baud rate in bits per second"
-      },
-      {
-        "name": "Bits",
-        "type": "uint16",
-        "size": 1,
-        "access": "RW",
-        "mandatory": "M",
-        "label": "Bits",
-        "desc": "Number of data bits per character"
-      },
-      {
-        "name": "Pty",
-        "type": "enum16",
-        "size": 1,
-        "access": "RW",
-        "mandatory": "M",
-        "label": "Parity",
-        "desc": "Bitmask value.  Parity setting",
-        "symbols": [
-          {
-            "name": "NONE",
-            "value": 0,
-            "label": "none",
-            "desc": "No Parity"
-          },
-          {
-            "name": "ODD",
-            "value": 1,
-            "label": "odd",
-            "desc": "Odd Parity"
-          },
-          {
-            "name": "EVEN",
-            "value": 2,
-            "label": "even",
-            "desc": "Even Parity"
-          }
-        ]
-      },
-      {
-        "name": "Dup",
-        "type": "enum16",
-        "size": 1,
-        "access": "RW",
-        "label": "Duplex",
-        "desc": "Enumerated value.  Duplex mode",
-        "symbols": [
-          {
-            "name": "FULL",
-            "value": 0,
-            "label": "full",
-            "desc": "Full Duplex"
-          },
-          {
-            "name": "HALF",
-            "value": 1,
-            "label": "half",
-            "desc": "Half Duplex"
-          }
-        ]
-      },
-      {
-        "name": "Flw",
-        "type": "enum16",
-        "size": 1,
-        "access": "RW",
-        "label": "Flow Control",
-        "desc": "Flow Control Method",
-        "symbols": [
-          {
-            "name": "NONE",
-            "value": 0,
-            "label": "none",
-            "desc": "No flow control"
-          },
-          {
-            "name": "HW",
-            "value": 1,
-            "label": "hardware",
-            "desc": "Hardware flow control"
-          },
-          {
-            "name": "XONXOFF",
-            "value": 2,
-            "label": "software",
-            "desc": "Soft (XON/XOFF) flow control"
-          }
-        ]
-      },
-      {
-        "name": "Typ",
-        "type": "enum16",
-        "size": 1,
-        "label": "Interface Type",
-        "desc": "Enumerated value.  Interface type",
-        "symbols": [
-          {
-            "name": "UNKNOWN",
-            "value": 0,
-            "label": "unknown",
-            "desc": "Unknown interface type"
-          },
-          {
-            "name": "RS232",
-            "value": 1,
-            "label": "RS232",
-            "desc": "RS232 interface type"
-          },
-          {
-            "name": "RS485",
-            "value": 2,
-            "label": "RS485",
-            "desc": "RS485 interface type"
-          }
-        ]
-      },
-      {
-        "name": "Pcol",
-        "type": "enum16",
-        "size": 1,
-        "label": "Protocol",
-        "desc": "Enumerated value. Serial protocol selection",
-        "symbols": [
-          {
-            "name": "UNKNOWN",
-            "value": 0,
-            "label": "unknown",
-            "desc": "Unknown protocol"
-          },
-          {
-            "name": "MODBUS",
-            "value": 1,
-            "label": "Modbus",
-            "desc": "Modbus protocol"
-          },
-          {
-            "name": "VENDOR",
-            "value": 2,
-            "label": "vendor specific"
-          }
-        ]
-      }
-    ]
-  },
-  "id": 17
+    "group": {
+        "desc": "Include this model for serial interface configuration support",
+        "label": "Serial Interface",
+        "name": "model_17",
+        "points": [
+            {
+                "desc": "Model identifier",
+                "label": "Model ID",
+                "mandatory": "M",
+                "name": "ID",
+                "size": 1,
+                "static": "S",
+                "type": "uint16",
+                "value": 17
+            },
+            {
+                "desc": "Model length",
+                "label": "Model Length",
+                "mandatory": "M",
+                "name": "L",
+                "size": 1,
+                "static": "S",
+                "type": "uint16"
+            },
+            {
+                "access": "RW",
+                "desc": "Interface name (8 chars)",
+                "label": "Name",
+                "name": "Nam",
+                "size": 4,
+                "type": "string"
+            },
+            {
+                "access": "RW",
+                "desc": "Interface baud rate in bits per second",
+                "label": "Rate",
+                "mandatory": "M",
+                "name": "Rte",
+                "size": 2,
+                "type": "uint32",
+                "units": "bps"
+            },
+            {
+                "access": "RW",
+                "desc": "Number of data bits per character",
+                "label": "Bits",
+                "mandatory": "M",
+                "name": "Bits",
+                "size": 1,
+                "type": "uint16"
+            },
+            {
+                "access": "RW",
+                "desc": "Bitmask value.  Parity setting",
+                "label": "Parity",
+                "mandatory": "M",
+                "name": "Pty",
+                "size": 1,
+                "symbols": [
+                    {
+                        "name": "NONE",
+                        "value": 0
+                    },
+                    {
+                        "name": "ODD",
+                        "value": 1
+                    },
+                    {
+                        "name": "EVEN",
+                        "value": 2
+                    }
+                ],
+                "type": "enum16"
+            },
+            {
+                "access": "RW",
+                "desc": "Enumerated value.  Duplex mode",
+                "label": "Duplex",
+                "name": "Dup",
+                "size": 1,
+                "symbols": [
+                    {
+                        "name": "FULL",
+                        "value": 0
+                    },
+                    {
+                        "name": "HALF",
+                        "value": 1
+                    }
+                ],
+                "type": "enum16"
+            },
+            {
+                "access": "RW",
+                "desc": "Flow Control Method",
+                "label": "Flow Control",
+                "name": "Flw",
+                "size": 1,
+                "symbols": [
+                    {
+                        "name": "NONE",
+                        "value": 0
+                    },
+                    {
+                        "name": "HW",
+                        "value": 1
+                    },
+                    {
+                        "name": "XONXOFF",
+                        "value": 2
+                    }
+                ],
+                "type": "enum16"
+            },
+            {
+                "desc": "Enumerated value.  Interface type",
+                "label": "Interface Type",
+                "name": "Typ",
+                "size": 1,
+                "symbols": [
+                    {
+                        "name": "UNKNOWN",
+                        "value": 0
+                    },
+                    {
+                        "name": "RS232",
+                        "value": 1
+                    },
+                    {
+                        "name": "RS485",
+                        "value": 2
+                    }
+                ],
+                "type": "enum16"
+            },
+            {
+                "desc": "Enumerated value. Serial protocol selection",
+                "label": "Protocol",
+                "name": "Pcol",
+                "size": 1,
+                "symbols": [
+                    {
+                        "name": "UNKNOWN",
+                        "value": 0
+                    },
+                    {
+                        "name": "MODBUS",
+                        "value": 1
+                    },
+                    {
+                        "name": "VENDOR",
+                        "value": 2
+                    }
+                ],
+                "type": "enum16"
+            }
+        ],
+        "type": "group"
+    },
+    "id": 17
 }

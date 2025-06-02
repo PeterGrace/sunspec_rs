@@ -1,214 +1,19 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "definitions": {
-        "group": {
-            "properties": {
-                "comments": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "count": {
-                    "default": 1,
-                    "type": [
-                        "integer",
-                        "string"
-                    ]
-                },
-                "desc": {
-                    "type": "string"
-                },
-                "detail": {
-                    "type": "string"
-                },
-                "groups": {
-                    "items": {
-                        "$ref": "#/definitions/group"
-                    },
-                    "type": "array"
-                },
-                "label": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "notes": {
-                    "type": "string"
-                },
-                "points": {
-                    "items": {
-                        "$ref": "#/definitions/point"
-                    },
-                    "type": "array"
-                },
-                "type": {
-                    "enum": [
-                        "group",
-                        "sync"
-                    ]
-                }
-            },
-            "required": [
-                "name",
-                "type"
-            ],
-            "type": "object"
-        },
-        "point": {
-            "properties": {
-                "access": {
-                    "default": "R",
-                    "enum": [
-                        "R",
-                        "RW"
-                    ],
-                    "type": "string"
-                },
-                "comments": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "count": {
-                    "type": "integer"
-                },
-                "desc": {
-                    "type": "string"
-                },
-                "detail": {
-                    "type": "string"
-                },
-                "label": {
-                    "type": "string"
-                },
-                "mandatory": {
-                    "default": "O",
-                    "enum": [
-                        "M",
-                        "O"
-                    ],
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "notes": {
-                    "type": "string"
-                },
-                "sf": {
-                    "maximum": 10,
-                    "minimum": -10,
-                    "type": [
-                        "integer",
-                        "string"
-                    ]
-                },
-                "size": {
-                    "type": "integer"
-                },
-                "static": {
-                    "default": "D",
-                    "enum": [
-                        "D",
-                        "S"
-                    ],
-                    "type": "string"
-                },
-                "symbols": {
-                    "items": {
-                        "$ref": "#/definitions/symbol"
-                    },
-                    "type": "array"
-                },
-                "type": {
-                    "enum": [
-                        "int16",
-                        "int32",
-                        "int64",
-                        "raw16",
-                        "uint16",
-                        "uint32",
-                        "uint64",
-                        "acc16",
-                        "acc32",
-                        "acc64",
-                        "bitfield16",
-                        "bitfield32",
-                        "bitfield64",
-                        "enum16",
-                        "enum32",
-                        "float32",
-                        "float64",
-                        "string",
-                        "sf",
-                        "pad",
-                        "ipaddr",
-                        "ipv6addr",
-                        "eui48",
-                        "sunssf",
-                        "count"
-                    ],
-                    "type": "string"
-                },
-                "units": {
-                    "type": "string"
-                },
-                "value": {
-                    "type": [
-                        "integer",
-                        "string"
-                    ]
-                }
-            },
-            "required": [
-                "name",
-                "type",
-                "size"
-            ],
-            "type": "object"
-        },
-        "symbol": {
-            "properties": {
-                "comments": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "desc": {
-                    "type": "string"
-                },
-                "detail": {
-                    "type": "string"
-                },
-                "label": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "notes": {
-                    "type": "string"
-                },
-                "value": {}
-            },
-            "required": [
-                "name",
-                "value"
-            ],
-            "type": "object"
-        }
-    },
     "description": "JSON Schema for SunSpec information model definition",
+    "type": "object",
+    "required": ["id", "group"],
     "properties": {
-        "comments": {
-            "items": {
-                "type": "string"
-            },
-            "type": "array"
+        "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
+        },
+        "group": {
+            "$ref": "#/definitions/group"
+        },
+        "label": {
+            "type": "string"
         },
         "desc": {
             "type": "string"
@@ -216,24 +21,167 @@
         "detail": {
             "type": "string"
         },
-        "group": {
-            "$ref": "#/definitions/group"
-        },
-        "id": {
-            "maximum": 65535,
-            "minimum": 1,
-            "type": "integer"
-        },
-        "label": {
-            "type": "string"
-        },
         "notes": {
             "type": "string"
+        },
+        "comments": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
         }
     },
-    "required": [
-        "id",
-        "group"
-    ],
-    "type": "object"
+    "definitions": {
+        "group": {
+            "type": "object",
+            "required": ["name", "type"],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": ["group", "sync"]
+                },
+                "count": {
+                    "type": ["integer", "string"],
+                    "default": 1
+                },
+                "points": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/point"
+                    }
+                },
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/group"
+                    }
+                },
+                "label": {
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "detail": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "comments": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "point": {
+            "type": "object",
+            "required": ["name", "type", "size"],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": ["int16", "int32", "int64", "raw16", "uint16", "uint32", "uint64" ,"acc16", "acc32",
+                             "acc64", "bitfield16", "bitfield32", "bitfield64", "enum16", "enum32", "float32",
+                             "float64", "string", "sf", "pad", "ipaddr", "ipv6addr", "eui48", "sunssf", "count"]
+                },
+                "value": {
+                    "type": ["integer", "string"]
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "sf": {
+                    "type": ["integer", "string"],
+                    "minimum": -10,
+                    "maximum": 10
+                },
+                "units": {
+                    "type": "string"
+                },
+                "access": {
+                    "type": "string",
+                    "enum": ["R", "RW"],
+                    "default": "R"
+                },
+                "mandatory": {
+                    "type": "string",
+                    "enum": ["M", "O"],
+                    "default": "O"
+                },
+                "static": {
+                    "type": "string",
+                    "enum": ["D", "S"],
+                    "default": "D"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "detail": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "comments": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "symbols": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/symbol"
+                    }
+                },
+                "standards": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "symbol": {
+            "type": "object",
+            "required": ["name", "value"],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "value": {},
+                "label": {
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "detail": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "comments": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
 }

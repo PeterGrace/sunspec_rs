@@ -1,616 +1,596 @@
 {
-  "group": {
-    "name": "volt_var",
-    "type": "group",
-    "label": "Static Volt-VAR",
-    "desc": "Static Volt-VAR Arrays ",
-    "points": [
-      {
-        "name": "ID",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "static": "S",
-        "label": "Model ID",
-        "desc": "Model identifier",
-        "value": 126
-      },
-      {
-        "name": "L",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "static": "S",
-        "label": "Model Length",
-        "desc": "Model length"
-      },
-      {
-        "name": "ActCrv",
-        "type": "uint16",
-        "size": 1,
-        "access": "RW",
-        "mandatory": "M",
-        "label": "ActCrv",
-        "desc": "Index of active curve. 0 = no active curve"
-      },
-      {
-        "name": "ModEna",
-        "type": "bitfield16",
-        "size": 1,
-        "access": "RW",
-        "mandatory": "M",
-        "label": "ModEna",
-        "desc": "Is Volt-VAR control active",
-        "symbols": [
-          {
-            "name": "ENABLED",
-            "value": 0
-          }
-        ]
-      },
-      {
-        "name": "WinTms",
-        "type": "uint16",
-        "size": 1,
-        "units": "Secs",
-        "access": "RW",
-        "label": "WinTms",
-        "desc": "Time window for volt-VAR change"
-      },
-      {
-        "name": "RvrtTms",
-        "type": "uint16",
-        "size": 1,
-        "units": "Secs",
-        "access": "RW",
-        "label": "RvrtTms",
-        "desc": "Timeout period for volt-VAR curve selection"
-      },
-      {
-        "name": "RmpTms",
-        "type": "uint16",
-        "size": 1,
-        "units": "Secs",
-        "access": "RW",
-        "label": "RmpTms",
-        "desc": "The time of the PT1 in seconds (time to accomplish a change of 95%)"
-      },
-      {
-        "name": "NCrv",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "label": "NCrv",
-        "desc": "Number of curves supported (recommend 4)"
-      },
-      {
-        "name": "NPt",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "label": "NPt",
-        "desc": "Number of curve points supported (maximum of 20)"
-      },
-      {
-        "name": "V_SF",
-        "type": "sunssf",
-        "size": 1,
-        "mandatory": "M",
-        "label": "V_SF",
-        "desc": "Scale factor for percent VRef"
-      },
-      {
-        "name": "DeptRef_SF",
-        "type": "sunssf",
-        "size": 1,
-        "mandatory": "M",
-        "label": "DeptRef_SF",
-        "desc": "Scale factor for dependent variable"
-      },
-      {
-        "name": "RmpIncDec_SF",
-        "type": "sunssf",
-        "size": 1
-      }
-    ],
-    "groups": [
-      {
-        "name": "curve",
-        "type": "group",
-        "count": 0,
+    "group": {
+        "desc": "Static Volt-VAR Arrays ",
+        "groups": [
+            {
+                "count": 0,
+                "name": "curve",
+                "points": [
+                    {
+                        "access": "RW",
+                        "desc": "Number of active points in array.",
+                        "label": "ActPt",
+                        "mandatory": "M",
+                        "name": "ActPt",
+                        "size": 1,
+                        "type": "uint16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Meaning of dependent variable: 1=%WMax 2=%VArMax 3=%VArAval.",
+                        "label": "DeptRef",
+                        "mandatory": "M",
+                        "name": "DeptRef",
+                        "size": 1,
+                        "symbols": [
+                            {
+                                "name": "WMax",
+                                "value": 1
+                            },
+                            {
+                                "name": "VArMax",
+                                "value": 2
+                            },
+                            {
+                                "name": "VArAval",
+                                "value": 3
+                            }
+                        ],
+                        "type": "enum16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 1 Volts.",
+                        "label": "V1",
+                        "mandatory": "M",
+                        "name": "V1",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 1 VARs.",
+                        "label": "VAr1",
+                        "mandatory": "M",
+                        "name": "VAr1",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 2 Volts.",
+                        "label": "V2",
+                        "name": "V2",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 2 VARs.",
+                        "label": "VAr2",
+                        "name": "VAr2",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 2 Volts.",
+                        "label": "V3",
+                        "name": "V3",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 3 VARs.",
+                        "label": "VAr3",
+                        "name": "VAr3",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 4 Volts.",
+                        "label": "V4",
+                        "name": "V4",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 4 VARs.",
+                        "label": "VAr4",
+                        "name": "VAr4",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 5 Volts.",
+                        "label": "V5",
+                        "name": "V5",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 5 VARs.",
+                        "label": "VAr5",
+                        "name": "VAr5",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 6 Volts.",
+                        "label": "V6",
+                        "name": "V6",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 6 VARs.",
+                        "label": "VAr6",
+                        "name": "VAr6",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 7 Volts.",
+                        "label": "V7",
+                        "name": "V7",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 7 VARs.",
+                        "label": "VAr7",
+                        "name": "VAr7",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 8 Volts.",
+                        "label": "V8",
+                        "name": "V8",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 8 VARs.",
+                        "label": "VAr8",
+                        "name": "VAr8",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 9 Volts.",
+                        "label": "V9",
+                        "name": "V9",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 9 VARs.",
+                        "label": "VAr9",
+                        "name": "VAr9",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 10 Volts.",
+                        "label": "V10",
+                        "name": "V10",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 10 VARs.",
+                        "label": "VAr10",
+                        "name": "VAr10",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 11 Volts.",
+                        "label": "V11",
+                        "name": "V11",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 11 VARs.",
+                        "label": "VAr11",
+                        "name": "VAr11",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 12 Volts.",
+                        "label": "V12",
+                        "name": "V12",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 12 VARs.",
+                        "label": "VAr12",
+                        "name": "VAr12",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 13 Volts.",
+                        "label": "V13",
+                        "name": "V13",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 13 VARs.",
+                        "label": "VAr13",
+                        "name": "VAr13",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 14 Volts.",
+                        "label": "V14",
+                        "name": "V14",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 14 VARs.",
+                        "label": "VAr14",
+                        "name": "VAr14",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 15 Volts.",
+                        "label": "V15",
+                        "name": "V15",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 15 VARs.",
+                        "label": "VAr15",
+                        "name": "VAr15",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 16 Volts.",
+                        "label": "V16",
+                        "name": "V16",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 16 VARs.",
+                        "label": "VAr16",
+                        "name": "VAr16",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 17 Volts.",
+                        "label": "V17",
+                        "name": "V17",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 17 VARs.",
+                        "label": "VAr17",
+                        "name": "VAr17",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 18 Volts.",
+                        "label": "V18",
+                        "name": "V18",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 18 VARs.",
+                        "label": "VAr18",
+                        "name": "VAr18",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 19 Volts.",
+                        "label": "V19",
+                        "name": "V19",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 19 VARs.",
+                        "label": "VAr19",
+                        "name": "VAr19",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 20 Volts.",
+                        "label": "V20",
+                        "name": "V20",
+                        "sf": "V_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% VRef"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Point 20 VARs.",
+                        "label": "VAr20",
+                        "name": "VAr20",
+                        "sf": "DeptRef_SF",
+                        "size": 1,
+                        "type": "int16"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "Optional description for curve. (Max 16 chars)",
+                        "label": "CrvNam",
+                        "name": "CrvNam",
+                        "size": 8,
+                        "type": "string"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "The time of the PT1 in seconds (time to accomplish a change of 95%).",
+                        "label": "RmpTms",
+                        "name": "RmpTms",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "Secs"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "The maximum rate at which the VAR value may be reduced in response to changes in the voltage value. %refVal is %WMax %VArMax or %VArAval depending on value of DeptRef.",
+                        "label": "RmpDecTmm",
+                        "name": "RmpDecTmm",
+                        "sf": "RmpIncDec_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% ref_value/min"
+                    },
+                    {
+                        "access": "RW",
+                        "desc": "The maximum rate at which the VAR value may be increased in response to changes in the voltage value. %refVal is %WMax %VArMax or %VArAval depending on value of DeptRef.",
+                        "label": "RmpIncTmm",
+                        "name": "RmpIncTmm",
+                        "sf": "RmpIncDec_SF",
+                        "size": 1,
+                        "type": "uint16",
+                        "units": "% ref_value/min"
+                    },
+                    {
+                        "desc": "Boolean flag indicates if curve is read-only or can be modified.",
+                        "label": "ReadOnly",
+                        "mandatory": "M",
+                        "name": "ReadOnly",
+                        "size": 1,
+                        "symbols": [
+                            {
+                                "name": "READWRITE",
+                                "value": 0
+                            },
+                            {
+                                "name": "READONLY",
+                                "value": 1
+                            }
+                        ],
+                        "type": "enum16"
+                    }
+                ],
+                "type": "group"
+            }
+        ],
+        "label": "Static Volt-VAR",
+        "name": "volt_var",
         "points": [
-          {
-            "name": "ActPt",
-            "type": "uint16",
-            "size": 1,
-            "access": "RW",
-            "mandatory": "M",
-            "label": "ActPt",
-            "desc": "Number of active points in array"
-          },
-          {
-            "name": "DeptRef",
-            "type": "enum16",
-            "size": 1,
-            "access": "RW",
-            "mandatory": "M",
-            "label": "DeptRef",
-            "desc": "Meaning of dependent variable: 1=%WMax 2=%VArMax 3=%VArAval",
-            "symbols": [
-              {
-                "name": "WMax",
-                "value": 1
-              },
-              {
-                "name": "VArMax",
-                "value": 2
-              },
-              {
-                "name": "VArAval",
-                "value": 3
-              }
-            ]
-          },
-          {
-            "name": "V1",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "mandatory": "M",
-            "label": "V1",
-            "desc": "Point 1 Volts"
-          },
-          {
-            "name": "VAr1",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "mandatory": "M",
-            "label": "VAr1",
-            "desc": "Point 1 VARs"
-          },
-          {
-            "name": "V2",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V2",
-            "desc": "Point 2 Volts"
-          },
-          {
-            "name": "VAr2",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr2",
-            "desc": "Point 2 VARs"
-          },
-          {
-            "name": "V3",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V3",
-            "desc": "Point 2 Volts"
-          },
-          {
-            "name": "VAr3",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr3",
-            "desc": "Point 3 VARs"
-          },
-          {
-            "name": "V4",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V4",
-            "desc": "Point 4 Volts"
-          },
-          {
-            "name": "VAr4",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr4",
-            "desc": "Point 4 VARs"
-          },
-          {
-            "name": "V5",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V5",
-            "desc": "Point 5 Volts"
-          },
-          {
-            "name": "VAr5",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr5",
-            "desc": "Point 5 VARs"
-          },
-          {
-            "name": "V6",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V6",
-            "desc": "Point 6 Volts"
-          },
-          {
-            "name": "VAr6",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr6",
-            "desc": "Point 6 VARs"
-          },
-          {
-            "name": "V7",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V7",
-            "desc": "Point 7 Volts"
-          },
-          {
-            "name": "VAr7",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr7",
-            "desc": "Point 7 VARs"
-          },
-          {
-            "name": "V8",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V8",
-            "desc": "Point 8 Volts"
-          },
-          {
-            "name": "VAr8",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr8",
-            "desc": "Point 8 VARs"
-          },
-          {
-            "name": "V9",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V9",
-            "desc": "Point 9 Volts"
-          },
-          {
-            "name": "VAr9",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr9",
-            "desc": "Point 9 VARs"
-          },
-          {
-            "name": "V10",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V10",
-            "desc": "Point 10 Volts"
-          },
-          {
-            "name": "VAr10",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr10",
-            "desc": "Point 10 VARs"
-          },
-          {
-            "name": "V11",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V11",
-            "desc": "Point 11 Volts"
-          },
-          {
-            "name": "VAr11",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr11",
-            "desc": "Point 11 VARs"
-          },
-          {
-            "name": "V12",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V12",
-            "desc": "Point 12 Volts"
-          },
-          {
-            "name": "VAr12",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr12",
-            "desc": "Point 12 VARs"
-          },
-          {
-            "name": "V13",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V13",
-            "desc": "Point 13 Volts"
-          },
-          {
-            "name": "VAr13",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr13",
-            "desc": "Point 13 VARs"
-          },
-          {
-            "name": "V14",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V14",
-            "desc": "Point 14 Volts"
-          },
-          {
-            "name": "VAr14",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr14",
-            "desc": "Point 14 VARs"
-          },
-          {
-            "name": "V15",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V15",
-            "desc": "Point 15 Volts"
-          },
-          {
-            "name": "VAr15",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr15",
-            "desc": "Point 15 VARs"
-          },
-          {
-            "name": "V16",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V16",
-            "desc": "Point 16 Volts"
-          },
-          {
-            "name": "VAr16",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr16",
-            "desc": "Point 16 VARs"
-          },
-          {
-            "name": "V17",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V17",
-            "desc": "Point 17 Volts"
-          },
-          {
-            "name": "VAr17",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr17",
-            "desc": "Point 17 VARs"
-          },
-          {
-            "name": "V18",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V18",
-            "desc": "Point 18 Volts"
-          },
-          {
-            "name": "VAr18",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr18",
-            "desc": "Point 18 VARs"
-          },
-          {
-            "name": "V19",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V19",
-            "desc": "Point 19 Volts"
-          },
-          {
-            "name": "VAr19",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr19",
-            "desc": "Point 19 VARs"
-          },
-          {
-            "name": "V20",
-            "type": "uint16",
-            "size": 1,
-            "sf": "V_SF",
-            "units": "%VRef",
-            "access": "RW",
-            "label": "V20",
-            "desc": "Point 20 Volts"
-          },
-          {
-            "name": "VAr20",
-            "type": "int16",
-            "size": 1,
-            "sf": "DeptRef_SF",
-            "units": "%DeptRef",
-            "access": "RW",
-            "label": "VAr20",
-            "desc": "Point 20 VARs"
-          },
-          {
-            "name": "CrvNam",
-            "type": "string",
-            "size": 8,
-            "access": "RW",
-            "label": "CrvNam",
-            "desc": "Optional description for curve. (Max 16 chars)"
-          },
-          {
-            "name": "RmpTms",
-            "type": "uint16",
-            "size": 1,
-            "units": "Secs",
-            "access": "RW",
-            "label": "RmpTms",
-            "desc": "The time of the PT1 in seconds (time to accomplish a change of 95%)"
-          },
-          {
-            "name": "RmpDecTmm",
-            "type": "uint16",
-            "size": 1,
-            "sf": "RmpIncDec_SF",
-            "units": "%ref_value/min",
-            "access": "RW",
-            "label": "RmpDecTmm",
-            "desc": "The maximum rate at which the VAR value may be reduced in response to changes in the voltage value. %ref_value is %WMax %VArMax or %VArAval depending on value of DeptRef"
-          },
-          {
-            "name": "RmpIncTmm",
-            "type": "uint16",
-            "size": 1,
-            "sf": "RmpIncDec_SF",
-            "units": "%ref_value/min",
-            "access": "RW",
-            "label": "RmpIncTmm",
-            "desc": "The maximum rate at which the VAR value may be increased in response to changes in the voltage value. %ref_value is %WMax %VArMax or %VArAval depending on value of DeptRef"
-          },
-          {
-            "name": "ReadOnly",
-            "type": "enum16",
-            "size": 1,
-            "mandatory": "M",
-            "label": "ReadOnly",
-            "desc": "Boolean flag indicates if curve is read-only or can be modified",
-            "symbols": [
-              {
-                "name": "READWRITE",
-                "value": 0
-              },
-              {
-                "name": "READONLY",
-                "value": 1
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  "id": 126
+            {
+                "desc": "Model identifier",
+                "label": "Model ID",
+                "mandatory": "M",
+                "name": "ID",
+                "size": 1,
+                "static": "S",
+                "type": "uint16",
+                "value": 126
+            },
+            {
+                "desc": "Model length",
+                "label": "Model Length",
+                "mandatory": "M",
+                "name": "L",
+                "size": 1,
+                "static": "S",
+                "type": "uint16"
+            },
+            {
+                "access": "RW",
+                "desc": "Index of active curve. 0=no active curve.",
+                "label": "ActCrv",
+                "mandatory": "M",
+                "name": "ActCrv",
+                "size": 1,
+                "type": "uint16"
+            },
+            {
+                "access": "RW",
+                "desc": "Is Volt-VAR control active.",
+                "label": "ModEna",
+                "mandatory": "M",
+                "name": "ModEna",
+                "size": 1,
+                "symbols": [
+                    {
+                        "name": "ENABLED",
+                        "value": 0
+                    }
+                ],
+                "type": "bitfield16"
+            },
+            {
+                "access": "RW",
+                "desc": "Time window for volt-VAR change.",
+                "label": "WinTms",
+                "name": "WinTms",
+                "size": 1,
+                "type": "uint16",
+                "units": "Secs"
+            },
+            {
+                "access": "RW",
+                "desc": "Timeout period for volt-VAR curve selection.",
+                "label": "RvrtTms",
+                "name": "RvrtTms",
+                "size": 1,
+                "type": "uint16",
+                "units": "Secs"
+            },
+            {
+                "access": "RW",
+                "desc": "The time of the PT1 in seconds (time to accomplish a change of 95%).",
+                "label": "RmpTms",
+                "name": "RmpTms",
+                "size": 1,
+                "type": "uint16",
+                "units": "Secs"
+            },
+            {
+                "desc": "Number of curves supported (recommend 4).",
+                "label": "NCrv",
+                "mandatory": "M",
+                "name": "NCrv",
+                "size": 1,
+                "type": "uint16"
+            },
+            {
+                "desc": "Number of curve points supported (maximum of 20).",
+                "label": "NPt",
+                "mandatory": "M",
+                "name": "NPt",
+                "size": 1,
+                "type": "uint16"
+            },
+            {
+                "desc": "Scale factor for percent VRef.",
+                "label": "V_SF",
+                "mandatory": "M",
+                "name": "V_SF",
+                "size": 1,
+                "type": "sunssf"
+            },
+            {
+                "desc": "scale factor for dependent variable.",
+                "label": "DeptRef_SF",
+                "mandatory": "M",
+                "name": "DeptRef_SF",
+                "size": 1,
+                "type": "sunssf"
+            },
+            {
+                "name": "RmpIncDec_SF",
+                "size": 1,
+                "type": "sunssf"
+            }
+        ],
+        "type": "group"
+    },
+    "id": 126
 }

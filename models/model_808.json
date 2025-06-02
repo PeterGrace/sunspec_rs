@@ -1,52 +1,52 @@
 {
-  "group": {
-    "name": "flow_battery_module",
-    "type": "group",
-    "label": "Flow Battery Module Model",
-    "points": [
-      {
-        "name": "ID",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "static": "S",
-        "label": "Model ID",
-        "desc": "Model identifier",
-        "value": 808
-      },
-      {
-        "name": "L",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "static": "S",
-        "label": "Model Length",
-        "desc": "Model length"
-      },
-      {
-        "name": "ModuleTBD",
-        "type": "uint16",
-        "size": 1,
-        "mandatory": "M",
-        "label": "Module Points To Be Determined"
-      }
-    ],
-    "groups": [
-      {
-        "name": "stack",
-        "type": "group",
-        "count": 0,
+    "group": {
+        "groups": [
+            {
+                "count": 0,
+                "name": "stack",
+                "points": [
+                    {
+                        "label": "Stack Points To Be Determined",
+                        "mandatory": "M",
+                        "name": "StackTBD",
+                        "size": 1,
+                        "type": "uint16"
+                    }
+                ],
+                "type": "group"
+            }
+        ],
+        "label": "Flow Battery Module Model",
+        "name": "flow_battery_module",
         "points": [
-          {
-            "name": "StackTBD",
-            "type": "uint16",
-            "size": 1,
-            "mandatory": "M",
-            "label": "Stack Points To Be Determined"
-          }
-        ]
-      }
-    ]
-  },
-  "id": 808
+            {
+                "desc": "Model identifier",
+                "label": "Model ID",
+                "mandatory": "M",
+                "name": "ID",
+                "size": 1,
+                "static": "S",
+                "type": "uint16",
+                "value": 808
+            },
+            {
+                "desc": "Model length",
+                "label": "Model Length",
+                "mandatory": "M",
+                "name": "L",
+                "size": 1,
+                "static": "S",
+                "type": "uint16"
+            },
+            {
+                "label": "Module Points To Be Determined",
+                "mandatory": "M",
+                "name": "ModuleTBD",
+                "size": 1,
+                "type": "uint16"
+            }
+        ],
+        "type": "group"
+    },
+    "id": 808
 }
