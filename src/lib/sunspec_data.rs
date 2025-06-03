@@ -2,7 +2,7 @@ use crate::json::group::Group;
 use crate::json::misc::JSONModel;
 use std::collections::HashMap;
 
-use crate::sunspec_models::{Model, SunSpecModels, Symbol};
+use crate::sunspec_models::{Model, SunSpecModels, Symbol, ValueType};
 use std::fs::File;
 #[derive(Default, Debug)]
 pub struct ResolvedModel {
@@ -12,8 +12,8 @@ pub struct ResolvedModel {
     pub notes: Option<String>,
 }
 
-/// A struct that holds a hash of all known model definitions, used as a library for lazy-loading
-/// of data into a model as needed.
+/// A struct that holds a hashmap of all known model definitions (SunSpecModels), used as a
+/// library for lazy-loading of data into a model as needed.  Also contains the point catalog/cache.
 #[derive(Default, Debug, Clone)]
 pub struct SunSpecData {
     pub models: HashMap<u16, SunSpecModels>,
@@ -51,7 +51,9 @@ impl SunSpecData {
                 anyhow::bail!("Couldn't deserialize xml: {e}");
             }
         };
-
+        warn!(
+            "XML models are deprecated; you likely want to locate the json version of this model."
+        );
         Ok(ssm)
     }
     fn load_model_json(id: u16, manufacturer: &Option<String>) -> anyhow::Result<SunSpecModels> {

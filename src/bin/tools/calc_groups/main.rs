@@ -11,16 +11,13 @@ use std::convert::TryFrom;
 use sunspec_rs::json::group::{Group, GroupCount};
 use sunspec_rs::json::misc::JSONModel;
 use sunspec_rs::json::point::{Point, PointType, PointValue};
+use sunspec_rs::sunspec_connection::PointNode;
 use sunspec_rs::sunspec_connection::{SunSpecConnection, SunSpecReadError, Word};
 use sunspec_rs::sunspec_data::SunSpecData;
 use sunspec_rs::sunspec_models::{ModelSource, ValueType};
 use tokio::sync::RwLock;
 use tracing_subscriber::fmt::format::FmtSpan;
 use tracing_subscriber::{prelude::*, EnvFilter, Registry};
-
-lazy_static! {
-    static ref CATALOG: RwLock<HashMap<String, PointNode>> = RwLock::new(HashMap::new());
-}
 
 pub async fn setup(addr: &str, slave_id: u8) -> (SunSpecConnection, SunSpecData) {
     let socket_addr = addr.parse().unwrap();
@@ -60,17 +57,23 @@ pub async fn main() {
 
     tracing::subscriber::set_global_default(subscriber).expect("Failed to set tracing subscriber");
     //endregion
-    let mut catalog: HashMap<String, ValueType> = HashMap::new();
     let addr = "127.0.0.1:8502";
     let (mut ss, _) = setup(addr, 1).await;
     let model: u16 = 705;
     if let Some(m) = ss.models.clone().get(&model) {
         info!("Model: {}, length: {}", model, m.len);
-        // why do I need to read two more than the specified length?
-        if let Ok(mut data) = ss.get_raw(m.address, m.len + 2).await {
-            if let ModelSource::Json(json) = &m.model.source {
+        if let ModelSource::Json(json) = &m.model.source {
+            // m.len + 2 because len doesn't include ID and L values in its calculation
+            if let Ok(mut data) = ss.get_raw(m.address, m.len + 2).await {
                 // start with our root level points
-                process_group(&mut data, &json.group, None, &mut m.address.clone()).await;
+                process_json_group(
+                    &mut data,
+                    &json.group,
+                    None,
+                    &mut m.address.clone(),
+                    &mut ss.catalog,
+                )
+                .await;
                 // ok, now for groups
             }
         }
@@ -97,11 +100,12 @@ pub fn parse_point_data(p: &Point, d: &Vec<Word>) -> anyhow::Result<ValueType> {
     }
 }
 #[async_recursion]
-pub async fn process_group(
+pub async fn process_json_group(
     data: &mut Vec<Word>,
     group: &Group,
     prefix: Option<String>,
     address: &mut u16,
+    mut catalog: &mut HashMap<String, PointNode>,
 ) {
     let newprefix = match prefix.clone() {
         Some(s) => {
@@ -117,7 +121,7 @@ pub async fn process_group(
                 Some(s) => format!(".{}.{}", s.split('.').nth(1).unwrap(), countval),
                 None => format!(".{}", countval),
             };
-            if let Some(num_of_groups_val) = CATALOG.read().await.get(&count_lookup) {
+            if let Some(num_of_groups_val) = catalog.get(&count_lookup) {
                 if let ValueType::Integer(num_groups) = num_of_groups_val.value {
                     info!("Group: {}, count: {}", newprefix, num_groups);
                     entries = num_groups as i64;
@@ -142,7 +146,7 @@ pub async fn process_group(
                     info!("{} @0x{} {:#?}", pointname, address, v);
                     // this is too simple, the actual solution will need to account for
                     // which group and group number the point belongs to
-                    CATALOG.write().await.insert(
+                    catalog.insert(
                         pointname,
                         PointNode {
                             value: v,
@@ -160,12 +164,7 @@ pub async fn process_group(
             }
         }
         for g in group.groups.iter() {
-            process_group(data, g, Some(newprefix.clone()), address).await;
+            process_json_group(data, g, Some(newprefix.clone()), address, &mut catalog).await;
         }
     }
-}
-
-pub struct PointNode {
-    pub value: ValueType,
-    pub address: u16,
 }

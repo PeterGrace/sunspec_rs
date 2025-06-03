@@ -153,9 +153,19 @@ pub struct SunSpecConnection {
     pub(crate) ctx: Arc<Mutex<Box<dyn SunSpecConn>>>,
     /// a map of the model definitions related to this connection (populated via populate_models)
     pub models: HashMap<u16, ModelData>,
+    /// a map of both the address and a retrieved value for each point, in JMES path format.
+    pub catalog: HashMap<String, PointNode>,
     /// boolean value that causes get_point to force an error if a symbol doesn't exist.  A false
     /// value indicates that get_point can return a synthesized value instead (e.g., enum, bitfields)
     pub strict_symbol: bool,
+}
+
+/// PointNode is a single entry from the point catalog.  It contains a value and the address of the
+/// point.
+#[derive(Debug, Clone)]
+pub struct PointNode {
+    pub value: ValueType,
+    pub address: u16,
 }
 
 impl SunSpecConnection {
@@ -203,6 +213,7 @@ impl SunSpecConnection {
             slave_num,
             ctx: Arc::new(Mutex::new(Box::new(ctx))),
             models: HashMap::new(),
+            catalog: HashMap::new(),
             strict_symbol,
         })
     }
@@ -213,6 +224,7 @@ impl SunSpecConnection {
             slave_num: Some(0_u8),
             ctx: Arc::new(Mutex::new(Box::new(testbuf))),
             models: HashMap::new(),
+            catalog: HashMap::new(),
             strict_symbol,
         })
     }
@@ -501,6 +513,10 @@ impl SunSpecConnection {
             .await
             {
                 Ok(md) => {
+                    // if this is a json model, populate group catalog
+                    if let ModelSource::Json(json) = md.clone().model.source {
+                        //process_json_group
+                    }
                     models.insert(id as u16, md);
                 }
                 Err(e) => {
