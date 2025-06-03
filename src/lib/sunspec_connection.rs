@@ -244,7 +244,6 @@ impl SunSpecConnection {
             let address_right = addr + amount_left;
 
             let data_left = match self
-                .clone()
                 .retry_read_holding_registers(address_left, amount_left)
                 .await
             {
@@ -252,7 +251,6 @@ impl SunSpecConnection {
                 Err(e) => return Err(SunSpecReadError::CommError(e.to_string())),
             };
             let data_right = match self
-                .clone()
                 .retry_read_holding_registers(address_right, amount_right)
                 .await
             {
@@ -463,7 +461,7 @@ impl SunSpecConnection {
     //region inner holding registers retry logic
 
     pub(crate) async fn retry_read_holding_registers(
-        self,
+        &mut self,
         addr: Address,
         q: Quantity,
     ) -> Result<Vec<Word>, SunSpecCommError> {
@@ -1340,6 +1338,9 @@ pub async fn process_json_group(
     address: &mut u16,
     mut catalog: &mut HashMap<String, PointNode>,
 ) {
+    if group.name == "DERMeasureDC" {
+        info!("BREAKPOINT");
+    }
     let newprefix = match prefix.clone() {
         Some(s) => {
             //info!("Group: {:#?}", group);
@@ -1350,7 +1351,7 @@ pub async fn process_json_group(
     let mut entries: i64 = 0;
     match &group.count {
         GroupCount::String(countval) => {
-            let count_lookup = match prefix {
+            let count_lookup = match prefix.clone() {
                 Some(s) => format!(".{}.{}", s.split('.').nth(1).unwrap(), countval),
                 None => format!(".{}", countval),
             };
@@ -1368,7 +1369,7 @@ pub async fn process_json_group(
     }
     for i in 0..entries {
         for p in group.points.iter() {
-            if p.name == "ID" || p.name == "L" {
+            if (p.name == "ID" || p.name == "L") && prefix.clone().is_none() {
                 // we skip ID and L processing but still increment address
                 *address += p.size as u16;
                 continue;
@@ -1391,7 +1392,6 @@ pub async fn process_json_group(
                             address: address.clone(),
                         },
                     );
-                    *address += p.size as u16;
                 }
                 Err(e) => {
                     error!(
@@ -1400,6 +1400,7 @@ pub async fn process_json_group(
                     );
                 }
             }
+            *address += p.size as u16;
         }
         for g in group.groups.iter() {
             process_json_group(data, g, Some(newprefix.clone()), address, &mut catalog).await;
@@ -1436,6 +1437,9 @@ pub fn parse_point_data(p: &crate::json::point::Point, d: &Vec<Word>) -> anyhow:
             }
         }
         PointType::Pad => Ok(ValueType::Pad),
-        _ => Err(anyhow!("Not implemented")),
+        _ => {
+            info!("{:#?}", p.type_);
+            Err(anyhow!("Not implemented"))
+        }
     }
 }

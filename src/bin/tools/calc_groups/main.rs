@@ -62,20 +62,5 @@ pub async fn main() {
     let model: u16 = 705;
     if let Some(m) = ss.models.clone().get(&model) {
         info!("Model: {}, length: {}", model, m.len);
-        if let ModelSource::Json(json) = &m.model.source {
-            // m.len + 2 because len doesn't include ID and L values in its calculation
-            if let Ok(mut data) = ss.get_raw(m.address, m.len + 2).await {
-                // start with our root level points
-                process_json_group(
-                    &mut data,
-                    &json.group,
-                    None,
-                    &mut m.address.clone(),
-                    &mut ss.catalog,
-                )
-                .await;
-                // ok, now for groups
-            }
-        }
     }
 }
