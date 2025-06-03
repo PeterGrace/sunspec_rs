@@ -11,7 +11,7 @@ use std::convert::TryFrom;
 use sunspec_rs::json::group::{Group, GroupCount};
 use sunspec_rs::json::misc::JSONModel;
 use sunspec_rs::json::point::{Point, PointType, PointValue};
-use sunspec_rs::sunspec_connection::PointNode;
+use sunspec_rs::sunspec_connection::{process_json_group, PointNode};
 use sunspec_rs::sunspec_connection::{SunSpecConnection, SunSpecReadError, Word};
 use sunspec_rs::sunspec_data::SunSpecData;
 use sunspec_rs::sunspec_models::{ModelSource, ValueType};
@@ -76,95 +76,6 @@ pub async fn main() {
                 .await;
                 // ok, now for groups
             }
-        }
-    }
-}
-pub fn parse_point_data(p: &Point, d: &Vec<Word>) -> anyhow::Result<ValueType> {
-    match p.type_ {
-        PointType::Uint16 | PointType::Int16 | PointType::Sunssf | PointType::Enum16 => {
-            if let Some(pointval) = d[0].to_i64() {
-                Ok(ValueType::Integer((pointval as i16) as i32))
-            } else {
-                Err(anyhow!("Can't convert to integer"))
-            }
-        }
-        PointType::Uint32 => {
-            let val = (d[0] as u32) << 16 | d[1] as u32;
-            if val == NOT_IMPLEMENTED_U32 {
-                return Err(anyhow!("Not implemented"));
-            } else {
-                Ok(ValueType::Integer(val as i32))
-            }
-        }
-        _ => Err(anyhow!("Not implemented")),
-    }
-}
-#[async_recursion]
-pub async fn process_json_group(
-    data: &mut Vec<Word>,
-    group: &Group,
-    prefix: Option<String>,
-    address: &mut u16,
-    mut catalog: &mut HashMap<String, PointNode>,
-) {
-    let newprefix = match prefix.clone() {
-        Some(s) => {
-            //info!("Group: {:#?}", group);
-            format!("{}.{}", s, group.name)
-        }
-        None => format!(".{}", group.name),
-    };
-    let mut entries: i64 = 0;
-    match &group.count {
-        GroupCount::String(countval) => {
-            let count_lookup = match prefix {
-                Some(s) => format!(".{}.{}", s.split('.').nth(1).unwrap(), countval),
-                None => format!(".{}", countval),
-            };
-            if let Some(num_of_groups_val) = catalog.get(&count_lookup) {
-                if let ValueType::Integer(num_groups) = num_of_groups_val.value {
-                    info!("Group: {}, count: {}", newprefix, num_groups);
-                    entries = num_groups as i64;
-                }
-            }
-        }
-        GroupCount::Integer(i) => {
-            info!("Group: {}, count: {}", newprefix, i);
-            entries = i.to_i64().unwrap();
-        }
-    }
-    for i in 0..entries {
-        for p in group.points.iter() {
-            let datum: Vec<Word> = data.drain(..p.size as usize).collect();
-            match parse_point_data(&p, &datum) {
-                Ok(v) => {
-                    let pointname = if entries > 1 {
-                        format!("{}[{}].{}", newprefix, i, p.name)
-                    } else {
-                        format!("{}.{}", newprefix, p.name)
-                    };
-                    info!("{} @0x{} {:#?}", pointname, address, v);
-                    // this is too simple, the actual solution will need to account for
-                    // which group and group number the point belongs to
-                    catalog.insert(
-                        pointname,
-                        PointNode {
-                            value: v,
-                            address: address.clone(),
-                        },
-                    );
-                    *address += p.size as u16;
-                }
-                Err(e) => {
-                    error!(
-                        "Can't parse point {}.{} {:?}: {e}",
-                        newprefix, p.name, p.type_
-                    );
-                }
-            }
-        }
-        for g in group.groups.iter() {
-            process_json_group(data, g, Some(newprefix.clone()), address, &mut catalog).await;
         }
     }
 }

@@ -1,4 +1,5 @@
 use crate::json::group::{Group, GroupCount};
+use crate::json::point::PointType;
 use crate::metrics::{MODBUS_GET, MODBUS_SET};
 use crate::modbus_test_harness::ModbusTestHarness;
 use crate::model_data::ModelData;
@@ -12,6 +13,7 @@ use async_recursion::async_recursion;
 use bitvec::macros::internal::funty::Fundamental;
 use bitvec::prelude::*;
 use num_traits::pow::Pow;
+use num_traits::ToPrimitive;
 use std::cmp::PartialEq;
 use std::collections::HashMap;
 use std::net::SocketAddr;
@@ -234,15 +236,43 @@ impl SunSpecConnection {
         addr: Address,
         amount: u16,
     ) -> Result<Vec<Word>, SunSpecReadError> {
-        let data = match self
-            .clone()
-            .retry_read_holding_registers(addr, amount)
-            .await
-        {
-            Ok(data) => data,
-            Err(e) => return Err(SunSpecReadError::CommError(e.to_string())),
-        };
-        Ok(data)
+        if amount > 100 {
+            // we need to split this read into two distinct requests and then combine them
+            let amount_left = 100;
+            let address_left = addr;
+            let amount_right = amount - amount_left;
+            let address_right = addr + amount_left;
+
+            let data_left = match self
+                .clone()
+                .retry_read_holding_registers(address_left, amount_left)
+                .await
+            {
+                Ok(d) => d,
+                Err(e) => return Err(SunSpecReadError::CommError(e.to_string())),
+            };
+            let data_right = match self
+                .clone()
+                .retry_read_holding_registers(address_right, amount_right)
+                .await
+            {
+                Ok(d) => d,
+                Err(e) => return Err(SunSpecReadError::CommError(e.to_string())),
+            };
+            let mut combined = data_left;
+            combined.extend(data_right);
+            Ok(combined)
+        } else {
+            let data = match self
+                .clone()
+                .retry_read_holding_registers(addr, amount)
+                .await
+            {
+                Ok(data) => data,
+                Err(e) => return Err(SunSpecReadError::CommError(e.to_string())),
+            };
+            Ok(data)
+        }
     }
     //region get value primitives
     /// Get a text string from the modbus connection
@@ -515,7 +545,16 @@ impl SunSpecConnection {
                 Ok(md) => {
                     // if this is a json model, populate group catalog
                     if let ModelSource::Json(json) = md.clone().model.source {
-                        //process_json_group
+                        if let Ok(mut data) = self.get_raw(md.address + 2, md.len).await {
+                            process_json_group(
+                                &mut data,
+                                &json.group,
+                                None,
+                                &mut md.address.clone(),
+                                &mut self.catalog,
+                            )
+                            .await;
+                        }
                     }
                     models.insert(id as u16, md);
                 }
@@ -771,9 +810,6 @@ impl SunSpecConnection {
             } else {
                 addr_offset = 0;
             }
-            if let ModelSource::Json(json) = md.clone().model.source {
-                info!("TODO: This was a json model, need to do appropriate size calculation for field");
-            }
             info!(
                 "block_offset = {fixed_block_len} + ({block_location} * {}) + {addr_offset}",
                 model.block[block_id].len
@@ -781,6 +817,7 @@ impl SunSpecConnection {
             block_offset =
                 fixed_block_len + (block_location * model.block[block_id].len) + addr_offset;
         }
+        // TODO: Here's where I'd read catalog data for a static point
 
         if point.value.is_some() {
             // if value is set already, its a static value from the model file.
@@ -1294,4 +1331,111 @@ pub fn get_block_id_from_name(model: &Model, s: &String) -> Option<usize> {
         }
     }
     None
+}
+#[async_recursion]
+pub async fn process_json_group(
+    data: &mut Vec<Word>,
+    group: &Group,
+    prefix: Option<String>,
+    address: &mut u16,
+    mut catalog: &mut HashMap<String, PointNode>,
+) {
+    let newprefix = match prefix.clone() {
+        Some(s) => {
+            //info!("Group: {:#?}", group);
+            format!("{}.{}", s, group.name)
+        }
+        None => format!(".{}", group.name),
+    };
+    let mut entries: i64 = 0;
+    match &group.count {
+        GroupCount::String(countval) => {
+            let count_lookup = match prefix {
+                Some(s) => format!(".{}.{}", s.split('.').nth(1).unwrap(), countval),
+                None => format!(".{}", countval),
+            };
+            if let Some(num_of_groups_val) = catalog.get(&count_lookup) {
+                if let ValueType::Integer(num_groups) = num_of_groups_val.value {
+                    info!("Group: {}, count: {}", newprefix, num_groups);
+                    entries = num_groups as i64;
+                }
+            }
+        }
+        GroupCount::Integer(i) => {
+            info!("Group: {}, count: {}", newprefix, i);
+            entries = i.to_i64().unwrap();
+        }
+    }
+    for i in 0..entries {
+        for p in group.points.iter() {
+            if p.name == "ID" || p.name == "L" {
+                // we skip ID and L processing but still increment address
+                *address += p.size as u16;
+                continue;
+            }
+            let datum: Vec<Word> = data.drain(..p.size as usize).collect();
+            match parse_point_data(&p, &datum) {
+                Ok(v) => {
+                    let pointname = if entries > 1 {
+                        format!("{}[{}].{}", newprefix, i, p.name)
+                    } else {
+                        format!("{}.{}", newprefix, p.name)
+                    };
+                    info!("{} @0x{} {:#?}", pointname, address, v);
+                    // this is too simple, the actual solution will need to account for
+                    // which group and group number the point belongs to
+                    catalog.insert(
+                        pointname,
+                        PointNode {
+                            value: v,
+                            address: address.clone(),
+                        },
+                    );
+                    *address += p.size as u16;
+                }
+                Err(e) => {
+                    error!(
+                        "Can't parse point {}.{} {:?}: {e}",
+                        newprefix, p.name, p.type_
+                    );
+                }
+            }
+        }
+        for g in group.groups.iter() {
+            process_json_group(data, g, Some(newprefix.clone()), address, &mut catalog).await;
+        }
+    }
+}
+pub fn parse_point_data(p: &crate::json::point::Point, d: &Vec<Word>) -> anyhow::Result<ValueType> {
+    match p.type_ {
+        PointType::Uint16 | PointType::Int16 | PointType::Sunssf | PointType::Enum16 => {
+            if let Some(pointval) = d[0].to_i64() {
+                Ok(ValueType::Integer((pointval as i16) as i32))
+            } else {
+                Err(anyhow!("Can't convert to integer"))
+            }
+        }
+        PointType::String => {
+            let bytes: Vec<u8> = d.iter().fold(vec![], |mut x, elem| {
+                let f = elem.to_be_bytes();
+                x.append(&mut f.to_vec());
+                x
+            });
+
+            match String::from_utf8(bytes) {
+                Ok(s) => Ok(ValueType::String(s.trim_matches(char::from(0)).parse()?)),
+                Err(e) => Err(anyhow!("Couldn't parse data to string")),
+            }
+        }
+        PointType::Uint32 => {
+            let val = (d[0] as u32) << 16 | d[1] as u32;
+            if val == NOT_IMPLEMENTED_U32 {
+                return Err(anyhow!("Not implemented"));
+            } else {
+                Ok(ValueType::Integer(val as i32))
+            }
+        }
+        PointType::Pad => Ok(ValueType::Pad),
+        _ => Err(anyhow!("Not implemented")),
+    }
 }
