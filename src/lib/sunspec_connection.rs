@@ -770,6 +770,10 @@ impl SunSpecConnection {
                 if catalog_entry.is_some() {
                     point = catalog_entry.clone().unwrap().point_data;
                 } else {
+                    trace!("Iterating through available catalog points:");
+                    for (c, _) in self.catalog.iter() {
+                        trace!("{c}");
+                    }
                     error!(
                         "Catalog entry for {catalog_name} not found.  Using default point data."
                     );
@@ -1331,13 +1335,6 @@ pub async fn process_json_group(
     address: &mut u16,
     mut catalog: &mut HashMap<String, PointNode>,
 ) {
-    let newprefix = match prefix.clone() {
-        Some(s) => {
-            //info!("Group: {:#?}", group);
-            format!("{}.{}", s, group.name)
-        }
-        None => format!(".{}", group.name),
-    };
     let mut entries: i64 = 0;
     match &group.count {
         GroupCount::String(countval) => {
@@ -1347,17 +1344,31 @@ pub async fn process_json_group(
             };
             if let Some(num_of_groups_val) = catalog.get(&count_lookup) {
                 if let ValueType::Integer(num_groups) = num_of_groups_val.value {
-                    trace!("Group: {}, count: {}", newprefix, num_groups);
                     entries = num_groups as i64;
                 }
             }
         }
         GroupCount::Integer(i) => {
-            trace!("Group: {}, count: {}", newprefix, i);
             entries = i.to_i64().unwrap();
         }
     }
     for i in 0..entries {
+        let newprefix = match prefix.clone() {
+            Some(s) => {
+                if entries > 1 {
+                    format!("{s}.{}[{}]", group.name, i + 1)
+                } else {
+                    format!("{s}.{}", group.name)
+                }
+            }
+            None => {
+                if entries > 1 {
+                    format!(".{}[{}]", group.name, i + 1)
+                } else {
+                    format!(".{}", group.name)
+                }
+            }
+        };
         for p in group.points.iter() {
             if (p.name == "ID" || p.name == "L") && prefix.clone().is_none() {
                 // we skip ID and L processing but still increment address
@@ -1367,11 +1378,7 @@ pub async fn process_json_group(
             let datum: Vec<Word> = data.drain(..p.size as usize).collect();
             match parse_point_data(&p, &datum) {
                 Ok(v) => {
-                    let pointname = if entries > 1 {
-                        format!("{}[{}].{}", newprefix, i, p.name)
-                    } else {
-                        format!("{}.{}", newprefix, p.name)
-                    };
+                    let pointname = format!("{}.{}", newprefix, p.name);
                     trace!("{} @0x{} {:#?}", pointname, address, v);
                     // this is too simple, the actual solution will need to account for
                     // which group and group number the point belongs to
