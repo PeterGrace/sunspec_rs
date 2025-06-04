@@ -527,7 +527,7 @@ impl SunSpecConnection {
     //region gather models from the device and store them
 
     pub async fn populate_models(
-        mut self,
+        &mut self,
         data: &SunSpecData,
     ) -> anyhow::Result<HashMap<u16, ModelData>> {
         let mut address = 40002;
@@ -767,7 +767,13 @@ impl SunSpecConnection {
             PointIdentifier::Catalog(catalog_name) => {
                 info!("Catalog name: {catalog_name} specified.  Will use json-supplied point data");
                 catalog_entry = self.catalog.get(&catalog_name).cloned();
-                point = catalog_entry.clone().unwrap().point_data;
+                if catalog_entry.is_some() {
+                    point = catalog_entry.clone().unwrap().point_data;
+                } else {
+                    error!(
+                        "Catalog entry for {catalog_name} not found.  Using default point data."
+                    );
+                }
             }
             PointIdentifier::Point(point_str) => {
                 point_name = point_str.clone();

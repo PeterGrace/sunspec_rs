@@ -502,8 +502,17 @@ impl From<&JSONModel> for SunSpecModels {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PointIdentifier {
     Catalog(String),
     Point(String),
+}
+
+impl Display for PointIdentifier {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            PointIdentifier::Catalog(s) => write!(f, "{}", s),
+            PointIdentifier::Point(s) => write!(f, "{}", s),
+        }
+    }
 }

@@ -28,8 +28,10 @@ pub async fn setup(addr: &str, slave_id: u8) -> (SunSpecConnection, SunSpecData)
     };
 
     let ssd = SunSpecData::default();
-    match ss.clone().populate_models(&ssd).await {
-        Ok(m) => ss.models = m,
+    match ss.populate_models(&ssd).await {
+        Ok(m) => {
+            ss.models = m;
+        }
         Err(e) => {
             panic!("Can't populate models: {e}")
         }
@@ -58,8 +60,5 @@ pub async fn main() {
     //endregion
     let addr = "127.0.0.1:8502";
     let (ss, _) = setup(addr, 1).await;
-    let model: u16 = 705;
-    if let Some(m) = ss.models.clone().get(&model) {
-        info!("Model: {}, length: {}", model, m.len);
-    }
+    info!("{:#?}", ss.catalog);
 }
