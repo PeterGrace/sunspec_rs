@@ -1,10 +1,12 @@
 use crate::json::defaults::point_access;
 use crate::json::group::{Group, GroupType};
 use crate::json::misc::JSONModel;
+use crate::json::point;
 use crate::json::point::{
     Point as JSONPoint, PointAccess, PointMandatory, PointSf, PointStatic, PointType as jpt,
     PointValue,
 };
+use crate::{json, sunspec_models};
 use async_recursion::async_recursion;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
@@ -13,8 +15,8 @@ use std::ops::Deref;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ValueType {
     String(String),
-    Integer(i32),
-    Float(f32),
+    Integer(i64),
+    Float(f64),
     Boolean(bool),
     Array(Vec<String>),
     Pad,
@@ -169,7 +171,7 @@ pub struct ModelLiteral {
     pub notes: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PointLiteral {
     pub id: String,
     pub label: Option<String>,
@@ -206,7 +208,72 @@ pub enum ModelSource {
 pub struct SunSpecModels {
     pub model: Model,
     pub strings: Vec<Strings>,
+    #[serde(skip_deserializing)]
     pub source: ModelSource,
+}
+impl From<crate::json::point::Point> for Point {
+    fn from(value: point::Point) -> Self {
+        let mut obj: sunspec_models::Point = Point::default();
+        obj.id = value.name;
+        obj.len = Some(value.size as u16);
+        obj.r#type = value.type_.to_string();
+        obj.mandatory = match value.mandatory {
+            PointMandatory::M => Some(true),
+            PointMandatory::O => Some(false),
+        };
+        obj.access = match value.access {
+            PointAccess::R => Some(Access::ReadOnly),
+            PointAccess::Rw => Some(Access::ReadWrite),
+        };
+        obj.units = value.units;
+        match value.sf {
+            None => {}
+            Some(sf) => match sf {
+                PointSf::String(s) => {
+                    obj.scale_factor = Some(s);
+                }
+                PointSf::Integer(i) => {
+                    warn!("JSON Point had an integer value for scale factor, we don't know what to do about that.");
+                    obj.scale_factor = None;
+                }
+            },
+        }
+        obj.value = match value.value {
+            None => None,
+            Some(v) => match v {
+                PointValue::String(s) => Some(ValueType::String(s)),
+                PointValue::Integer(i) => Some(ValueType::Integer(i as i64)),
+            },
+        };
+        let mut literal = PointLiteral::default();
+        if value.label.is_some() {
+            literal.label = value.label.clone();
+        }
+        if value.desc.is_some() {
+            literal.description = value.desc.clone();
+        }
+        if value.notes.is_some() {
+            literal.notes = value.notes.clone();
+        }
+        obj.literal = Some(literal);
+
+        obj.symbol = value
+            .symbols
+            .iter()
+            .map(|s| {
+                let s = s.clone();
+                Some(sunspec_models::Symbol {
+                    symbol: s.value.to_string(),
+                    id: s.name,
+                })
+            })
+            .collect();
+
+        // we don't need an offset in a json loadup case, because the catalog point will have the
+        // actual address
+        obj.offset = 0;
+        obj
+    }
 }
 
 impl From<&JSONModel> for SunSpecModels {
@@ -216,7 +283,7 @@ impl From<&JSONModel> for SunSpecModels {
             model_len = model_len.saturating_add(p.size as u16);
         }
 
-        info!("JSON Groups count is {:#?}", json.group.count);
+        trace!("JSON Groups count is {:#?}", json.group.count);
         let mut blocks: Vec<Block> = vec![];
 
         let mut block_len: u16 = 0;
@@ -296,14 +363,8 @@ impl From<&JSONModel> for SunSpecModels {
                 value: if point.static_ == PointStatic::S {
                     match point.value.clone() {
                         Some(PointValue::String(s)) => Some(ValueType::String(s)),
-                        Some(PointValue::Integer(i)) => Some(ValueType::Integer(i as i32)),
-                        None => {
-                            info!(
-                                "{}/{}: Point is specified as static, but no value provided.",
-                                json.id, point.name,
-                            );
-                            None
-                        }
+                        Some(PointValue::Integer(i)) => Some(ValueType::Integer(i as i64)),
+                        None => None,
                     }
                 } else {
                     None
@@ -397,7 +458,7 @@ impl From<&JSONModel> for SunSpecModels {
                         value: if point.static_ == PointStatic::S {
                             match point.value.clone() {
                                 Some(PointValue::String(s)) => Some(ValueType::String(s)),
-                                Some(PointValue::Integer(i)) => Some(ValueType::Integer(i as i32)),
+                                Some(PointValue::Integer(i)) => Some(ValueType::Integer(i as i64)),
                                 None => {
                                     debug!(
                                 "Point is specified as static, but no value provided: {:#?}",
@@ -439,4 +500,10 @@ impl From<&JSONModel> for SunSpecModels {
             source: ModelSource::Json(json.clone()),
         }
     }
+}
+
+#[derive(Debug)]
+pub enum PointIdentifier {
+    Catalog(String),
+    Point(String),
 }

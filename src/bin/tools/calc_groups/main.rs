@@ -15,7 +15,6 @@ use sunspec_rs::sunspec_connection::{process_json_group, PointNode};
 use sunspec_rs::sunspec_connection::{SunSpecConnection, SunSpecReadError, Word};
 use sunspec_rs::sunspec_data::SunSpecData;
 use sunspec_rs::sunspec_models::{ModelSource, ValueType};
-use tokio::sync::RwLock;
 use tracing_subscriber::fmt::format::FmtSpan;
 use tracing_subscriber::{prelude::*, EnvFilter, Registry};
 
@@ -58,7 +57,7 @@ pub async fn main() {
     tracing::subscriber::set_global_default(subscriber).expect("Failed to set tracing subscriber");
     //endregion
     let addr = "127.0.0.1:8502";
-    let (mut ss, _) = setup(addr, 1).await;
+    let (ss, _) = setup(addr, 1).await;
     let model: u16 = 705;
     if let Some(m) = ss.models.clone().get(&model) {
         info!("Model: {}, length: {}", model, m.len);

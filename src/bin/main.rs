@@ -10,7 +10,9 @@ use std::process;
 use std::time::Duration;
 use sunspec_rs::sunspec_connection::{SunSpecConnection, Word};
 use sunspec_rs::sunspec_data::SunSpecData;
-use sunspec_rs::sunspec_models::{GroupIdentifier, OptionalGroupIdentifier, ValueType};
+use sunspec_rs::sunspec_models::{
+    GroupIdentifier, OptionalGroupIdentifier, PointIdentifier, ValueType,
+};
 use tokio_modbus::Address;
 use tracing_log::AsTrace;
 use tracing_subscriber;
@@ -56,7 +58,11 @@ pub async fn main() {
         let md = ss.models.get(&_model).unwrap().clone();
         match ss
             .clone()
-            .set_point(md.clone(), _field, ValueType::Integer(300))
+            .set_point(
+                md.clone(),
+                PointIdentifier::Point(_field.to_string()),
+                ValueType::Integer(300),
+            )
             .await
         {
             Ok(_) => {
@@ -64,34 +70,6 @@ pub async fn main() {
             }
             Err(e) => {
                 error!("Oh no, it didn't work: {e}")
-            }
-        }
-    } else if modules {
-        // read fields
-        let _model: u16 = 804_u16;
-        let md = ss.models.get(&_model).unwrap().clone();
-        // let testing: Vec<Word> = ss.get_raw(md.address, 64).await.unwrap();
-        // info!("{:#?}", testing);
-        let _fields: Vec<&str> = vec!["ModSoC", "ModSoH"];
-        for f in _fields {
-            for a in 0..6 {
-                match ss
-                    .clone()
-                    .get_point(
-                        md.clone(),
-                        f,
-                        OptionalGroupIdentifier(Some(GroupIdentifier::String("Crv".to_string()))),
-                        Some(a),
-                    )
-                    .await
-                {
-                    Ok(pt) => {
-                        println!("{_model}/{f}/{a} = {:#?}", pt.value);
-                    }
-                    Err(e) => {
-                        error!("Error received: {e}");
-                    }
-                }
             }
         }
     } else {
@@ -104,7 +82,7 @@ pub async fn main() {
             let which_block = 1;
             match ss
                 .clone()
-                .get_point(md.clone(), f, block.clone(), Some(which_block))
+                .get_point(md.clone(), PointIdentifier::Point(f.to_string()))
                 .await
             {
                 Ok(pt) => {

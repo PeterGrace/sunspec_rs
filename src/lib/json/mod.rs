@@ -8,6 +8,7 @@ pub mod misc;
 pub mod point;
 
 use crate::json::group::GroupCount;
+use crate::sunspec_models;
 use serde::{Deserialize, Serialize};
 use serde_json::*;
 

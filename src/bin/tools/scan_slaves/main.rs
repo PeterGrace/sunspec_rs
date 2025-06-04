@@ -4,7 +4,7 @@ use clap::Parser;
 use clap_verbosity_flag;
 use sunspec_rs::sunspec_connection::SunSpecConnection;
 use sunspec_rs::sunspec_data::SunSpecData;
-use sunspec_rs::sunspec_models::ValueType;
+use sunspec_rs::sunspec_models::{PointIdentifier, ValueType};
 use tracing_log::AsTrace;
 use tracing_subscriber;
 
@@ -44,7 +44,7 @@ pub async fn main() {
         let md = ss.models.get(&1).unwrap().clone();
         match ss
             .clone()
-            .get_point(md.clone(), "SN", None.into(), None.into())
+            .get_point(md.clone(), PointIdentifier::Point("SN".to_string()))
             .await
         {
             Ok(p) => {

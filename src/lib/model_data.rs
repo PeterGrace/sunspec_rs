@@ -1,7 +1,8 @@
 use crate::sunspec_connection::SunSpecConnection;
 use crate::sunspec_data::{ResolvedModel, SunSpecData};
 use crate::sunspec_models::{
-    GroupIdentifier, LiteralType, OptionalGroupIdentifier, SunSpecModels, ValueType,
+    GroupIdentifier, LiteralType, OptionalGroupIdentifier, PointIdentifier, SunSpecModels,
+    ValueType,
 };
 use std::collections::HashMap;
 use std::string::ToString;
@@ -106,7 +107,7 @@ impl ModelData {
         } else {
             if let Ok(point) = conn
                 .clone()
-                .get_point(self.clone(), name, OptionalGroupIdentifier(block), addr)
+                .get_point(self.clone(), PointIdentifier::Point(name.parse().unwrap()))
                 .await
             {
                 if let Some(ValueType::Integer(val)) = point.value {
