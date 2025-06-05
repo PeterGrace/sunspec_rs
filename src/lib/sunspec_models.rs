@@ -502,7 +502,7 @@ impl From<&JSONModel> for SunSpecModels {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PointIdentifier {
     Catalog(String),
     Point(String),

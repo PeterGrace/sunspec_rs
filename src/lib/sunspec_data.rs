@@ -51,7 +51,7 @@ impl SunSpecData {
                 anyhow::bail!("Couldn't deserialize xml: {e}");
             }
         };
-        warn!(
+        info!(
             "XML models are deprecated; you likely want to locate the json version of this model."
         );
         Ok(ssm)

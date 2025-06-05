@@ -763,20 +763,19 @@ impl SunSpecConnection {
 
         let mut catalog_entry: Option<PointNode> = None;
         let mut point_name: String = String::new();
-        match point_identifier {
+        match point_identifier.clone() {
             PointIdentifier::Catalog(catalog_name) => {
                 info!("Catalog name: {catalog_name} specified.  Will use json-supplied point data");
                 catalog_entry = self.catalog.get(&catalog_name).cloned();
                 if catalog_entry.is_some() {
                     point = catalog_entry.clone().unwrap().point_data;
+                    symbols = point.symbol.clone();
                 } else {
-                    trace!("Iterating through available catalog points:");
+                    trace!("Requested {catalog_name}, not found. Iterating through available catalog points:");
                     for (c, _) in self.catalog.iter() {
                         trace!("{c}");
                     }
-                    error!(
-                        "Catalog entry for {catalog_name} not found.  Using default point data."
-                    );
+                    info!("Catalog entry for {catalog_name} not found.  Using default point data.");
                 }
             }
             PointIdentifier::Point(point_str) => {
@@ -798,9 +797,8 @@ impl SunSpecConnection {
 
         if point.id.len() == 0 {
             let err = format!(
-                "You asked for point {model_name}/{point_name} but it doesn't exist in the specified block."
+                "You asked for point {model_name}/{point_identifier} but it doesn't exist in the specified block."
             );
-            error!("{err}");
             return Err(SunSpecPointError::DoesNotExist(err));
         }
         //region if there's literals for this point, populate them
@@ -943,6 +941,9 @@ impl SunSpecConnection {
                                 return Ok(point);
                             }
                         }
+                    } else {
+                        return Err(SunSpecPointError::GeneralError(
+                        format!("An enum was queried but no symbols are present for the point, so can't render.")));
                     }
                 }
                 Err(e) => {
@@ -1140,6 +1141,9 @@ impl SunSpecConnection {
                                 return Ok(point);
                             }
                         }
+                    } else {
+                        return Err(SunSpecPointError::GeneralError(
+                format!("An enum was queried but no symbols are present for the point, so can't render.")));
                     }
                 }
                 Err(e) => {
@@ -1205,9 +1209,9 @@ impl SunSpecConnection {
                 debug!(err);
                 return Err(SunSpecPointError::DoesNotExist(err));
             }
-        };
+        }
 
-        Err(SunSpecPointError::UndefinedError)
+        //Err(SunSpecPointError::UndefinedError)
     }
     //endregion
 }
@@ -1379,7 +1383,7 @@ pub async fn process_json_group(
             match parse_point_data(&p, &datum) {
                 Ok(v) => {
                     let pointname = format!("{}.{}", newprefix, p.name);
-                    trace!("{} @0x{} {:#?}", pointname, address, v);
+                    debug!("{}: {} @0x{} {:#?}", group.name, pointname, address, v);
                     // this is too simple, the actual solution will need to account for
                     // which group and group number the point belongs to
                     catalog.insert(
@@ -1392,7 +1396,7 @@ pub async fn process_json_group(
                     );
                 }
                 Err(e) => {
-                    error!(
+                    info!(
                         "Can't parse point {}.{} {:?}: {e}",
                         newprefix, p.name, p.type_
                     );

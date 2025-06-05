@@ -28,8 +28,8 @@ pub async fn main() {
         .with_line_number(true)
         .init();
 
-    let socket_addr = "127.0.0.1:8502".parse().unwrap();
-    let mut ss = match SunSpecConnection::new(socket_addr, Some(1), false).await {
+    let socket_addr = "10.174.2.83:502".parse().unwrap();
+    let mut ss = match SunSpecConnection::new(socket_addr, Some(7), false).await {
         Ok(mb) => mb,
         Err(e) => {
             error!("Can't create modbus connection: {e}");
@@ -38,7 +38,7 @@ pub async fn main() {
     };
 
     let ssd = SunSpecData::default();
-    match ss.clone().populate_models(&ssd).await {
+    match ss.populate_models(&ssd).await {
         Ok(m) => ss.models = m,
         Err(e) => {
             panic!("Can't populate models: {e}")
@@ -74,19 +74,15 @@ pub async fn main() {
         }
     } else {
         // read fields
-        let _model: u16 = 705_u16;
+        let _model: u16 = 804_u16;
         let md = ss.models.get(&_model).unwrap().clone();
-        let block = OptionalGroupIdentifier(Some(GroupIdentifier::String("Crv".to_string())));
-        let _fields: Vec<&str> = vec!["VRefAutoTms"];
+        let _fields: Vec<PointIdentifier> = vec![PointIdentifier::Catalog(
+            ".lithium_ion_string.lithium_ion_string_module[1].ModSoH".to_string(),
+        )];
         for f in _fields {
-            let which_block = 1;
-            match ss
-                .clone()
-                .get_point(md.clone(), PointIdentifier::Point(f.to_string()))
-                .await
-            {
+            match ss.clone().get_point(md.clone(), f.clone()).await {
                 Ok(pt) => {
-                    println!("{_model}/{block}[{which_block}]/{f} = {:#?}", pt.value);
+                    println!("{_model}/{f} = {:#?}", pt.value);
                 }
                 Err(e) => {
                     error!("Error received: {e}");
