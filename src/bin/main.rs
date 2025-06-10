@@ -29,7 +29,7 @@ pub async fn main() {
         .init();
 
     let socket_addr = "10.174.2.83:502".parse().unwrap();
-    let mut ss = match SunSpecConnection::new(socket_addr, Some(7), false).await {
+    let mut ss = match SunSpecConnection::new(socket_addr, Some(7), false, None).await {
         Ok(mb) => mb,
         Err(e) => {
             error!("Can't create modbus connection: {e}");

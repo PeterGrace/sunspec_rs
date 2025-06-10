@@ -29,6 +29,11 @@ path = "src/bin/tools/scan_slaves/main.rs"
 name = "calc_groups"
 path = "src/bin/tools/calc_groups/main.rs"
 
+[[bin]]
+name = "test_tls"
+path = "src/bin/tools/test_tls/main.rs"
+
+
 [dependencies]
 clap-verbosity-flag = "2.0.1"
 tokio = { version = "1.27.0", features = ["tracing", "macros", "rt-multi-thread"] }
@@ -49,3 +54,10 @@ thiserror = "1.0.48"
 async-trait = "0.1.73"
 prometheus = "0.13.3"
 num-traits = "0.2.16"
+tokio-rustls = "0.26.2"
+rustls-pemfile = "2.2.0"
+pem = "3.0.5"
+pkcs8 = { version = "0.10.2", features = ["pkcs5", "encryption"] }
+pkcs5 = "0.7.1"
+aes = "0.8.4"
+bon = "3.6.4"
