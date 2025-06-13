@@ -35,13 +35,13 @@ pub async fn main() {
 
     let tls = TlsConfig::builder()
         .domain("localhost".to_string())
-        .ca_file("ca.crt".to_string())
-        .client_cert_file("client.crt".to_string())
-        .client_key_file("client.key".to_string())
+        .ca_file("/home/pgrace/ca.crt".to_string())
+        .client_cert_file("/home/pgrace/client.crt".to_string())
+        .client_key_file("/home/pgrace/client.key".to_string())
         .build();
 
     let socket_addr = "127.0.0.1:8502".parse().unwrap();
-    let mut ss = match SunSpecConnection::new(socket_addr, Some(7), false, Some(tls)).await {
+    let mut ss = match SunSpecConnection::new(socket_addr, Some(1), false, Some(tls)).await {
         Ok(mb) => mb,
         Err(e) => {
             error!("Can't create modbus connection: {e}");

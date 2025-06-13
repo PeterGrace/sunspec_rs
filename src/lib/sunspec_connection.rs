@@ -17,7 +17,7 @@ use num_traits::pow::Pow;
 use num_traits::ToPrimitive;
 use pkcs8::der::Decode;
 use pkcs8::EncryptedPrivateKeyInfo;
-use rustls_pemfile::{certs, pkcs8_private_keys};
+use rustls_pemfile::{certs, pkcs8_private_keys, private_key};
 use std::cmp::PartialEq;
 use std::collections::HashMap;
 use std::fs::File;
@@ -236,7 +236,20 @@ impl SunSpecConnection {
                 let domain = ServerName::try_from(tls.domain)
                     .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "invalid dnsname"))?;
 
-                let transport = connector.connect(domain, stream).await?;
+                let transport = match tokio::time::timeout(
+                    Duration::from_secs(5),
+                    connector.connect(domain, stream),
+                )
+                .await
+                {
+                    Ok(Ok(transport)) => transport,
+                    Ok(Err(err)) => {
+                        anyhow::bail!("TLS connection error: {err}");
+                    }
+                    Err(_) => {
+                        anyhow::bail!("TLS connection timeout");
+                    }
+                };
                 if slave_id.is_some() {
                     ctx = tcp::attach_slave(transport, slave_id.unwrap());
                 } else {
@@ -1534,10 +1547,13 @@ fn load_keys(path: &Path, password: Option<&str>) -> io::Result<PrivateKeyDer<'s
     };
 
     if expected_tag.eq("PRIVATE KEY") {
-        pkcs8_private_keys(&mut BufReader::new(File::open(path)?))
-            .next()
-            .unwrap()
-            .map(Into::into)
+        match private_key(&mut BufReader::new(File::open(path)?)) {
+            Ok(f) => Ok(f.unwrap()),
+            Err(e) => Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "No private key found",
+            )),
+        }
     } else {
         let content = std::fs::read(path)?;
         let mut iter = pem::parse_many(content)
