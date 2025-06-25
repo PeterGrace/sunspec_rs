@@ -34,7 +34,7 @@ pub async fn main() {
     tracing::subscriber::set_global_default(subscriber).expect("Failed to set tracing subscriber");
 
     let tls = TlsConfig::builder()
-        .domain("localhost".to_string())
+        .domain("dersim".to_string())
         .ca_file("/home/pgrace/ca.crt".to_string())
         .client_cert_file("/home/pgrace/client.crt".to_string())
         .client_key_file("/home/pgrace/client.key".to_string())
@@ -58,11 +58,10 @@ pub async fn main() {
     };
 
     // read fields
-    let _model: u16 = 804_u16;
+    let _model: u16 = 701_u16;
     let md = ss.models.get(&_model).unwrap().clone();
-    let _fields: Vec<PointIdentifier> = vec![PointIdentifier::Catalog(
-        ".lithium_ion_string.lithium_ion_string_module[1].ModSoH".to_string(),
-    )];
+    let _fields: Vec<PointIdentifier> =
+        vec![PointIdentifier::Catalog(".DERMeasureAC.ACType".to_string())];
     for f in _fields {
         match ss.clone().get_point(md.clone(), f.clone()).await {
             Ok(pt) => {
