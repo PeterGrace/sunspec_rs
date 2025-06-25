@@ -24,7 +24,7 @@ use std::collections::HashMap;
 use std::fs::File;
 use std::io;
 use std::io::BufReader;
-use std::net::SocketAddr;
+use std::net::{SocketAddr, ToSocketAddrs};
 use std::path::Path;
 use std::string::ToString;
 use std::sync::Arc;
@@ -205,7 +205,13 @@ impl SunSpecConnection {
         strict_symbol: bool,
         tls_config: Option<TlsConfig>,
     ) -> anyhow::Result<Self> {
-        let socket_addr = socket_addr.parse().unwrap();
+        let mut socket_addrs = socket_addr.to_socket_addrs()?;
+        let socket_addr = match socket_addrs.next() {
+            Some(addr) => addr,
+            None => {
+                anyhow::bail!("Can't resolve socket address: {socket_addr}");
+            }
+        };
         let ctx: Context;
         let slave_id = match slave_num {
             Some(num) => Some(Slave(num)),
