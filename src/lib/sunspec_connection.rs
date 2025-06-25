@@ -12,21 +12,32 @@ use anyhow::{anyhow, Error};
 use async_recursion::async_recursion;
 use bitvec::macros::internal::funty::Fundamental;
 use bitvec::prelude::*;
+use bon::Builder;
 use num_traits::pow::Pow;
 use num_traits::ToPrimitive;
+use pkcs8::der::Decode;
+use pkcs8::EncryptedPrivateKeyInfo;
+use rustls_pemfile::{certs, pkcs8_private_keys, private_key};
 use std::cmp::PartialEq;
 use std::collections::HashMap;
+use std::fs::File;
+use std::io;
+use std::io::BufReader;
 use std::net::SocketAddr;
+use std::path::Path;
 use std::string::ToString;
 use std::sync::Arc;
 use std::time::Duration;
 use thiserror::Error;
+use tokio::net::TcpStream;
 use tokio::sync::Mutex;
 use tokio::time::timeout;
 use tokio_modbus::client::{tcp, Context, Reader, Writer};
 use tokio_modbus::{Address, Quantity, Slave};
 use tokio_retry::strategy::{jitter, ExponentialBackoff};
 use tokio_retry::RetryIf;
+use tokio_rustls::rustls::pki_types::{CertificateDer, PrivateKeyDer, ServerName};
+use tokio_rustls::TlsConnector;
 
 pub const SUNSPEC_END_MODEL_ID: u16 = 65535;
 pub const POINT_TYPE_STRING: &str = "string";
@@ -191,6 +202,7 @@ impl SunSpecConnection {
         socket_addr: String,
         slave_num: Option<u8>,
         strict_symbol: bool,
+        tls_config: Option<TlsConfig>,
     ) -> anyhow::Result<Self> {
         let socket_addr = socket_addr.parse().unwrap();
         let ctx: Context;
@@ -199,20 +211,68 @@ impl SunSpecConnection {
             None => None,
         };
 
-        if slave_id.is_some() {
-            ctx = match tcp::connect_slave(socket_addr, slave_id.unwrap()).await {
-                Ok(ctx) => ctx,
-                Err(e) => {
-                    anyhow::bail!("Can't connect to slave: {e}");
+        match tls_config {
+            Some(tls) => {
+                let mut root_cert_store = tokio_rustls::rustls::RootCertStore::empty();
+                let ca_path = Path::new(&tls.ca_file);
+                let mut pem = BufReader::new(File::open(ca_path)?);
+                let certs = rustls_pemfile::certs(&mut pem).collect::<Result<Vec<_>, _>>()?;
+                root_cert_store.add_parsable_certificates(certs);
+
+                let cert_path = Path::new(&tls.client_cert_file);
+                let key_path = Path::new(&tls.client_key_file);
+                let certs = load_certs(cert_path)?;
+                let key = load_keys(key_path, None)?;
+
+                let config = tokio_rustls::rustls::ClientConfig::builder()
+                    .with_root_certificates(root_cert_store)
+                    .with_client_auth_cert(certs, key)
+                    .map_err(|err| io::Error::new(io::ErrorKind::InvalidInput, err))?;
+                let connector = TlsConnector::from(Arc::new(config));
+
+                let stream = TcpStream::connect(&socket_addr).await?;
+                stream.set_nodelay(true)?;
+
+                let domain = ServerName::try_from(tls.domain)
+                    .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "invalid dnsname"))?;
+
+                let transport = match tokio::time::timeout(
+                    Duration::from_secs(5),
+                    connector.connect(domain, stream),
+                )
+                .await
+                {
+                    Ok(Ok(transport)) => transport,
+                    Ok(Err(err)) => {
+                        anyhow::bail!("TLS connection error: {err}");
+                    }
+                    Err(_) => {
+                        anyhow::bail!("TLS connection timeout");
+                    }
+                };
+                if slave_id.is_some() {
+                    ctx = tcp::attach_slave(transport, slave_id.unwrap());
+                } else {
+                    ctx = tcp::attach(transport);
                 }
-            };
-        } else {
-            ctx = match tcp::connect(socket_addr).await {
-                Ok(ctx) => ctx,
-                Err(e) => {
-                    anyhow::bail!("Can't connect: {e}");
+            }
+            None => {
+                if slave_id.is_some() {
+                    ctx = match tcp::connect_slave(socket_addr, slave_id.unwrap()).await {
+                        Ok(ctx) => ctx,
+                        Err(e) => {
+                            anyhow::bail!("Can't connect to slave: {e}");
+                        }
+                    };
+                } else {
+                    ctx = match tcp::connect(socket_addr).await {
+                        Ok(ctx) => ctx,
+                        Err(e) => {
+                            anyhow::bail!("Can't connect: {e}");
+                        }
+                    };
                 }
-            };
+            }
         }
 
         //let arc_ctx = Arc::new(Mutex::new(ctx));
@@ -1463,5 +1523,77 @@ pub fn parse_point_data(p: &crate::json::point::Point, d: &Vec<Word>) -> anyhow:
         }
         PointType::Pad => Ok(ValueType::Pad),
         _ => Err(anyhow!("Point type is not implemented")),
+    }
+}
+
+#[derive(Debug, Clone, Builder)]
+pub struct TlsConfig {
+    pub domain: String,
+    pub ca_file: String,
+    pub client_cert_file: String,
+    pub client_key_file: String,
+    pub insecure_skip_verify: Option<bool>,
+    pub password: Option<String>,
+}
+
+fn load_certs(path: &Path) -> io::Result<Vec<CertificateDer<'static>>> {
+    certs(&mut BufReader::new(File::open(path)?)).collect()
+}
+
+fn load_keys(path: &Path, password: Option<&str>) -> io::Result<PrivateKeyDer<'static>> {
+    let expected_tag = match &password {
+        Some(_) => "ENCRYPTED PRIVATE KEY",
+        None => "PRIVATE KEY",
+    };
+
+    if expected_tag.eq("PRIVATE KEY") {
+        match private_key(&mut BufReader::new(File::open(path)?)) {
+            Ok(f) => Ok(f.unwrap()),
+            Err(e) => Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "No private key found",
+            )),
+        }
+    } else {
+        let content = std::fs::read(path)?;
+        let mut iter = pem::parse_many(content)
+            .map_err(|err| io::Error::new(io::ErrorKind::InvalidData, err.to_string()))?
+            .into_iter()
+            .filter(|x| x.tag() == expected_tag)
+            .map(|x| x.contents().to_vec());
+
+        match iter.next() {
+            Some(key) => match password {
+                Some(password) => {
+                    let encrypted =
+                        pkcs8::EncryptedPrivateKeyInfo::from_der(&key).map_err(|err| {
+                            io::Error::new(io::ErrorKind::InvalidData, err.to_string())
+                        })?;
+                    let decrypted = encrypted.decrypt(password).map_err(|err| {
+                        io::Error::new(io::ErrorKind::InvalidData, err.to_string())
+                    })?;
+                    let key = decrypted.as_bytes().to_vec();
+                    match rustls_pemfile::read_one_from_slice(&key)
+                        .expect("cannot parse private key .pem file")
+                    {
+                        Some((rustls_pemfile::Item::Pkcs1Key(key), _keys)) => {
+                            io::Result::Ok(key.into())
+                        }
+                        Some((rustls_pemfile::Item::Pkcs8Key(key), _keys)) => {
+                            io::Result::Ok(key.into())
+                        }
+                        Some((rustls_pemfile::Item::Sec1Key(key), _keys)) => {
+                            io::Result::Ok(key.into())
+                        }
+                        _ => io::Result::Err(io::Error::new(
+                            io::ErrorKind::InvalidInput,
+                            "invalid key",
+                        )),
+                    }
+                }
+                None => io::Result::Err(io::Error::new(io::ErrorKind::InvalidInput, "invalid key")),
+            },
+            None => io::Result::Err(io::Error::new(io::ErrorKind::InvalidInput, "invalid key")),
+        }
     }
 }
