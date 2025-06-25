@@ -18,6 +18,7 @@ use num_traits::ToPrimitive;
 use pkcs8::der::Decode;
 use pkcs8::EncryptedPrivateKeyInfo;
 use rustls_pemfile::{certs, pkcs8_private_keys, private_key};
+use serde::Deserialize;
 use std::cmp::PartialEq;
 use std::collections::HashMap;
 use std::fs::File;
@@ -1526,7 +1527,7 @@ pub fn parse_point_data(p: &crate::json::point::Point, d: &Vec<Word>) -> anyhow:
     }
 }
 
-#[derive(Debug, Clone, Builder)]
+#[derive(Deserialize, Debug, Clone, Builder)]
 pub struct TlsConfig {
     pub domain: String,
     pub ca_file: String,
