@@ -1,5 +1,5 @@
 use sunspec_rs::sunspec_connection::SunSpecWriteError;
-use sunspec_rs::sunspec_models::ValueType;
+use sunspec_rs::sunspec_models::{PointIdentifier, ValueType};
 
 mod common;
 
@@ -14,7 +14,11 @@ pub async fn test_write_string_not_exist() {
     let buf: Vec<u16> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     let (ss, _ssd, md) =
         common::setup(modelid, String::from(field), String::from("Generac"), buf).await;
-    match ss.clone().set_point(md.clone(), field, value).await {
+    match ss
+        .clone()
+        .set_point(md.clone(), PointIdentifier::Point(field.to_string()), value)
+        .await
+    {
         Ok(_) => {}
         Err(e) => {
             assert_eq!(e, SunSpecWriteError::PointDoesntExist)
@@ -33,7 +37,11 @@ pub async fn test_write_string_read_only() {
     let buf: Vec<u16> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     let (ss, _ssd, md) =
         common::setup(modelid, String::from(field), String::from("Generac"), buf).await;
-    match ss.clone().set_point(md.clone(), field, value).await {
+    match ss
+        .clone()
+        .set_point(md.clone(), PointIdentifier::Point(field.to_string()), value)
+        .await
+    {
         Ok(_) => {}
         Err(e) => {
             assert_eq!(e, SunSpecWriteError::PointIsReadOnly)
@@ -51,7 +59,11 @@ pub async fn test_write_string_wrong_type() {
     let buf: Vec<u16> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     let (ss, _ssd, md) =
         common::setup(modelid, String::from(field), String::from("Generac"), buf).await;
-    match ss.clone().set_point(md.clone(), field, value).await {
+    match ss
+        .clone()
+        .set_point(md.clone(), PointIdentifier::Point(field.to_string()), value)
+        .await
+    {
         Ok(_) => {}
         Err(e) => {
             assert_eq!(e, SunSpecWriteError::ValueDoesntMatchPoint);
@@ -64,12 +76,16 @@ pub async fn test_write_enum32_value_too_big() {
     let field: &str = "Enable";
     let connection: &str = "127.0.0.1:5083";
     let slave: u8 = 9_u8;
-    let value = ValueType::Integer(77777_i32);
+    let value = ValueType::Integer(77777_i64);
 
     let buf: Vec<u16> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     let (ss, _ssd, md) =
         common::setup(modelid, String::from(field), String::from("Generac"), buf).await;
-    match ss.clone().set_point(md.clone(), field, value).await {
+    match ss
+        .clone()
+        .set_point(md.clone(), PointIdentifier::Point(field.to_string()), value)
+        .await
+    {
         Ok(_) => {}
         Err(e) => {
             assert_eq!(e, SunSpecWriteError::ValueWouldOverflow);
