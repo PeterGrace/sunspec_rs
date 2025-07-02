@@ -71,10 +71,10 @@ pub struct Model {
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct Block {
-    pub(crate) len: u16,
-    pub(crate) r#type: Option<String>,
-    pub(crate) name: Option<String>,
-    pub(crate) point: Vec<Point>,
+    pub len: u16,
+    pub r#type: Option<String>,
+    pub name: Option<String>,
+    pub point: Vec<Point>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
