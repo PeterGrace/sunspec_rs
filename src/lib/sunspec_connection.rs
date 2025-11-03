@@ -118,6 +118,8 @@ pub enum SunSpecPointError {
     GeneralError(String),
     #[error("point does not exist: {0}")]
     DoesNotExist(String),
+    #[error("point not implemented: {0}")]
+    PointNotImplemented(String),
     #[error("Undefined error")]
     #[default]
     UndefinedError,
@@ -912,11 +914,13 @@ impl SunSpecConnection {
                             self.slave_num.unwrap_or(0)
                         );
                         debug!(err);
-                        if let SunSpecReadError::CommError(_) = e {
-                            return Err(SunSpecPointError::CommError(err));
+                        return if let SunSpecReadError::CommError(_) = e {
+                            Err(SunSpecPointError::CommError(err))
+                        } else if let SunSpecReadError::DatapointNotImplemented = e {
+                            Err(SunSpecPointError::PointNotImplemented(err))
                         } else {
-                            return Err(SunSpecPointError::GeneralError(err));
-                        }
+                            Err(SunSpecPointError::GeneralError(err))
+                        };
                     }
                 };
             }
@@ -942,11 +946,13 @@ impl SunSpecConnection {
                         self.slave_num.unwrap_or(0)
                     );
                     debug!(err);
-                    if let SunSpecReadError::CommError(_) = e {
-                        return Err(SunSpecPointError::CommError(err));
+                    return if let SunSpecReadError::CommError(_) = e {
+                        Err(SunSpecPointError::CommError(err))
+                    } else if let SunSpecReadError::DatapointNotImplemented = e {
+                        Err(SunSpecPointError::PointNotImplemented(err))
                     } else {
-                        return Err(SunSpecPointError::GeneralError(err));
-                    }
+                        Err(SunSpecPointError::GeneralError(err))
+                    };
                 }
             },
             POINT_TYPE_UINT16 | POINT_TYPE_ACC16 => match self.get_u16(read_addr).await {
@@ -978,11 +984,13 @@ impl SunSpecConnection {
                         self.slave_num.unwrap_or(0)
                     );
                     debug!(err);
-                    if let SunSpecReadError::CommError(_) = e {
-                        return Err(SunSpecPointError::CommError(err));
+                    return if let SunSpecReadError::CommError(_) = e {
+                        Err(SunSpecPointError::CommError(err))
+                    } else if let SunSpecReadError::DatapointNotImplemented = e {
+                        Err(SunSpecPointError::PointNotImplemented(err))
                     } else {
-                        return Err(SunSpecPointError::GeneralError(err));
-                    }
+                        Err(SunSpecPointError::GeneralError(err))
+                    };
                 }
             },
             POINT_TYPE_ENUM16 => match self.get_u16(read_addr).await {
@@ -1020,11 +1028,13 @@ impl SunSpecConnection {
                         self.slave_num.unwrap_or(0)
                     );
                     debug!(err);
-                    if let SunSpecReadError::CommError(_) = e {
-                        return Err(SunSpecPointError::CommError(err));
+                    return if let SunSpecReadError::CommError(_) = e {
+                        Err(SunSpecPointError::CommError(err))
+                    } else if let SunSpecReadError::DatapointNotImplemented = e {
+                        Err(SunSpecPointError::PointNotImplemented(err))
                     } else {
-                        return Err(SunSpecPointError::GeneralError(err));
-                    }
+                        Err(SunSpecPointError::GeneralError(err))
+                    };
                 }
             },
             POINT_TYPE_BITFIELD16 => match self.get_u16(read_addr).await {
@@ -1057,11 +1067,13 @@ impl SunSpecConnection {
                         self.slave_num.unwrap_or(0)
                     );
                     debug!(err);
-                    if let SunSpecReadError::CommError(_) = e {
-                        return Err(SunSpecPointError::CommError(err));
+                    return if let SunSpecReadError::CommError(_) = e {
+                        Err(SunSpecPointError::CommError(err))
+                    } else if let SunSpecReadError::DatapointNotImplemented = e {
+                        Err(SunSpecPointError::PointNotImplemented(err))
                     } else {
-                        return Err(SunSpecPointError::GeneralError(err));
-                    }
+                        Err(SunSpecPointError::GeneralError(err))
+                    };
                 }
             },
             POINT_TYPE_SUNSSF => match self.get_i16(read_addr).await {
@@ -1077,11 +1089,13 @@ impl SunSpecConnection {
                         self.slave_num.unwrap_or(0)
                     );
                     debug!(err);
-                    if let SunSpecReadError::CommError(_) = e {
-                        return Err(SunSpecPointError::CommError(err));
+                    return if let SunSpecReadError::CommError(_) = e {
+                        Err(SunSpecPointError::CommError(err))
+                    } else if let SunSpecReadError::DatapointNotImplemented = e {
+                        Err(SunSpecPointError::PointNotImplemented(err))
                     } else {
-                        return Err(SunSpecPointError::GeneralError(err));
-                    }
+                        Err(SunSpecPointError::GeneralError(err))
+                    };
                 }
             },
             POINT_TYPE_UINT32 | POINT_TYPE_ACC32 => match self.get_u32(read_addr).await {
@@ -1113,11 +1127,13 @@ impl SunSpecConnection {
                         self.slave_num.unwrap_or(0)
                     );
                     debug!(err);
-                    if let SunSpecReadError::CommError(_) = e {
-                        return Err(SunSpecPointError::CommError(err));
+                    return if let SunSpecReadError::CommError(_) = e {
+                        Err(SunSpecPointError::CommError(err))
+                    } else if let SunSpecReadError::DatapointNotImplemented = e {
+                        Err(SunSpecPointError::PointNotImplemented(err))
                     } else {
-                        return Err(SunSpecPointError::GeneralError(err));
-                    }
+                        Err(SunSpecPointError::GeneralError(err))
+                    };
                 }
             },
             POINT_TYPE_UINT64 | POINT_TYPE_ACC64 => match self.get_u64(read_addr).await {
@@ -1149,11 +1165,13 @@ impl SunSpecConnection {
                         self.slave_num.unwrap_or(0)
                     );
                     debug!(err);
-                    if let SunSpecReadError::CommError(_) = e {
-                        return Err(SunSpecPointError::CommError(err));
+                    return if let SunSpecReadError::CommError(_) = e {
+                        Err(SunSpecPointError::CommError(err))
+                    } else if let SunSpecReadError::DatapointNotImplemented = e {
+                        Err(SunSpecPointError::PointNotImplemented(err))
                     } else {
-                        return Err(SunSpecPointError::GeneralError(err));
-                    }
+                        Err(SunSpecPointError::GeneralError(err))
+                    };
                 }
             },
             POINT_TYPE_INT32 => match self.get_i32(read_addr).await {
@@ -1178,11 +1196,13 @@ impl SunSpecConnection {
                         self.slave_num.unwrap_or(0)
                     );
                     debug!(err);
-                    if let SunSpecReadError::CommError(_) = e {
-                        return Err(SunSpecPointError::CommError(err));
+                    return if let SunSpecReadError::CommError(_) = e {
+                        Err(SunSpecPointError::CommError(err))
+                    } else if let SunSpecReadError::DatapointNotImplemented = e {
+                        Err(SunSpecPointError::PointNotImplemented(err))
                     } else {
-                        return Err(SunSpecPointError::GeneralError(err));
-                    }
+                        Err(SunSpecPointError::GeneralError(err))
+                    };
                 }
             },
             POINT_TYPE_ENUM32 => match self.get_u32(read_addr).await {
@@ -1220,11 +1240,13 @@ impl SunSpecConnection {
                         self.slave_num.unwrap_or(0)
                     );
                     debug!(err);
-                    if let SunSpecReadError::CommError(_) = e {
-                        return Err(SunSpecPointError::CommError(err));
+                    return if let SunSpecReadError::CommError(_) = e {
+                        Err(SunSpecPointError::CommError(err))
+                    } else if let SunSpecReadError::DatapointNotImplemented = e {
+                        Err(SunSpecPointError::PointNotImplemented(err))
                     } else {
-                        return Err(SunSpecPointError::GeneralError(err));
-                    }
+                        Err(SunSpecPointError::GeneralError(err))
+                    };
                 }
             },
             POINT_TYPE_BITFIELD32 => match self.get_u32(read_addr).await {
@@ -1257,11 +1279,13 @@ impl SunSpecConnection {
                         self.slave_num.unwrap_or(0)
                     );
                     debug!(err);
-                    if let SunSpecReadError::CommError(_) = e {
-                        return Err(SunSpecPointError::CommError(err));
+                    return if let SunSpecReadError::CommError(_) = e {
+                        Err(SunSpecPointError::CommError(err))
+                    } else if let SunSpecReadError::DatapointNotImplemented = e {
+                        Err(SunSpecPointError::PointNotImplemented(err))
                     } else {
-                        return Err(SunSpecPointError::GeneralError(err));
-                    }
+                        Err(SunSpecPointError::GeneralError(err))
+                    };
                 }
             },
             POINT_TYPE_PAD => {
