@@ -699,7 +699,9 @@ impl SunSpecConnection {
 
         match point_identifier {
             PointIdentifier::Catalog(catalog_name) => {
-                info!("Catalog name: {catalog_name} specified.  Will use json-supplied point data");
+                debug!(
+                    "Catalog name: {catalog_name} specified.  Will use json-supplied point data"
+                );
                 catalog_entry = self.catalog.get(&catalog_name).cloned();
                 point = catalog_entry.clone().unwrap().point_data;
             }
@@ -834,7 +836,9 @@ impl SunSpecConnection {
         let mut point_name: String = String::new();
         match point_identifier.clone() {
             PointIdentifier::Catalog(catalog_name) => {
-                info!("Catalog name: {catalog_name} specified.  Will use json-supplied point data");
+                debug!(
+                    "Catalog name: {catalog_name} specified.  Will use json-supplied point data"
+                );
                 catalog_entry = self.catalog.get(&catalog_name).cloned();
                 if catalog_entry.is_some() {
                     point = catalog_entry.clone().unwrap().point_data;
